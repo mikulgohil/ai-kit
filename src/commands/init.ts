@@ -19,7 +19,8 @@ import {
   logSection,
   fileExists,
 } from '../utils.js';
-import type { ProjectScan, ConflictResolution, ClarificationAnswer } from '../types.js';
+import { loadCustomFragments } from '../generator/assembler.js';
+import type { ProjectScan, ConflictResolution, ClarificationAnswer, StrictnessLevel } from '../types.js';
 
 export async function initCommand(targetPath?: string): Promise<void> {
   const projectDir = path.resolve(targetPath || process.cwd());
@@ -68,12 +69,18 @@ export async function initCommand(targetPath?: string): Promise<void> {
   // Ask what to generate
   const tools = await selectTools();
 
+  // Ask strictness level
+  const strictness = await selectStrictness();
+
+  // Load custom fragments
+  const customFragments = loadCustomFragments(projectDir);
+
   // Ask conflict resolution strategy
   const conflict = await selectConflictStrategy(projectDir);
 
   // Generate files
   logSection('Generating Files');
-  const results = await generate(projectDir, scan, tools, conflict);
+  const results = await generate(projectDir, scan, tools, conflict, { strictness, customFragments });
 
   // Summary
   logSection('Setup Complete');
@@ -151,6 +158,18 @@ async function selectTools(): Promise<{ claude: boolean; cursor: boolean }> {
   };
 }
 
+async function selectStrictness(): Promise<StrictnessLevel> {
+  return select({
+    message: 'How strictly should AI enforce these rules?',
+    choices: [
+      { name: 'Standard — follow rules by default, use judgment for edge cases', value: 'standard' as const },
+      { name: 'Strict — enforce all rules, no exceptions without approval', value: 'strict' as const },
+      { name: 'Relaxed — rules are guidelines, prioritize shipping speed', value: 'relaxed' as const },
+    ],
+    default: 'standard',
+  });
+}
+
 async function selectConflictStrategy(
   projectDir: string,
 ): Promise<ConflictResolution> {
@@ -190,6 +209,7 @@ async function generate(
   scan: ProjectScan,
   tools: { claude: boolean; cursor: boolean },
   conflict: ConflictResolution,
+  opts?: { strictness?: StrictnessLevel; customFragments?: string[] },
 ): Promise<GenerateResult> {
   const result: GenerateResult = {
     claudeMd: false,
@@ -204,7 +224,7 @@ async function generate(
   if (tools.claude) {
     const claudeMdPath = path.join(projectDir, GENERATED_FILES.claudeMd);
     if (conflict === 'overwrite' || !fileExists(claudeMdPath)) {
-      const content = generateClaudeMd(scan);
+      const content = generateClaudeMd(scan, { strictness: opts?.strictness, customFragments: opts?.customFragments });
       await fs.writeFile(claudeMdPath, content, 'utf-8');
       result.claudeMd = true;
     } else {
@@ -219,7 +239,7 @@ async function generate(
   if (tools.cursor) {
     const cursorPath = path.join(projectDir, GENERATED_FILES.cursorRules);
     if (conflict === 'overwrite' || !fileExists(cursorPath)) {
-      const content = generateCursorRules(scan);
+      const content = generateCursorRules(scan, { strictness: opts?.strictness, customFragments: opts?.customFragments });
       await fs.writeFile(cursorPath, content, 'utf-8');
       result.cursorRules = true;
     } else {
@@ -247,7 +267,7 @@ async function generate(
   if (result.claudeMd) templates.push('CLAUDE.md');
   if (result.cursorRules) templates.push('.cursorrules');
 
-  const config = generateConfig(scan, templates, result.commands, result.guides);
+  const config = generateConfig(scan, templates, result.commands, result.guides, { strictness: opts?.strictness, customFragments: opts?.customFragments });
   await fs.writeJson(
     path.join(projectDir, AI_KIT_CONFIG_FILE),
     config,

@@ -29,6 +29,19 @@ const AVAILABLE_SKILLS = [
   'responsive-check',
   'document',
   'token-tips',
+  // New skills (v1.1.0)
+  'perf-audit',
+  'bundle-check',
+  'i18n-check',
+  'schema-gen',
+  'docker-debug',
+  'ci-fix',
+  'changelog',
+  'release',
+  'storybook-gen',
+  'visual-diff',
+  'db-migrate',
+  'dependency-graph',
 ];
 
 // Short descriptions for auto-discovery — AI reads these to decide when to apply
@@ -59,6 +72,19 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'responsive-check': 'Audit responsive design — breakpoints, touch targets, overflow',
   'document': 'Generate documentation for existing components and utilities',
   'token-tips': 'Token usage optimization strategies for AI coding assistants',
+  // New skills (v1.1.0)
+  'perf-audit': 'Lighthouse-style performance audit covering Core Web Vitals, resource loading, and caching',
+  'bundle-check': 'Analyze bundle size, find heavy imports, suggest tree-shaking and code splitting',
+  'i18n-check': 'Find hardcoded strings, missing translation keys, and internationalization gaps',
+  'schema-gen': 'Generate TypeScript types and Zod schemas from API responses, JSON, or GraphQL',
+  'docker-debug': 'Analyze Dockerfiles for security, efficiency, and best practice violations',
+  'ci-fix': 'Debug CI/CD pipeline failures, optimize caching, and improve build performance',
+  'changelog': 'Generate formatted changelogs from git history following Keep a Changelog format',
+  'release': 'Guided release workflow with versioning, changelog, tagging, and release notes',
+  'storybook-gen': 'Generate Storybook stories with controls, play functions, and visual tests',
+  'visual-diff': 'Visual regression testing plan for changed components and pages',
+  'db-migrate': 'Create safe database migrations with rollback strategies for Prisma, Drizzle, or SQL',
+  'dependency-graph': 'Map module dependencies, find circular imports, and analyze coupling metrics',
 };
 
 export async function copySkills(targetDir: string): Promise<string[]> {

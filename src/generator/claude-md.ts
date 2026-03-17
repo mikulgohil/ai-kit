@@ -1,4 +1,4 @@
-import type { ProjectScan } from '../types.js';
+import type { ProjectScan, StrictnessLevel } from '../types.js';
 import { assembleTemplate } from './assembler.js';
 
 export function selectFragments(scan: ProjectScan): string[] {
@@ -36,10 +36,16 @@ export function selectFragments(scan: ProjectScan): string[] {
   return fragments;
 }
 
-export function generateClaudeMd(scan: ProjectScan): string {
+export function generateClaudeMd(
+  scan: ProjectScan,
+  options?: { strictness?: StrictnessLevel; customFragments?: string[] },
+): string {
   const fragments = selectFragments(scan);
   const variables = buildVariables(scan);
-  return assembleTemplate('claude-md', fragments, variables);
+  return assembleTemplate('claude-md', fragments, variables, {
+    customFragments: options?.customFragments,
+    strictness: options?.strictness,
+  });
 }
 
 function buildVariables(scan: ProjectScan): Record<string, string> {

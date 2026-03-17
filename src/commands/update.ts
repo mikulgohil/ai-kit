@@ -9,6 +9,7 @@ import { generateMdcFiles } from '../generator/cursor-mdc.js';
 import { generateConfig } from '../generator/config.js';
 import { copySkills } from '../copier/skills.js';
 import { copyGuides } from '../copier/guides.js';
+import { loadCustomFragments } from '../generator/assembler.js';
 import { AI_KIT_CONFIG_FILE, GENERATED_FILES, VERSION } from '../constants.js';
 import {
   logSuccess,
@@ -60,6 +61,10 @@ export async function updateCommand(targetPath?: string): Promise<void> {
 
   logSection('Updating Files');
 
+  const strictness = existingConfig.strictness || 'standard';
+  const customFragments = loadCustomFragments(projectDir);
+  const genOpts = { strictness, customFragments };
+
   const templates: string[] = [];
 
   // Update CLAUDE.md if it was previously generated
@@ -68,7 +73,7 @@ export async function updateCommand(targetPath?: string): Promise<void> {
     fileExists(path.join(projectDir, GENERATED_FILES.claudeMd))
   ) {
     const claudeMdPath = path.join(projectDir, GENERATED_FILES.claudeMd);
-    const newContent = generateClaudeMd(scan);
+    const newContent = generateClaudeMd(scan, genOpts);
     const existing = readFileSafe(claudeMdPath);
     if (existing) {
       await fs.writeFile(claudeMdPath, mergeWithMarkers(existing, newContent), 'utf-8');
@@ -85,7 +90,7 @@ export async function updateCommand(targetPath?: string): Promise<void> {
     fileExists(path.join(projectDir, GENERATED_FILES.cursorRules))
   ) {
     const cursorRulesPath = path.join(projectDir, GENERATED_FILES.cursorRules);
-    const newContent = generateCursorRules(scan);
+    const newContent = generateCursorRules(scan, genOpts);
     const existing = readFileSafe(cursorRulesPath);
     if (existing) {
       await fs.writeFile(cursorRulesPath, mergeWithMarkers(existing, newContent), 'utf-8');
@@ -113,7 +118,7 @@ export async function updateCommand(targetPath?: string): Promise<void> {
   logSuccess(`${guides.length} guides updated`);
 
   // Update config
-  const config = generateConfig(scan, templates, commands, guides);
+  const config = generateConfig(scan, templates, commands, guides, genOpts);
   await fs.writeJson(configPath, config, { spaces: 2 });
   logSuccess('ai-kit.config.json updated');
 

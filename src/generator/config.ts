@@ -1,4 +1,4 @@
-import type { AiKitConfig, ProjectScan } from '../types.js';
+import type { AiKitConfig, ProjectScan, StrictnessLevel } from '../types.js';
 import { VERSION } from '../constants.js';
 
 export function generateConfig(
@@ -6,6 +6,7 @@ export function generateConfig(
   templates: string[],
   commands: string[],
   guides: string[],
+  options?: { strictness?: StrictnessLevel; customFragments?: string[] },
 ): AiKitConfig {
   return {
     version: VERSION,
@@ -14,5 +15,7 @@ export function generateConfig(
     templates,
     commands,
     guides,
+    strictness: options?.strictness || 'standard',
+    customFragments: options?.customFragments || [],
   };
 }

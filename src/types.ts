@@ -1,6 +1,10 @@
 import type { ToolsDetection } from './scanner/tools.js';
 import type { McpDetection } from './scanner/mcp.js';
 
+export type StrictnessLevel = 'strict' | 'standard' | 'relaxed';
+
+export type TeamProfile = 'solo-dev' | 'small-team' | 'enterprise';
+
 export interface ProjectScan {
   framework: 'nextjs' | 'react' | 'unknown';
   nextjsVersion?: string;
@@ -45,12 +49,17 @@ export interface AiKitConfig {
   templates: string[];
   commands: string[];
   guides: string[];
+  strictness: StrictnessLevel;
+  teamProfile?: TeamProfile;
+  customFragments: string[];
 }
 
 export interface GeneratorOptions {
   scan: ProjectScan;
   overwrite: boolean;
   outputDir: string;
+  strictness: StrictnessLevel;
+  customFragments?: string[];
 }
 
 export type ConflictResolution = 'overwrite' | 'merge' | 'skip';

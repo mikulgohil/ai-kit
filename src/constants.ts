@@ -10,7 +10,7 @@ export const COMMANDS_DIR = path.join(PACKAGE_ROOT, 'commands');
 export const GUIDES_DIR = path.join(PACKAGE_ROOT, 'guides');
 export const DOCS_SCAFFOLDS_DIR = path.join(PACKAGE_ROOT, 'docs-scaffolds');
 
-export const VERSION = '1.0.0';
+export const VERSION = '1.1.0';
 
 export const AI_KIT_FOLDER = 'ai-kit';
 export const AI_KIT_CONFIG_FILE = 'ai-kit.config.json';

@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import chalk from 'chalk';
 import ora from 'ora';
 import os from 'os';
-import { logSection, logInfo, logWarning } from '../utils.js';
+import { logSection, logInfo, logSuccess, logWarning } from '../utils.js';
 import { PACKAGE_ROOT } from '../constants.js';
 
 // ─── Pricing (per 1M tokens) ──────────────────────────────────────────
@@ -29,6 +29,7 @@ interface SessionSummary {
   usage: TokenUsage;
   model: string;
   messageCount: number;
+  projectName: string; // extracted from parent directory name
 }
 
 interface DailySummary {
@@ -148,6 +149,7 @@ function parseSessionFile(filePath: string): SessionSummary | null {
     }
 
     const sessionId = path.basename(filePath, '.jsonl');
+    const projectName = path.basename(path.dirname(filePath));
 
     return {
       sessionId,
@@ -156,6 +158,7 @@ function parseSessionFile(filePath: string): SessionSummary | null {
       usage,
       model,
       messageCount,
+      projectName,
     };
   } catch {
     return null;
@@ -256,9 +259,90 @@ function printPeriodSummary(
   console.log(`  Estimated cost: ${chalk.yellow('~' + fmtCost(cost))}`);
 }
 
+// ─── Project Breakdown ──────────────────────────────────────────────────
+function printProjectBreakdown(sessions: SessionSummary[]): void {
+  const projectMap = new Map<string, { sessions: number; cost: number }>();
+
+  for (const s of sessions) {
+    const existing = projectMap.get(s.projectName) || { sessions: 0, cost: 0 };
+    existing.sessions++;
+    existing.cost += calculateCost(s.usage, s.model);
+    projectMap.set(s.projectName, existing);
+  }
+
+  const sorted = Array.from(projectMap.entries())
+    .sort((a, b) => b[1].cost - a[1].cost);
+
+  console.log(`\n${chalk.bold('Per-Project Breakdown')}`);
+  for (const [name, data] of sorted.slice(0, 10)) {
+    const bar = progressBar((data.cost / sumCost(sessions)) * 100, 15);
+    console.log(`  ${bar} ${chalk.yellow(fmtCost(data.cost))} ${chalk.dim(`(${data.sessions} sessions)`)} ${name}`);
+  }
+}
+
+// ─── Trend Analysis ─────────────────────────────────────────────────────
+function printTrendAnalysis(sessions: SessionSummary[]): void {
+  const today = new Date();
+
+  // This week
+  const thisWeekStart = new Date(today);
+  thisWeekStart.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
+  const thisWeekStr = thisWeekStart.toISOString().slice(0, 10);
+
+  // Last week
+  const lastWeekStart = new Date(thisWeekStart);
+  lastWeekStart.setDate(lastWeekStart.getDate() - 7);
+  const lastWeekEnd = new Date(thisWeekStart);
+  lastWeekEnd.setDate(lastWeekEnd.getDate() - 1);
+  const lastWeekStartStr = lastWeekStart.toISOString().slice(0, 10);
+  const lastWeekEndStr = lastWeekEnd.toISOString().slice(0, 10);
+
+  const todayStr = today.toISOString().slice(0, 10);
+  const thisWeekSessions = filterDateRange(sessions, thisWeekStr, todayStr);
+  const lastWeekSessions = filterDateRange(sessions, lastWeekStartStr, lastWeekEndStr);
+
+  const thisWeekCost = sumCost(thisWeekSessions);
+  const lastWeekCost = sumCost(lastWeekSessions);
+
+  if (lastWeekCost > 0) {
+    const change = ((thisWeekCost - lastWeekCost) / lastWeekCost) * 100;
+    const arrow = change > 0 ? chalk.red('\u2191') : change < 0 ? chalk.green('\u2193') : chalk.dim('\u2192');
+    const changeStr = change > 0 ? `+${change.toFixed(0)}%` : `${change.toFixed(0)}%`;
+
+    console.log(`\n${chalk.bold('Week-over-Week Trend')}`);
+    console.log(`  Last week: ${chalk.yellow(fmtCost(lastWeekCost))} (${lastWeekSessions.length} sessions)`);
+    console.log(`  This week: ${chalk.yellow(fmtCost(thisWeekCost))} (${thisWeekSessions.length} sessions)`);
+    console.log(`  Change: ${arrow} ${changeStr}`);
+  }
+}
+
+// ─── ROI Estimate ───────────────────────────────────────────────────────
+function printRoiEstimate(sessions: SessionSummary[], monthCost: number): void {
+  // Estimate: each AI session saves ~15 minutes of developer time on average
+  const AVG_MINUTES_SAVED_PER_SESSION = 15;
+  const DEVELOPER_HOURLY_RATE = 75; // USD estimate
+
+  const totalSessions = sessions.length;
+  const minutesSaved = totalSessions * AVG_MINUTES_SAVED_PER_SESSION;
+  const hoursSaved = minutesSaved / 60;
+  const valueSaved = hoursSaved * DEVELOPER_HOURLY_RATE;
+  const roi = monthCost > 0 ? ((valueSaved - monthCost) / monthCost) * 100 : 0;
+
+  console.log(`\n${chalk.bold('ROI Estimate')} ${chalk.dim('(based on ~15 min saved per session)')}`);
+  console.log(`  Sessions this month: ${chalk.cyan(String(totalSessions))}`);
+  console.log(`  Estimated time saved: ${chalk.cyan(`${hoursSaved.toFixed(1)} hours`)} (${minutesSaved} min)`);
+  console.log(`  Estimated value saved: ${chalk.green(fmtCost(valueSaved))} (at $${DEVELOPER_HOURLY_RATE}/hr)`);
+  console.log(`  AI cost: ${chalk.yellow(fmtCost(monthCost))}`);
+  if (roi > 0) {
+    console.log(`  ROI: ${chalk.green(`${roi.toFixed(0)}%`)}`);
+  }
+}
+
 // ─── Main Command ──────────────────────────────────────────────────────
-export async function tokensCommand(options: { export?: boolean } = {}): Promise<void> {
+export async function tokensCommand(options: { export?: boolean; csv?: boolean; budget?: number } = {}): Promise<void> {
   logSection('AI Kit \u2014 Token Usage');
+
+  const budget = options.budget || PLAN_BUDGET;
 
   const spinner = ora('Scanning Claude Code session logs...').start();
 
@@ -305,7 +389,7 @@ export async function tokensCommand(options: { export?: boolean } = {}): Promise
 
   // Budget progress
   const monthCost = sumCost(monthSessions);
-  const budgetPercent = Math.min((monthCost / PLAN_BUDGET) * 100, 100);
+  const budgetPercent = Math.min((monthCost / budget) * 100, 100);
   const daysInMonth = new Date(
     new Date().getFullYear(),
     new Date().getMonth() + 1,
@@ -315,16 +399,47 @@ export async function tokensCommand(options: { export?: boolean } = {}): Promise
   const daysRemaining = daysInMonth - dayOfMonth;
   const dailyAvg = dayOfMonth > 0 ? monthCost / dayOfMonth : 0;
   const estimatedDaysLeft =
-    dailyAvg > 0 ? Math.floor((PLAN_BUDGET - monthCost) / dailyAvg) : daysRemaining;
+    dailyAvg > 0 ? Math.floor((budget - monthCost) / dailyAvg) : daysRemaining;
 
-  console.log(`\n${chalk.bold(`$${PLAN_BUDGET} Plan Budget`)}`);
+  console.log(`\n${chalk.bold(`$${budget} Plan Budget`)}`);
   console.log(
-    `  ${progressBar(budgetPercent)} ${Math.round(budgetPercent)}% used (~${fmtCost(monthCost)} of ${fmtCost(PLAN_BUDGET)})`,
+    `  ${progressBar(budgetPercent)} ${Math.round(budgetPercent)}% used (~${fmtCost(monthCost)} of ${fmtCost(budget)})`,
   );
   console.log(
     `  Estimated days remaining at this rate: ${chalk.cyan(String(Math.max(estimatedDaysLeft, 0)))} days`,
   );
   console.log(`  Daily average: ${chalk.yellow(fmtCost(dailyAvg))}`);
+
+  // Budget alerts
+  if (budgetPercent >= 90) {
+    console.log(chalk.red.bold('\n  \u26a0 ALERT: Over 90% of monthly budget used!'));
+  } else if (budgetPercent >= 75) {
+    console.log(chalk.yellow('\n  \u26a0 Warning: Over 75% of monthly budget used.'));
+  } else if (budgetPercent >= 50) {
+    console.log(chalk.blue('\n  \u2139 Note: Over 50% of monthly budget used.'));
+  }
+
+  // Model recommendations
+  const opusSessions = monthSessions.filter(s => s.model === 'opus');
+  const sonnetSessions = monthSessions.filter(s => s.model === 'sonnet');
+  const opusCost = sumCost(opusSessions);
+  const sonnetCost = sumCost(sonnetSessions);
+
+  if (opusCost > sonnetCost * 2 && opusSessions.length > 5) {
+    console.log(`\n${chalk.bold('Model Recommendation')}`);
+    console.log(`  Opus usage: ${chalk.yellow(fmtCost(opusCost))} (${opusSessions.length} sessions)`);
+    console.log(`  Sonnet usage: ${chalk.yellow(fmtCost(sonnetCost))} (${sonnetSessions.length} sessions)`);
+    console.log(chalk.dim('  Tip: Use Sonnet for routine tasks (reviews, tests, docs) and Opus for complex tasks (architecture, debugging).'));
+  }
+
+  // Per-project breakdown
+  printProjectBreakdown(monthSessions);
+
+  // Trend analysis
+  printTrendAnalysis(sessions);
+
+  // ROI estimate
+  printRoiEstimate(monthSessions, monthCost);
 
   // Tip
   console.log(
@@ -334,6 +449,18 @@ export async function tokensCommand(options: { export?: boolean } = {}): Promise
     chalk.dim("     it's cheaper than a failed implementation attempt."),
   );
   console.log('');
+
+  // CSV export
+  if (options.csv) {
+    const csvPath = path.join(process.cwd(), 'token-usage.csv');
+    const csvHeader = 'Date,Sessions,Input Tokens,Output Tokens,Cache Tokens,Cost\n';
+    const daily = aggregateByDate(sessions);
+    const csvRows = daily.map(d =>
+      `${d.date},${d.sessions},${d.usage.inputTokens},${d.usage.outputTokens},${d.usage.cacheReadTokens},${d.cost.toFixed(2)}`
+    ).join('\n');
+    await fs.writeFile(csvPath, csvHeader + csvRows, 'utf-8');
+    logSuccess(`CSV exported to ${csvPath}`);
+  }
 
   // Export mode
   if (options.export) {

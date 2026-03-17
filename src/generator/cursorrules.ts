@@ -1,11 +1,17 @@
-import type { ProjectScan } from '../types.js';
+import type { ProjectScan, StrictnessLevel } from '../types.js';
 import { assembleTemplate } from './assembler.js';
 import { selectFragments } from './claude-md.js';
 
-export function generateCursorRules(scan: ProjectScan): string {
+export function generateCursorRules(
+  scan: ProjectScan,
+  options?: { strictness?: StrictnessLevel; customFragments?: string[] },
+): string {
   const fragments = selectFragments(scan);
   const variables = buildCursorVariables(scan);
-  return assembleTemplate('cursorrules', fragments, variables);
+  return assembleTemplate('cursorrules', fragments, variables, {
+    customFragments: options?.customFragments,
+    strictness: options?.strictness,
+  });
 }
 
 export function buildCursorVariables(scan: ProjectScan): Record<string, string> {

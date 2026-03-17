@@ -4,6 +4,10 @@ import { initCommand } from './commands/init.js';
 import { updateCommand } from './commands/update.js';
 import { resetCommand } from './commands/reset.js';
 import { tokensCommand } from './commands/tokens.js';
+import { doctorCommand } from './commands/doctor.js';
+import { diffCommand } from './commands/diff.js';
+import { exportCommand } from './commands/export.js';
+import { statsCommand } from './commands/stats.js';
 
 const program = new Command();
 
@@ -66,9 +70,76 @@ program
   .command('tokens')
   .description('Show token usage summary and cost estimates')
   .option('--export', 'Export data and open HTML dashboard')
-  .action(async (opts: { export?: boolean }) => {
+  .option('--csv', 'Export daily usage to CSV file')
+  .option('--budget <amount>', 'Monthly budget in USD (default: $20)', parseFloat)
+  .action(async (opts: { export?: boolean; csv?: boolean; budget?: number }) => {
     try {
       await tokensCommand(opts);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('doctor')
+  .description('Diagnose AI Kit setup and check for issues')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .action(async (targetPath?: string) => {
+    try {
+      await doctorCommand(targetPath);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('diff')
+  .description('Show what would change on update (dry run)')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .action(async (targetPath?: string) => {
+    try {
+      await diffCommand(targetPath);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('export')
+  .description('Export rules to other AI tools (Windsurf, Aider, Cline)')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .option('--format <format>', 'Export format: windsurf, aider, cline, or all')
+  .action(async (targetPath?: string, opts?: { format?: string }) => {
+    try {
+      await exportCommand(targetPath, opts);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('stats')
+  .description('Show project setup statistics and complexity')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .action(async (targetPath?: string) => {
+    try {
+      await statsCommand(targetPath);
     } catch (err) {
       if ((err as Error).name === 'ExitPromptError') {
         process.exit(0);
