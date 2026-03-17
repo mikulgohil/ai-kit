@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>@horizontal/ai-kit — Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FFFFFF;
+    --text-primary: #111111;
+    --text-secondary: #666666;
+    --accent-bg: #F5F5F5;
+    --accent-border: #E0E0E0;
+    --highlight: #000000;
+    --slide-w: 1920px;
+    --slide-h: 1080px;
+    --margin: 80px;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #1a1a1a;
+    color: var(--text-primary);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .deck {
+    position: relative;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    transform-origin: center center;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+    padding: var(--margin);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .slide.active { display: flex; }
+
+  /* Typography */
+  .slide-title {
+    font-weight: 700;
+    font-size: 44px;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .slide-title.large { font-size: 48px; }
+
+  .slide-subtitle {
+    font-weight: 400;
+    font-size: 22px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 32px;
+  }
+
+  .body-text {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  .label {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--accent-bg);
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid var(--accent-border);
+  }
+
+  .card-title {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  /* Layout helpers */
+  .flex-grow { flex: 1; }
+  .center-all {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .text-center { text-align: center; }
+
+  .divider {
+    width: 80px;
+    height: 1px;
+    background: var(--accent-border);
+    margin: 24px auto;
+  }
+
+  .divider-full {
+    width: 100%;
+    height: 1px;
+    background: var(--accent-border);
+  }
+
+  /* Scenario card rows */
+  .scenario-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .scenario-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+  .scenario-value {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+
+  /* Problem rows */
+  .problem-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    padding: 14px 0;
+  }
+  .problem-arrow {
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+  .problem-desc {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--text-secondary);
+  }
+
+  /* Detection rows */
+  .detect-row {
+    margin-bottom: 32px;
+  }
+  .detect-label {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .detect-what {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+  .detect-how {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  /* Feature rows */
+  .feature-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 32px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--accent-border);
+    align-items: baseline;
+  }
+  .feature-row:last-child { border-bottom: none; }
+  .feature-label {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+  .feature-desc {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Flow boxes */
+  .flow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .flow-box {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    text-align: center;
+    min-width: 130px;
+  }
+  .flow-box-label {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+  .flow-box-sub {
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .flow-arrow {
+    font-size: 20px;
+    color: var(--text-secondary);
+  }
+
+  /* Standards - left border accent */
+  .standard-block {
+    border-left: 2px solid var(--text-primary);
+    padding-left: 16px;
+    margin-bottom: 36px;
+  }
+  .standard-label {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .standard-detail {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Fragment list */
+  .fragment-row {
+    display: grid;
+    grid-template-columns: 32px 220px 1fr;
+    gap: 8px;
+    padding: 6px 0;
+    align-items: baseline;
+  }
+  .fragment-check {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+  .fragment-name {
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .fragment-desc {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  /* Code block */
+  .code-block {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+  }
+
+  /* Conversation simulation */
+  .convo-card {
+    background: var(--accent-bg);
+    border-radius: 8px;
+    padding: 28px 32px;
+  }
+  .convo-line {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 12px;
+    padding: 6px 0;
+    align-items: baseline;
+  }
+  .convo-label-ai {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+  .convo-label-dev {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+  .convo-text {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+  .convo-qa {
+    display: grid;
+    grid-template-columns: 48px 1fr 48px 1fr;
+    gap: 12px;
+    padding: 6px 0;
+    align-items: baseline;
+  }
+  .convo-result {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-primary);
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--accent-border);
+  }
+
+  /* Three columns */
+  .three-cols {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    gap: 32px;
+    flex: 1;
+  }
+  .col-divider {
+    background: var(--accent-border);
+    width: 1px;
+  }
+  .col-header {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+  .col-item {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-secondary);
+    padding: 4px 0;
+  }
+
+  /* Command table */
+  .cmd-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    padding: 10px 12px;
+    align-items: baseline;
+  }
+  .cmd-row:nth-child(even) {
+    background: #F9F9F9;
+    border-radius: 4px;
+  }
+  .cmd-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+  .cmd-desc {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  /* CLI command blocks */
+  .cli-block {
+    background: var(--accent-bg);
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-bottom: 8px;
+  }
+  .cli-cmd {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: 20px;
+    color: var(--highlight);
+  }
+  .cli-desc {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+
+  /* Before/After */
+  .ba-container {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 48px;
+    flex: 1;
+  }
+  .ba-divider {
+    background: var(--accent-border);
+    width: 1px;
+  }
+  .ba-header {
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+  .ba-header.before { color: var(--text-secondary); }
+  .ba-header.after { color: var(--text-primary); }
+  .ba-row {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--accent-border);
+  }
+  .ba-row:last-child { border-bottom: none; }
+  .ba-text {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  .ba-text.before { color: var(--text-secondary); }
+  .ba-text.after { color: var(--text-primary); }
+
+  /* Takeaway */
+  .takeaway {
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--text-primary);
+    text-align: center;
+    margin-top: auto;
+    padding-top: 32px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent-border);
+    transition: width 0.3s ease;
+    z-index: 100;
+  }
+
+  /* Slide number */
+  .slide-num {
+    position: fixed;
+    bottom: 16px;
+    right: 24px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-secondary);
+    z-index: 100;
+    background: rgba(255,255,255,0.9);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* Flow vertical (Slide 5) */
+  .flow-v-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    justify-content: center;
+  }
+  .flow-v-box {
+    background: var(--accent-bg);
+    border-radius: 8px;
+    padding: 20px 40px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+  }
+  .flow-v-box-main {
+    font-weight: 400;
+    font-size: 18px;
+    color: var(--text-primary);
+  }
+  .flow-v-box-sub {
+    font-weight: 400;
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .flow-v-arrow {
+    font-size: 24px;
+    color: var(--text-secondary);
+    padding: 12px 0;
+  }
+
+  /* Output branch for Slide 8 */
+  .output-branch {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 24px;
+  }
+  .output-label {
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    text-align: center;
+  }
+  .output-arrow {
+    font-size: 16px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ======================== SLIDE 1 — Title ======================== -->
+  <div class="slide center-all" data-slide="1">
+    <div style="max-width: 800px;">
+      <div style="font-weight: 700; font-size: 56px; color: var(--text-primary); margin-bottom: 16px;">
+        @horizontal/ai-kit
+      </div>
+      <div style="font-weight: 400; font-size: 24px; color: var(--text-secondary); margin-bottom: 32px;">
+        AI-Powered Developer Setup for Horizontal Digital
+      </div>
+      <div class="divider"></div>
+      <div style="font-weight: 400; font-size: 20px; color: var(--text-secondary); margin-top: 32px;">
+        One command. Tailored AI config. Every project.
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 2 — The Problem ======================== -->
+  <div class="slide" data-slide="2">
+    <div class="slide-title large">The Problem</div>
+    <div class="slide-subtitle" style="margin-bottom: 12px;">
+      Most developers at Horizontal struggle with AI tools.
+    </div>
+    <div style="font-weight: 400; font-size: 20px; color: var(--text-secondary); margin-bottom: 40px;">
+      Not because the tools are bad — because the setup is missing.
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 28px;">
+      <div class="problem-row">
+        <div class="problem-arrow">→&nbsp; No project context</div>
+        <div class="problem-desc">AI doesn't know your stack or conventions</div>
+      </div>
+      <div class="problem-row">
+        <div class="problem-arrow">→&nbsp; Vague prompts</div>
+        <div class="problem-desc">"Fix this" → garbage output → wasted tokens</div>
+      </div>
+      <div class="problem-row">
+        <div class="problem-arrow">→&nbsp; No guardrails</div>
+        <div class="problem-desc">AI writes code that doesn't match standards</div>
+      </div>
+      <div class="problem-row">
+        <div class="problem-arrow">→&nbsp; Inconsistent setups</div>
+        <div class="problem-desc">Every developer configures differently</div>
+      </div>
+      <div class="problem-row">
+        <div class="problem-arrow">→&nbsp; Token waste</div>
+        <div class="problem-desc">Repeated context, long conversations</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 3 — What Happens Today (1/2) ======================== -->
+  <div class="slide" data-slide="3">
+    <div class="slide-title large">What Actually Happens Today</div>
+    <div style="height: 32px;"></div>
+    <div class="card" style="margin-bottom: 32px;">
+      <div class="card-title">Scenario 1 — The Vague Prompt</div>
+      <div class="scenario-row"><div class="scenario-label">Developer types:</div><div class="scenario-value">"Create a login page"</div></div>
+      <div class="scenario-row"><div class="scenario-label">AI generates:</div><div class="scenario-value">Generic page, inline styles, no TypeScript</div></div>
+      <div class="scenario-row"><div class="scenario-label">Developer reacts:</div><div class="scenario-value">"This is useless" → deletes → does manually</div></div>
+      <div class="scenario-row"><div class="scenario-label">Time wasted:</div><div class="scenario-value">25 minutes + tokens burned</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Scenario 2 — The Copy-Paste Loop</div>
+      <div class="scenario-row"><div class="scenario-label">Developer types:</div><div class="scenario-value">Pastes 400 lines + "fix the bug"</div></div>
+      <div class="scenario-row"><div class="scenario-label">AI generates:</div><div class="scenario-value">Refactors half the file, breaks two things</div></div>
+      <div class="scenario-row"><div class="scenario-label">Developer reacts:</div><div class="scenario-value">Spends 40 min reverting + finding new bugs</div></div>
+      <div class="scenario-row"><div class="scenario-label">Time wasted:</div><div class="scenario-value">1 hour + lost trust in the tool</div></div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 4 — What Happens Today (2/2) ======================== -->
+  <div class="slide" data-slide="4">
+    <div class="slide-title large">What Actually Happens Today</div>
+    <div style="height: 32px;"></div>
+    <div class="card">
+      <div class="card-title">Scenario 3 — The Dropout</div>
+      <div class="scenario-row"><div class="scenario-label">Developer types:</div><div class="scenario-value">"Add a Sitecore component for hero banner"</div></div>
+      <div class="scenario-row"><div class="scenario-label">AI generates:</div><div class="scenario-value">Plain React component — no field helpers, no ComponentRendering types, no Experience Editor support</div></div>
+      <div class="scenario-row"><div class="scenario-label">Developer reacts:</div><div class="scenario-value">"AI doesn't understand our stack"</div></div>
+      <div class="scenario-row"><div class="scenario-label">Result:</div><div class="scenario-value">Stops using AI entirely</div></div>
+    </div>
+    <div class="takeaway" style="margin-top: 64px;">
+      The AI isn't bad — it just doesn't know what project it's working on.
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 5 — Why This Happens ======================== -->
+  <div class="slide" data-slide="5">
+    <div class="slide-title large">Why This Happens</div>
+    <div style="height: 24px;"></div>
+    <div class="flow-v-container">
+      <div class="flow-v-box">
+        <div class="flow-v-box-main">Developer writes an incomplete prompt</div>
+        <div class="flow-v-box-sub">"make a component" / "fix this" / "add a page"</div>
+      </div>
+      <div class="flow-v-arrow">↓</div>
+      <div class="flow-v-box">
+        <div class="flow-v-box-main">AI has zero context about the project</div>
+        <div class="flow-v-box-sub">No idea about framework, router, CMS, or tokens</div>
+      </div>
+      <div class="flow-v-arrow">↓</div>
+      <div class="flow-v-box">
+        <div class="flow-v-box-main">Output doesn't match project standards</div>
+        <div class="flow-v-box-sub">Developer expects 100% from a one-line prompt</div>
+      </div>
+    </div>
+    <div class="takeaway">The gap isn't the AI. It's the missing setup.</div>
+  </div>
+
+  <!-- ======================== SLIDE 6 — The Solution ======================== -->
+  <div class="slide center-all" data-slide="6">
+    <div style="max-width: 700px;">
+      <div style="font-weight: 700; font-size: 44px; color: var(--text-primary); margin-bottom: 48px;">
+        The Solution
+      </div>
+      <div class="mono" style="font-size: 36px; color: var(--highlight); margin-bottom: 48px;">
+        npx @horizontal/ai-kit init
+      </div>
+      <div style="font-weight: 400; font-size: 22px; color: var(--text-secondary); max-width: 700px; line-height: 1.6;">
+        One command scans your project, detects your tech stack,
+        and generates tailored AI configuration — automatically.
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 7 — What It Does ======================== -->
+  <div class="slide" data-slide="7">
+    <div class="slide-title large">What It Does</div>
+    <div style="height: 24px;"></div>
+    <div class="feature-row">
+      <div class="feature-label">Scans</div>
+      <div class="feature-desc">Reads package.json, file structure, and configs to detect framework, CMS, styling, TypeScript, monorepo</div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-label">Generates</div>
+      <div class="feature-desc">Creates CLAUDE.md and .cursorrules tailored to your exact stack — not generic templates</div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-label">Standards</div>
+      <div class="feature-desc">Embeds Horizontal coding standards so all AI output follows the same conventions across every project</div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-label">Commands</div>
+      <div class="feature-desc">10 pre-built slash commands including an interactive prompt builder that asks the right questions</div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-label">Guides</div>
+      <div class="feature-desc">Developer guides + doc scaffolds for tracking decisions and mistakes</div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 8 — How It Works ======================== -->
+  <div class="slide" data-slide="8">
+    <div class="slide-title large">How It Works</div>
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+      <div class="flow-container">
+        <div class="flow-box">
+          <div class="flow-box-label">Scan</div>
+          <div class="flow-box-sub">Project</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">
+          <div class="flow-box-label">Detect</div>
+          <div class="flow-box-sub">Stack</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">
+          <div class="flow-box-label">Ask</div>
+          <div class="flow-box-sub">Questions</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box" style="position: relative;">
+          <div class="flow-box-label">Generate</div>
+          <div class="flow-box-sub">Files</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">
+          <div class="flow-box-label">Done</div>
+          <div class="flow-box-sub">&nbsp;</div>
+        </div>
+      </div>
+      <div class="output-branch">
+        <div>
+          <div class="output-arrow">↑</div>
+          <div class="output-label">CLAUDE.md</div>
+        </div>
+        <div>
+          <div class="output-arrow">↑</div>
+          <div class="output-label">.cursorrules</div>
+        </div>
+        <div>
+          <div class="output-arrow">↑</div>
+          <div class="output-label">/commands</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 9 — Auto-Detection (1/2) ======================== -->
+  <div class="slide" data-slide="9">
+    <div class="slide-title large">Auto-Detection — What We Scan</div>
+    <div style="height: 32px;"></div>
+    <div class="detect-row">
+      <div class="detect-label">Framework</div>
+      <div class="detect-what">Next.js version, App Router vs Pages Router vs Hybrid</div>
+      <div class="detect-how">Detected from dependencies + directory structure</div>
+    </div>
+    <div class="detect-row">
+      <div class="detect-label">CMS</div>
+      <div class="detect-what">Sitecore XM Cloud or Sitecore JSS</div>
+      <div class="detect-how">Detected from @sitecore-jss/* or @sitecore-content-sdk/*</div>
+    </div>
+    <div class="detect-row">
+      <div class="detect-label">Styling</div>
+      <div class="detect-what">Tailwind CSS, SCSS, styled-components, CSS Modules</div>
+      <div class="detect-how">Detected from dependencies + config files</div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 10 — Auto-Detection (2/2) ======================== -->
+  <div class="slide" data-slide="10">
+    <div class="slide-title large">Auto-Detection — What We Scan <span style="font-weight: 400; font-size: 24px; color: var(--text-secondary);">(continued)</span></div>
+    <div style="height: 32px;"></div>
+    <div class="detect-row">
+      <div class="detect-label">TypeScript</div>
+      <div class="detect-what">Presence + strict mode</div>
+      <div class="detect-how">Detected from tsconfig.json</div>
+    </div>
+    <div class="detect-row">
+      <div class="detect-label">Monorepo</div>
+      <div class="detect-what">Turborepo, Nx, Lerna, pnpm workspaces</div>
+      <div class="detect-how">Detected from turbo.json, nx.json, workspace configs</div>
+    </div>
+    <div class="detect-row">
+      <div class="detect-label">Package Manager</div>
+      <div class="detect-what">npm, pnpm, yarn, bun</div>
+      <div class="detect-how">Detected from lock files + packageManager field</div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 11 — Shared Coding Standards (1/2) ======================== -->
+  <div class="slide" data-slide="11">
+    <div class="slide-title large">One Standard. Every Project. Every Developer.</div>
+    <div class="slide-subtitle">AI Kit embeds Horizontal's coding standards into every generated config.</div>
+    <div style="height: 16px;"></div>
+    <div class="standard-block">
+      <div class="standard-label">Naming</div>
+      <div class="standard-detail">Components: PascalCase &middot; Hooks: camelCase<br>Constants: UPPER_SNAKE_CASE &middot; One component per file</div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Structure</div>
+      <div class="standard-detail">Components under 200 lines — split if larger<br>Colocate: component + types + tests + styles<br>Separate business logic from UI with custom hooks</div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Import Order</div>
+      <div class="standard-detail">External packages → Internal shared →<br>Local relative → Types</div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 12 — Shared Coding Standards (2/2) ======================== -->
+  <div class="slide" data-slide="12">
+    <div class="slide-title large">One Standard. Every Project. Every Developer.</div>
+    <div style="height: 32px;"></div>
+    <div class="standard-block">
+      <div class="standard-label">Error Handling</div>
+      <div class="standard-detail">Always handle error states — never blank screens<br>User-friendly messages, not raw error strings</div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Accessibility</div>
+      <div class="standard-detail">Semantic HTML, alt text, keyboard navigation<br>ARIA labels, 4.5:1 color contrast ratio</div>
+    </div>
+    <div class="standard-block">
+      <div class="standard-label">Git Practices</div>
+      <div class="standard-detail">Conventional commits: feat: / fix: / refactor:<br>One logical change per commit, never commit secrets</div>
+    </div>
+    <div style="height: 48px;"></div>
+    <div style="font-weight: 500; font-size: 18px; color: var(--text-primary);">
+      These standards are baked into every CLAUDE.md and .cursorrules file.<br>
+      AI follows these rules automatically — no developer action needed.
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 13 — Template Assembly ======================== -->
+  <div class="slide" data-slide="13">
+    <div class="slide-title large">Smart Template Assembly</div>
+    <div class="slide-subtitle">Generated configs are assembled from modular fragments based on YOUR project.</div>
+    <div style="height: 16px;"></div>
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+      <div class="fragment-row"><div class="fragment-check">✓</div><div class="fragment-name">base</div><div class="fragment-desc">Always included — standards, workflow, safety</div></div>
+      <div class="fragment-row"><div class="fragment-check">?</div><div class="fragment-name">nextjs-app-router</div><div class="fragment-desc">If App Router detected</div></div>
+      <div class="fragment-row"><div class="fragment-check">?</div><div class="fragment-name">nextjs-pages-router</div><div class="fragment-desc">If Pages Router detected</div></div>
+      <div class="fragment-row"><div class="fragment-check">?</div><div class="fragment-name">sitecore-xmc</div><div class="fragment-desc">If Sitecore XM Cloud detected</div></div>
+      <div class="fragment-row"><div class="fragment-check">?</div><div class="fragment-name">tailwind</div><div class="fragment-desc">If Tailwind CSS detected</div></div>
+      <div class="fragment-row"><div class="fragment-check">?</div><div class="fragment-name">typescript</div><div class="fragment-desc">If TypeScript detected</div></div>
+      <div class="fragment-row"><div class="fragment-check">?</div><div class="fragment-name">monorepo</div><div class="fragment-desc">If monorepo tooling detected</div></div>
+      <div class="fragment-row"><div class="fragment-check">?</div><div class="fragment-name">figma</div><div class="fragment-desc">If Figma workflow detected</div></div>
+    </div>
+    <div style="height: 32px;"></div>
+    <div class="card" style="padding: 16px 24px;">
+      <span style="font-weight: 400; font-size: 16px; color: var(--text-secondary);">Example output for Next.js 14 + Tailwind + TypeScript:</span><br>
+      <span class="mono" style="font-weight: 500; font-size: 16px; color: var(--text-primary);">base + nextjs-app-router + tailwind + typescript</span>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 14 — Generated CLAUDE.md Sample ======================== -->
+  <div class="slide" data-slide="14">
+    <div class="slide-title large">What Gets Generated — CLAUDE.md <span style="font-weight: 400; font-size: 24px; color: var(--text-secondary);">(sample)</span></div>
+    <div style="height: 24px;"></div>
+    <div class="code-block" style="flex: 1;">
+<span style="font-weight: 700;"># my-project — AI Assistant Rules</span>
+
+<span style="color: var(--text-secondary);">&gt; Auto-generated by @horizontal/ai-kit</span>
+<span style="color: var(--text-secondary);">&gt; Tech Stack: Next.js 14 · Sitecore XM Cloud · TypeScript · Tailwind CSS</span>
+
+<span style="font-weight: 700;">## Horizontal Coding Standards</span>
+- PascalCase components, under 200 lines
+- Separate logic from UI with custom hooks
+- Always handle error states, semantic HTML
+
+<span style="font-weight: 700;">## Next.js App Router</span>
+- Server Components by default
+- Use generateMetadata for SEO
+
+<span style="font-weight: 700;">## Sitecore XM Cloud</span>
+- Use &lt;Text&gt;, &lt;RichText&gt;, &lt;Image&gt; field helpers
+
+<span style="font-weight: 700;">## Tailwind CSS</span>
+- Mobile-first, use design tokens</div>
+  </div>
+
+  <!-- ======================== SLIDE 15 — The Key Innovation ======================== -->
+  <div class="slide center-all" data-slide="15">
+    <div style="max-width: 700px;">
+      <div style="font-weight: 700; font-size: 44px; color: var(--text-primary); margin-bottom: 48px;">
+        The Key Innovation
+      </div>
+      <div class="mono" style="font-size: 48px; color: var(--highlight); margin-bottom: 48px;">
+        /prompt-help
+      </div>
+      <div style="font-weight: 400; font-size: 22px; color: var(--text-secondary); max-width: 650px; line-height: 1.6; margin-bottom: 32px;">
+        An interactive prompt builder that asks ALL the right questions
+        so the developer never writes a vague prompt again.
+      </div>
+      <div style="font-weight: 500; font-size: 18px; color: var(--text-primary);">
+        Think of the developer as an intern — the tool extracts every detail.
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 16 — /prompt-help in Action ======================== -->
+  <div class="slide" data-slide="16">
+    <div class="slide-title large">/prompt-help in Action</div>
+    <div style="height: 24px;"></div>
+    <div class="convo-card" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+      <div class="convo-line">
+        <div class="convo-label-ai">AI</div>
+        <div class="convo-text">What do you need help with?</div>
+      </div>
+      <div class="convo-line" style="margin-bottom: 4px;">
+        <div></div>
+        <div class="convo-text" style="color: var(--text-secondary);">1. New Component&nbsp;&nbsp; 2. New Page&nbsp;&nbsp; 3. Fix a Bug&nbsp;&nbsp; ...</div>
+      </div>
+      <div style="height: 12px;"></div>
+      <div class="convo-line">
+        <div class="convo-label-dev">Dev</div>
+        <div class="convo-text">1. New Component</div>
+      </div>
+      <div style="height: 16px;"></div>
+      <div class="convo-qa">
+        <div class="convo-label-ai">AI</div><div class="convo-text">Component name?</div>
+        <div class="convo-label-dev">Dev</div><div class="convo-text">ProductCard</div>
+      </div>
+      <div class="convo-qa">
+        <div class="convo-label-ai">AI</div><div class="convo-text">What does it do?</div>
+        <div class="convo-label-dev">Dev</div><div class="convo-text">Shows product info</div>
+      </div>
+      <div class="convo-qa">
+        <div class="convo-label-ai">AI</div><div class="convo-text">Server or Client Component?</div>
+        <div class="convo-label-dev">Dev</div><div class="convo-text">Client</div>
+      </div>
+      <div class="convo-qa">
+        <div class="convo-label-ai">AI</div><div class="convo-text">Responsive behavior?</div>
+        <div class="convo-label-dev">Dev</div><div class="convo-text">Stack on mobile</div>
+      </div>
+      <div class="convo-qa">
+        <div class="convo-label-ai">AI</div><div class="convo-text">Similar component to reference?</div>
+        <div class="convo-label-dev">Dev</div><div class="convo-text">UserCard.tsx</div>
+      </div>
+      <div class="convo-result">
+        → Generates a complete, structured prompt with all context<br>
+        → Developer says "execute" — perfect output first try
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 17 — Different Questions per Task ======================== -->
+  <div class="slide" data-slide="17">
+    <div class="slide-title large">Every Task Gets Different Questions</div>
+    <div style="height: 32px;"></div>
+    <div class="three-cols">
+      <div>
+        <div class="col-header">New Component</div>
+        <div class="col-item">Component name?</div>
+        <div class="col-item">What does it do?</div>
+        <div class="col-item">Where does it go?</div>
+        <div class="col-item">What props?</div>
+        <div class="col-item">Server or Client?</div>
+        <div class="col-item">Data fetching?</div>
+        <div class="col-item">Responsive needs?</div>
+        <div class="col-item">Similar component?</div>
+      </div>
+      <div class="col-divider"></div>
+      <div>
+        <div class="col-header">Fix a Bug</div>
+        <div class="col-item">Which files?</div>
+        <div class="col-item">Expected behavior?</div>
+        <div class="col-item">Actual behavior?</div>
+        <div class="col-item">Steps to reproduce?</div>
+        <div class="col-item">Error messages?</div>
+        <div class="col-item">When did it start?</div>
+        <div class="col-item">What have you tried?</div>
+      </div>
+      <div class="col-divider"></div>
+      <div>
+        <div class="col-header">Write Tests</div>
+        <div class="col-item">Which files to test?</div>
+        <div class="col-item">Unit or E2E?</div>
+        <div class="col-item">Testing framework?</div>
+        <div class="col-item">Key scenarios?</div>
+        <div class="col-item">Edge cases?</div>
+        <div class="col-item">What to mock?</div>
+        <div class="col-item">Coverage target?</div>
+      </div>
+    </div>
+    <div style="font-weight: 500; font-size: 18px; color: var(--text-primary); text-align: center; margin-top: 40px;">
+      10 task types &times; 6–12 questions each
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 18 — All Slash Commands ======================== -->
+  <div class="slide" data-slide="18">
+    <div class="slide-title large">Pre-Built Slash Commands</div>
+    <div style="height: 24px;"></div>
+    <div>
+      <div class="cmd-row"><div class="cmd-name">/prompt-help</div><div class="cmd-desc">Interactive prompt builder — start here</div></div>
+      <div class="cmd-row"><div class="cmd-name">/review</div><div class="cmd-desc">Deep code review as a Senior Engineer</div></div>
+      <div class="cmd-row"><div class="cmd-name">/fix-bug</div><div class="cmd-desc">Guided bug fix with root cause analysis</div></div>
+      <div class="cmd-row"><div class="cmd-name">/new-component</div><div class="cmd-desc">Scaffold a component matching project patterns</div></div>
+      <div class="cmd-row"><div class="cmd-name">/new-page</div><div class="cmd-desc">Create a page/route with data fetching + SEO</div></div>
+      <div class="cmd-row"><div class="cmd-name">/understand</div><div class="cmd-desc">Explain code for learning</div></div>
+      <div class="cmd-row"><div class="cmd-name">/test</div><div class="cmd-desc">Generate tests with edge case coverage</div></div>
+      <div class="cmd-row"><div class="cmd-name">/optimize</div><div class="cmd-desc">Performance audit with impact ranking</div></div>
+      <div class="cmd-row"><div class="cmd-name">/figma-to-code</div><div class="cmd-desc">Guided Figma design to code workflow</div></div>
+      <div class="cmd-row"><div class="cmd-name">/design-tokens</div><div class="cmd-desc">Read and display project design tokens</div></div>
+    </div>
+    <div style="font-weight: 400; font-size: 14px; color: var(--text-secondary); margin-top: 32px;">
+      Copied to .claude/commands/ — available instantly in Claude Code
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 19 — Three Commands ======================== -->
+  <div class="slide" data-slide="19">
+    <div class="slide-title large">Simple CLI — Three Commands</div>
+    <div style="height: 32px;"></div>
+    <div style="display: flex; flex-direction: column; gap: 32px; flex: 1; justify-content: center;">
+      <div>
+        <div class="cli-block"><div class="cli-cmd">$ npx @horizontal/ai-kit init</div></div>
+        <div class="cli-desc">First-time setup. Scans, asks questions, generates everything.</div>
+      </div>
+      <div>
+        <div class="cli-block"><div class="cli-cmd">$ npx @horizontal/ai-kit update</div></div>
+        <div class="cli-desc">Re-scans and refreshes configs after project changes.</div>
+      </div>
+      <div>
+        <div class="cli-block"><div class="cli-cmd">$ npx @horizontal/ai-kit reset</div></div>
+        <div class="cli-desc">Removes all generated files. Clean slate.</div>
+      </div>
+    </div>
+    <div class="takeaway">No config files to write. No docs to read. Just run it.</div>
+  </div>
+
+  <!-- ======================== SLIDE 20 — Before vs After ======================== -->
+  <div class="slide" data-slide="20">
+    <div class="slide-title large" style="margin-bottom: 32px;">Before vs After</div>
+    <div class="ba-container">
+      <div>
+        <div class="ba-header before">Before AI Kit</div>
+        <div class="ba-row"><div class="ba-text before">"Create a hero component"<br>Expects 100% from one line</div></div>
+        <div class="ba-row"><div class="ba-text before">AI has no context about the project<br>Guesses framework, CMS, patterns</div></div>
+        <div class="ba-row"><div class="ba-text before">Output breaks project standards<br>Different code style per developer</div></div>
+      </div>
+      <div class="ba-divider"></div>
+      <div>
+        <div class="ba-header after">After AI Kit</div>
+        <div class="ba-row"><div class="ba-text after">/prompt-help → answers 10 questions<br>→ structured prompt → correct output</div></div>
+        <div class="ba-row"><div class="ba-text after">CLAUDE.md loaded automatically<br>Knows stack, router, tokens, scripts</div></div>
+        <div class="ba-row"><div class="ba-text after">Follows Horizontal standards<br>Same conventions, every project</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SLIDE 21 — Get Started ======================== -->
+  <div class="slide center-all" data-slide="21">
+    <div style="max-width: 800px;">
+      <div style="font-weight: 700; font-size: 44px; color: var(--text-primary); margin-bottom: 48px;">
+        Get Started Today
+      </div>
+      <div class="mono" style="font-size: 36px; color: var(--highlight); margin-bottom: 48px;">
+        npx @horizontal/ai-kit init
+      </div>
+      <div style="font-weight: 400; font-size: 20px; color: var(--text-secondary); margin-bottom: 16px;">
+        Works with any Horizontal project.
+      </div>
+      <div style="font-weight: 400; font-size: 20px; color: var(--text-secondary); margin-bottom: 48px;">
+        Next.js &middot; Sitecore XM Cloud &middot; Tailwind &middot; TypeScript &middot; Monorepos
+      </div>
+      <div style="font-weight: 500; font-size: 22px; color: var(--text-primary);">
+        Same coding standards. Every project. Every developer.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Slide number -->
+<div class="slide-num" id="slideNum"></div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    document.getElementById('progressBar').style.width =
+      ((current + 1) / total * 100) + '%';
+    document.getElementById('slideNum').textContent =
+      (current + 1) + ' / ' + total;
+  }
+
+  function scaleDeck() {
+    const deck = document.getElementById('deck');
+    const sw = 1920, sh = 1080;
+    const ww = window.innerWidth, wh = window.innerHeight;
+    const scale = Math.min(ww / sw, wh / sh);
+    deck.style.width = sw + 'px';
+    deck.style.height = sh + 'px';
+    deck.style.transform = 'scale(' + scale + ')';
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      showSlide(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      showSlide(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(total - 1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  // Click navigation
+  document.getElementById('deck').addEventListener('click', function(e) {
+    const x = e.clientX;
+    if (x > window.innerWidth * 0.5) {
+      showSlide(current + 1);
+    } else {
+      showSlide(current - 1);
+    }
+  });
+
+  // Touch navigation
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (dx < -50) showSlide(current + 1);
+    else if (dx > 50) showSlide(current - 1);
+  });
+
+  window.addEventListener('resize', scaleDeck);
+  scaleDeck();
+  showSlide(0);
+})();
+</script>
+</body>
+</html>

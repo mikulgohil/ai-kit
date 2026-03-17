@@ -1,0 +1,58 @@
+{
+  "name": "@horizontal/ai-kit",
+  "version": "1.0.0",
+  "description": "AI-assisted development setup kit for Horizontal Digital projects. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, slash commands, and developer guides.",
+  "type": "module",
+  "bin": {
+    "ai-kit": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "commands",
+    "guides",
+    "docs-scaffolds"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "claude-code",
+    "cursor",
+    "developer-tools",
+    "cli",
+    "nextjs",
+    "tailwind",
+    "sitecore"
+  ],
+  "author": "Horizontal Digital",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AgarwalHorizontal/ai-kit.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.0.0",
+    "chalk": "^5.4.0",
+    "commander": "^13.0.0",
+    "fs-extra": "^11.0.0",
+    "ora": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.0",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.0.0"
+  }
+}
