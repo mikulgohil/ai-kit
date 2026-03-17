@@ -66,7 +66,7 @@ Detailed usage is covered in the generated guides under `ai-kit/guides/` after r
 
 ## Repository
 
-[https://github.com/AgarwalHorizontal/ai-kit](https://github.com/AgarwalHorizontal/ai-kit)
+[https://github.com/mikulgohil/ai-kit](https://github.com/mikulgohil/ai-kit)
 
 ## License
 

@@ -40,7 +40,7 @@
 - [ ] Keep it under 100 lines — link to guides for detail
 
 ### 5. Fix GitHub Repository URL
-- [ ] Update `package.json` → correct Horizontal GitHub org URL (currently placeholder `AgarwalHorizontal/ai-kit.git`)
+- [x] Update `package.json` → updated to `mikulgohil/ai-kit.git`
 
 ---
 
