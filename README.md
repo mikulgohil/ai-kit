@@ -16,7 +16,7 @@ Running `init` scans your project and produces:
 
 - **CLAUDE.md** — Project-aware rules and conventions for Claude Code
 - **.cursorrules** — Equivalent rules for Cursor AI
-- **.claude/commands/** — 10 slash commands: `prompt-help`, `review`, `fix-bug`, `new-component`, `new-page`, `understand`, `test`, `optimize`, `figma-to-code`, `design-tokens`
+- **.claude/commands/** — 25 slash commands across 5 categories: getting started, building, quality & review, maintenance, workflow
 - **ai-kit/guides/** — 5 developer guides: getting-started, prompt-playbook, when-to-use-ai, token-saving-tips, figma-workflow
 - **docs/** — 3 doc scaffolds: mistakes-log, decisions-log, time-log
 

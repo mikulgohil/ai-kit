@@ -21,6 +21,21 @@ const ALL_COMMANDS = [
   'optimize',
   'figma-to-code',
   'design-tokens',
+  'accessibility-audit',
+  'security-check',
+  'refactor',
+  'api-route',
+  'pre-pr',
+  'migrate',
+  'error-boundary',
+  'type-fix',
+  'extract-hook',
+  'dep-check',
+  'env-setup',
+  'commit-msg',
+  'sitecore-debug',
+  'responsive-check',
+  'document',
 ];
 
 function makeTempDir(): string {
