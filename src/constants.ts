@@ -21,6 +21,8 @@ export const GENERATED_FILES = {
   cursorMdcDir: '.cursor/rules',
   claudeSettings: '.claude/settings.json',
   claudeCommands: '.claude/commands',
+  claudeSkills: '.claude/skills',
+  cursorSkills: '.cursor/skills',
 } as const;
 
 export const TEMPLATE_FRAGMENTS = [

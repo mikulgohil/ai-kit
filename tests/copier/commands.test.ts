@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'fs-extra';
 import os from 'os';
 import path from 'path';
-import { copyCommands } from '../../src/copier/commands.js';
+import { copyCommands, copySkills } from '../../src/copier/skills.js';
 import { COMMANDS_DIR } from '../../src/constants.js';
 
 /**
@@ -126,6 +126,48 @@ describe('copyCommands', () => {
         await copyCommands(tmpDir);
         const restored = fs.readFileSync(reviewDest, 'utf-8');
         expect(restored).not.toBe('stale content');
+      }
+    });
+  });
+
+  describe('skill directories', () => {
+    it('creates skill directories for Claude Code and Cursor', async () => {
+      await copyCommands(tmpDir);
+      // Check Claude Code skills
+      expect(fs.existsSync(path.join(tmpDir, '.claude', 'skills', 'review', 'SKILL.md'))).toBe(true);
+      // Check Cursor skills
+      expect(fs.existsSync(path.join(tmpDir, '.cursor', 'skills', 'review', 'SKILL.md'))).toBe(true);
+      // Check legacy commands still exist
+      expect(fs.existsSync(path.join(tmpDir, '.claude', 'commands', 'review.md'))).toBe(true);
+    });
+
+    it('creates a SKILL.md with the same content as the source command', async () => {
+      await copySkills(tmpDir);
+      const availableCommands = ALL_COMMANDS.filter((cmd) =>
+        fs.existsSync(path.join(COMMANDS_DIR, `${cmd}.md`)),
+      );
+
+      for (const cmd of availableCommands) {
+        const sourceContent = fs.readFileSync(path.join(COMMANDS_DIR, `${cmd}.md`), 'utf-8');
+        const claudeSkillContent = fs.readFileSync(
+          path.join(tmpDir, '.claude', 'skills', cmd, 'SKILL.md'),
+          'utf-8',
+        );
+        const cursorSkillContent = fs.readFileSync(
+          path.join(tmpDir, '.cursor', 'skills', cmd, 'SKILL.md'),
+          'utf-8',
+        );
+        expect(claudeSkillContent).toBe(sourceContent);
+        expect(cursorSkillContent).toBe(sourceContent);
+      }
+    });
+
+    it('creates skill directories for all available commands', async () => {
+      const copied = await copySkills(tmpDir);
+
+      for (const skill of copied) {
+        expect(fs.existsSync(path.join(tmpDir, '.claude', 'skills', skill, 'SKILL.md'))).toBe(true);
+        expect(fs.existsSync(path.join(tmpDir, '.cursor', 'skills', skill, 'SKILL.md'))).toBe(true);
       }
     });
   });

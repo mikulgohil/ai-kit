@@ -7,7 +7,7 @@ import { generateClaudeMd } from '../generator/claude-md.js';
 import { generateCursorRules } from '../generator/cursorrules.js';
 import { generateMdcFiles } from '../generator/cursor-mdc.js';
 import { generateConfig } from '../generator/config.js';
-import { copyCommands } from '../copier/commands.js';
+import { copySkills } from '../copier/skills.js';
 import { copyGuides } from '../copier/guides.js';
 import { scaffoldDocs } from '../copier/docs.js';
 import { AI_KIT_CONFIG_FILE, GENERATED_FILES } from '../constants.js';
@@ -82,7 +82,7 @@ export async function initCommand(targetPath?: string): Promise<void> {
   if (results.cursorMdcFiles > 0)
     logSuccess(`${results.cursorMdcFiles} .cursor/rules/*.mdc files generated`);
   if (results.commands.length > 0)
-    logSuccess(`${results.commands.length} slash commands copied`);
+    logSuccess(`${results.commands.length} skills generated (.claude/skills/ + .cursor/skills/)`);
   if (results.guides.length > 0)
     logSuccess(`${results.guides.length} guides added to ai-kit/guides/`);
   if (results.docs.length > 0)
@@ -211,11 +211,8 @@ async function generate(
       logWarning('CLAUDE.md exists, skipping');
     }
 
-    // Copy slash commands
-    result.commands = await copyCommands(projectDir);
-
-    // Ensure .claude/commands directory
-    await fs.ensureDir(path.join(projectDir, '.claude', 'commands'));
+    // Copy skills (also generates legacy .claude/commands/)
+    result.commands = await copySkills(projectDir);
   }
 
   // Generate .cursorrules

@@ -13,6 +13,8 @@ export async function resetCommand(targetPath?: string): Promise<void> {
   logInfo(`  - ${GENERATED_FILES.cursorRules}`);
   logInfo(`  - ${GENERATED_FILES.cursorMdcDir}/`);
   logInfo(`  - ${GENERATED_FILES.claudeCommands}/`);
+  logInfo(`  - ${GENERATED_FILES.claudeSkills}/`);
+  logInfo(`  - ${GENERATED_FILES.cursorSkills}/`);
   logInfo(`  - ai-kit/`);
   logInfo(`  - ${AI_KIT_CONFIG_FILE}`);
   console.log('');
@@ -50,11 +52,25 @@ export async function resetCommand(targetPath?: string): Promise<void> {
     removed.push(GENERATED_FILES.cursorMdcDir);
   }
 
-  // Remove .claude/commands/ (only ai-kit commands)
+  // Remove .claude/commands/ (legacy)
   const commandsDir = path.join(projectDir, GENERATED_FILES.claudeCommands);
   if (fileExists(commandsDir)) {
     await fs.remove(commandsDir);
     removed.push(GENERATED_FILES.claudeCommands);
+  }
+
+  // Remove .claude/skills/
+  const claudeSkillsDir = path.join(projectDir, GENERATED_FILES.claudeSkills);
+  if (fileExists(claudeSkillsDir)) {
+    await fs.remove(claudeSkillsDir);
+    removed.push(GENERATED_FILES.claudeSkills);
+  }
+
+  // Remove .cursor/skills/
+  const cursorSkillsDir = path.join(projectDir, GENERATED_FILES.cursorSkills);
+  if (fileExists(cursorSkillsDir)) {
+    await fs.remove(cursorSkillsDir);
+    removed.push(GENERATED_FILES.cursorSkills);
   }
 
   // Remove ai-kit/ folder

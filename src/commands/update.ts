@@ -7,7 +7,7 @@ import { generateClaudeMd } from '../generator/claude-md.js';
 import { generateCursorRules } from '../generator/cursorrules.js';
 import { generateMdcFiles } from '../generator/cursor-mdc.js';
 import { generateConfig } from '../generator/config.js';
-import { copyCommands } from '../copier/commands.js';
+import { copySkills } from '../copier/skills.js';
 import { copyGuides } from '../copier/guides.js';
 import { AI_KIT_CONFIG_FILE, GENERATED_FILES, VERSION } from '../constants.js';
 import {
@@ -106,8 +106,8 @@ export async function updateCommand(targetPath?: string): Promise<void> {
   }
 
   // Update commands and guides
-  const commands = await copyCommands(projectDir);
-  logSuccess(`${commands.length} slash commands updated`);
+  const commands = await copySkills(projectDir);
+  logSuccess(`${commands.length} skills updated (.claude/skills/ + .cursor/skills/)`);
 
   const guides = await copyGuides(projectDir);
   logSuccess(`${guides.length} guides updated`);

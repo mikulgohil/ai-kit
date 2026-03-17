@@ -131,8 +131,10 @@ These standards are enforced across all projects to ensure consistency.
 - Document significant changes in `docs/` if the directory exists
 - When modifying a component, update its doc file's change log
 
-## Commands
-Available at: `.claude/commands/`
+## Skills & Commands
+Available as auto-discovered skills (`.claude/skills/`, `.cursor/skills/`) and legacy commands (`.claude/commands/`).
+
+AI will auto-discover and apply these when your task matches. You can also invoke them manually with `/skill-name`.
 
 **Getting Started**
 - `/prompt-help` — Interactive prompt builder (start here if unsure how to ask)
