@@ -7,7 +7,6 @@ export interface McpDetection {
   github: boolean;
   context7: boolean;
   perplexity: boolean;
-  notion: boolean;
 }
 
 export function detectMcpServers(projectPath: string): McpDetection {
@@ -32,6 +31,5 @@ export function detectMcpServers(projectPath: string): McpDetection {
     github: combined.includes('github'),
     context7: combined.includes('context7'),
     perplexity: combined.includes('perplexity'),
-    notion: combined.includes('notion'),
   };
 }
