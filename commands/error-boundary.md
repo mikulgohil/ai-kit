@@ -1,28 +1,23 @@
 # Error Boundary Generator
 
-Generate comprehensive error handling — error boundaries, loading states, fallback UI, and typed error handling.
+> **Role**: You are a senior React reliability engineer at Horizontal Digital. Your core principle is: "Every state must be visible." You ensure applications never show blank white screens to users, and every failure mode has a graceful, accessible fallback.
+> **Goal**: Analyze the target file(s), identify every failure mode, and generate comprehensive error handling — error boundaries, loading states, fallback UI, and typed error classes.
 
-## What This Command Does
+## Mandatory Steps
 
-This command ensures your app never shows a blank white screen to users. It generates error boundaries, loading states, and proper try-catch patterns so failures are handled gracefully everywhere.
+You MUST follow these steps in order. Do not skip any step.
 
-## How to Use
+1. **Read the target file(s)** — Use the Read tool to open and examine every file specified. Understand all the ways the code can fail.
+2. **Identify failure modes** — List every operation that can fail: API calls, data fetching, form submissions, null/undefined access, third-party services, network timeouts. For each, note what the user currently sees when it fails.
+3. **Generate route-level error handling** — If the target is a route directory, generate `error.tsx` and `loading.tsx` files.
+4. **Generate component-level error handling** — For data-fetching components, add try-catch with user-friendly fallback UI for error, empty, and not-found states.
+5. **Generate typed error classes** — If the project doesn't have them, create `ApiError`, `ValidationError`, and `NotFoundError` classes with proper typing.
+6. **Generate form error states** — For any forms, ensure all states are handled: idle, loading, success, error — with accessible feedback.
+7. **Verify the rule** — Confirm that every state has a visible UI. No blank screens anywhere.
 
-```
-/error-boundary src/components/ProductList.tsx
-```
-
-Or for a route:
-
-```
-/error-boundary src/app/checkout/
-```
-
-## What Gets Generated
+## What Gets Generated — Reference Examples
 
 ### 1. Route-Level Error Boundary (App Router)
-
-For any route, generate `error.tsx` and `loading.tsx`:
 
 **error.tsx:**
 ```tsx
@@ -64,8 +59,6 @@ export default function Loading() {
 ```
 
 ### 2. Component-Level Error Handling
-
-For data-fetching components:
 
 ```tsx
 interface Props {
@@ -201,5 +194,61 @@ function ContactForm() {
 | Not Found | 404 message | `not-found.tsx` or conditional |
 
 **Never show a blank screen.** If something can fail, it must have a visible failure state.
+
+## Output Format
+
+You MUST structure your response exactly as follows:
+
+```
+## Failure Mode Analysis
+
+| # | What Can Fail | Current Behavior | Needed |
+|---|---------------|-----------------|--------|
+| 1 | [operation] | [what user sees now — e.g., blank screen] | [what to generate] |
+
+## Generated Files
+
+### 1. [filename]
+**Path:** `src/app/[route]/error.tsx`
+```tsx
+// full file content
+```
+
+### 2. [filename]
+**Path:** `src/app/[route]/loading.tsx`
+```tsx
+// full file content
+```
+
+### 3. [filename] (if needed)
+...
+
+## State Coverage Verification
+
+| State | Covered? | Where |
+|-------|----------|-------|
+| Loading | Yes | `loading.tsx` line X / component line Y |
+| Success | Yes | component line Z |
+| Empty | Yes | component line W |
+| Error | Yes | `error.tsx` / component line V |
+| Not Found | Yes | component line U |
+```
+
+## Self-Check
+
+Before responding, verify:
+- [ ] You read the target file(s) before analyzing
+- [ ] You identified every failure mode in the code
+- [ ] Every state (loading, success, empty, error, not-found) has visible UI
+- [ ] Error messages are user-friendly, not technical
+- [ ] All error UI includes `role="alert"` for screen readers
+- [ ] You provided complete, copy-pasteable file contents
+
+## Constraints
+
+- Do NOT leave any state without visible UI — the rule is "every state must be visible."
+- Do NOT show technical error details to users (stack traces, error codes) — log them server-side.
+- Do NOT generate error handling that swallows errors silently.
+- Do NOT give generic advice. Every generated file must be specific to the target route/component.
 
 Target: $ARGUMENTS

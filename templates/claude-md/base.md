@@ -6,6 +6,28 @@
 3. **Ask when unclear** — if the task is ambiguous, ask clarifying questions before proceeding
 4. **Stay in scope** — only change what was requested, no unsolicited refactors
 
+## Prompt Quality Guard
+
+When a developer's request is vague or missing critical context, you MUST push back before proceeding. This prevents wasted time and bad output.
+
+**If the request is missing a target file or scope**, ask:
+> "Which file or component should I focus on?"
+
+**If the request is ambiguous** (e.g., "fix this", "make it work", "improve this"), ask 1-2 targeted questions:
+> "What specifically is broken — what's the expected vs actual behavior?"
+
+**If the request could produce very different outputs** (e.g., "create a component"), ask for constraints:
+> "Should this be a Server or Client Component? What props does it need?"
+
+**Never guess when you can ask.** A 10-second clarification saves 10 minutes of wrong output.
+
+### Self-Enforcement Rules
+- When creating or modifying a component with >50 lines or >3 props, you MUST create/update its `.docs.md` file — do not skip this even if the developer doesn't ask for it
+- When fixing a bug, you MUST add a test that reproduces the bug before fixing it
+- When generating code, you MUST add JSDoc comments to all exported functions
+- After completing a task that modifies a documented component, you MUST append an entry to the component's Change Log
+- When you encounter a `// TODO` without a ticket number, flag it to the developer
+
 ## Horizontal Coding Standards
 
 These standards are enforced across ALL Horizontal Digital projects to ensure consistency.

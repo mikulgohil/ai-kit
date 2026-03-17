@@ -1,22 +1,23 @@
 # Extract Hook
 
-Extract logic from a component into a reusable custom React hook.
+> **Role**: You are a senior React architect at Horizontal Digital. You specialize in separating concerns — logic goes in hooks, rendering goes in components. You create hooks that are typed, testable, and reusable.
+> **Goal**: Read the target component, identify all extractable logic (state, effects, derived values), create a properly typed custom hook, update the component to use it, and generate a test file for the hook.
 
-## What This Command Does
+## Mandatory Steps
 
-When a component has too much logic mixed with UI, this command identifies what should be a custom hook, creates the hook file, moves the logic, and updates the component to use the hook — all while maintaining the same behavior.
+You MUST follow these steps in order. Do not skip any step.
 
-## How to Use
-
-```
-/extract-hook src/components/ProductList.tsx — extract the filtering and pagination logic
-```
-
-Or let the AI identify what to extract:
-
-```
-/extract-hook src/components/Dashboard.tsx
-```
+1. **Read the target component** — Use the Read tool to open and examine the file. Understand all the state, effects, callbacks, and derived values it contains.
+2. **Identify extractable logic** — Find all of the following in the component:
+   - `useState` calls (3+ is a strong signal to extract)
+   - `useEffect` with complex logic (data fetching, subscriptions, timers)
+   - `useMemo` / `useCallback` with non-trivial computations
+   - Derived state (values computed from other state)
+   - Logic that is duplicated in other components
+3. **Design the hook interface** — Define the typed `Options` (input) and `Return` (output) interfaces. Return an object (not an array) — objects are easier to destructure selectively.
+4. **Create the hook file** — Move all identified logic into a `useXxx` function with the typed interface. Place it in `hooks/` directory (or colocated if single-use).
+5. **Update the component** — Replace the extracted logic with a single hook call. The component should now only handle rendering.
+6. **Generate a test file** — Create a test file for the hook using `@testing-library/react-hooks` or `renderHook` patterns.
 
 ## When to Extract a Hook
 
@@ -165,18 +166,72 @@ export function ProductList({ categoryId }: { categoryId: string }) {
 }
 ```
 
-## Output
+## Output Format
 
-1. New hook file with typed interface for parameters and return value
-2. Updated component that imports and uses the hook
-3. Test file for the hook (`useHookName.test.ts`)
+You MUST structure your response exactly as follows:
 
-## Rules
+```
+## Extraction Analysis
 
-- Hook name starts with `use` (React convention)
-- Hook returns a typed object (not an array — objects are easier to destructure selectively)
-- Hook file goes in `hooks/` directory (or colocated if single-use)
-- Component only handles rendering after extraction
-- Behavior stays identical — extract, don't enhance
+### Logic Found in Component
+| # | Type | Lines | Extractable? | Why |
+|---|------|-------|-------------|-----|
+| 1 | useState | L5-L10 | Yes | 6 state variables managing product data |
+| 2 | useEffect | L12-L25 | Yes | Data fetching logic |
+| 3 | useMemo | L27-L35 | Yes | Derived filtered/sorted list |
+
+### Hook Design
+- **Name:** `useProducts`
+- **File:** `hooks/useProducts.ts`
+- **Input:** `{ categoryId: string }`
+- **Output:** `{ products, filtered, loading, error, search, setSearch, sortBy, setSortBy, page, setPage }`
+
+## Generated Files
+
+### 1. Hook File
+**Path:** `hooks/useProducts.ts`
+```tsx
+// complete hook code
+```
+
+### 2. Updated Component
+**Path:** `src/components/ProductList.tsx`
+```tsx
+// complete updated component
+```
+
+### 3. Hook Test
+**Path:** `hooks/__tests__/useProducts.test.ts`
+```tsx
+// test file
+```
+
+## Behavior Verification
+- [ ] All state variables accounted for
+- [ ] All effects moved to hook
+- [ ] All derived values moved to hook
+- [ ] Component only handles rendering
+- [ ] Hook returns typed object (not array)
+```
+
+## Self-Check
+
+Before responding, verify:
+- [ ] You read the target file before analyzing
+- [ ] You identified ALL useState, useEffect, useMemo, and useCallback in the component
+- [ ] The hook has typed `Options` and `Return` interfaces
+- [ ] The hook returns an object, not an array
+- [ ] The updated component only handles rendering
+- [ ] The test file covers the hook's key behaviors
+- [ ] Behavior is identical before and after extraction
+
+## Constraints
+
+- Hook name MUST start with `use` (React convention).
+- Hook MUST return a typed object (not an array — objects are easier to destructure selectively).
+- Hook file goes in `hooks/` directory (or colocated if single-use).
+- Component MUST only handle rendering after extraction.
+- Behavior MUST stay identical — extract, don't enhance.
+- Do NOT give generic advice. Every suggestion must reference specific code in the target component.
 
 Target: $ARGUMENTS

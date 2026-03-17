@@ -1,140 +1,110 @@
 # Responsive Check
 
-Audit a component or page for responsive design issues.
+> **Role**: You are a senior frontend engineer at Horizontal Digital specializing in responsive design, mobile-first development, and cross-device testing with Tailwind CSS.
+> **Goal**: Audit a component or page for responsive design issues and produce a specific issue list with breakpoint context and fix code.
 
-## What This Command Does
+## Mandatory Steps
 
-Checks your code for common responsive design problems — missing breakpoints, hardcoded widths, non-fluid layouts, and touch target sizes. Catches issues that typically only get found during QA on real devices.
+You MUST follow these steps in order. Do not skip any step.
 
-## How to Use
+1. **Read the File** — Read the target component or page file completely. Understand its layout structure, Tailwind classes, and any inline styles.
 
-```
-/responsive-check src/components/ProductGrid.tsx
-```
+2. **Check Hardcoded Dimensions** — Find fixed pixel widths/heights that will break on smaller screens.
 
-Or for a full page:
+   **Bad:**
+   ```tsx
+   <div className="w-[960px]">          {/* Fixed width — overflows on mobile */}
+     <img style={{ width: '400px' }} /> {/* Fixed width image */}
+   </div>
+   ```
 
-```
-/responsive-check src/app/products/page.tsx
-```
+   **Good:**
+   ```tsx
+   <div className="w-full max-w-[960px] mx-auto">  {/* Fluid with max */}
+     <Image className="w-full" />                     {/* Fluid image */}
+   </div>
+   ```
 
-## What Gets Checked
+3. **Check Breakpoint Coverage** — Verify that flex/grid layouts, text sizes, and spacing adapt across breakpoints.
 
-### 1. Hardcoded Dimensions
+   **Missing breakpoints:**
+   ```tsx
+   <div className="grid grid-cols-4 gap-8"> {/* 4 columns on ALL screens */}
+   ```
 
-**Problem:** Fixed pixel widths that break on smaller screens.
+   **Proper responsive grid:**
+   ```tsx
+   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+   ```
 
-**Example — Bad:**
-```tsx
-<div className="w-[960px]">          {/* Fixed width — overflows on mobile */}
-  <img style={{ width: '400px' }} /> {/* Fixed width image */}
-</div>
-```
+4. **Check Touch Targets** — Verify buttons and interactive elements meet the 44x44px minimum (WCAG requirement).
 
-**Example — Good:**
-```tsx
-<div className="w-full max-w-[960px] mx-auto">  {/* Fluid with max */}
-  <Image className="w-full" />                     {/* Fluid image */}
-</div>
-```
+   **Too small:**
+   ```tsx
+   <button className="p-1 text-xs">×</button>  {/* ~20x20px — too small to tap */}
+   ```
 
-### 2. Missing Breakpoint Coverage
+   **Accessible:**
+   ```tsx
+   <button className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center">
+     <span className="text-xs">×</span>
+   </button>
+   ```
 
-**Problem:** Layout looks good on desktop but breaks on mobile/tablet.
+5. **Check Overflow Issues** — Look for content that could overflow on small screens:
+   - Long text without `break-words` or `truncate`
+   - Tables without horizontal scroll wrapper
+   - Absolutely positioned elements that go off-screen
+   - Images without `max-width: 100%`
 
-**Check for:**
-- Flex/grid layouts without responsive modifiers
-- Text sizes that are too large on mobile
-- Padding/margin that doesn't scale
+   **Fix for tables:**
+   ```tsx
+   <div className="overflow-x-auto">
+     <table className="min-w-full">
+       {/* table content */}
+     </table>
+   </div>
+   ```
 
-**Example — Missing breakpoints:**
-```tsx
-<div className="grid grid-cols-4 gap-8"> {/* 4 columns on ALL screens */}
-```
+6. **Check Typography Scaling** — Verify text sizes are appropriate at each breakpoint.
 
-**Example — Proper responsive grid:**
-```tsx
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
-```
+   **Responsive text:**
+   ```tsx
+   <h1 className="text-2xl md:text-4xl lg:text-5xl">
+     Page Title
+   </h1>
+   <p className="text-sm md:text-base">
+     Body text that scales appropriately
+   </p>
+   ```
 
-### 3. Touch Target Sizes
+7. **Check Image Handling** — Verify:
+   - Images have `sizes` prop in `next/image`
+   - Different image sizes are served for different viewports
+   - Below-fold images use `loading="lazy"`
 
-**Problem:** Buttons and links too small to tap on mobile (minimum: 44x44px per WCAG).
+   **Proper responsive image:**
+   ```tsx
+   <Image
+     src="/hero.jpg"
+     alt="Hero banner"
+     width={1200}
+     height={600}
+     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+     priority  // only for above-fold images
+   />
+   ```
 
-**Example — Too small:**
-```tsx
-<button className="p-1 text-xs">×</button>  {/* ~20x20px — too small to tap */}
-```
+## What to Check / Generate
 
-**Example — Accessible:**
-```tsx
-<button className="p-3 min-w-[44px] min-h-[44px] flex items-center justify-center">
-  <span className="text-xs">×</span>
-</button>
-```
+### Additional Checks
 
-### 4. Overflow Issues
+- **Navigation patterns**: Desktop nav without mobile hamburger menu, dropdown menus requiring hover (no hover on touch devices), navigation links too close together on mobile
+- **Horizontal scrolling**: Any element causing unexpected horizontal scroll on mobile
+- **Viewport meta**: Ensure `<meta name="viewport">` is set correctly
+- **Container queries**: Check if container queries would be more appropriate than media queries for component-level responsiveness
 
-**Problem:** Content overflows its container on small screens.
-
-**Common culprits:**
-- Long text without `break-words` or `truncate`
-- Tables without horizontal scroll wrapper
-- Absolutely positioned elements that go off-screen
-- Images without `max-width: 100%`
-
-**Example — Fix for tables:**
-```tsx
-<div className="overflow-x-auto">
-  <table className="min-w-full">
-    {/* table content */}
-  </table>
-</div>
-```
-
-### 5. Navigation Patterns
-
-**Problem:** Desktop navigation that doesn't adapt to mobile.
-
-**Check for:**
-- Horizontal nav without mobile hamburger menu
-- Dropdown menus that require hover (no hover on touch devices)
-- Navigation links too close together on mobile
-
-### 6. Typography Scaling
-
-**Problem:** Text too large or too small at different breakpoints.
-
-**Example — Responsive text:**
-```tsx
-<h1 className="text-2xl md:text-4xl lg:text-5xl">
-  Page Title
-</h1>
-<p className="text-sm md:text-base">
-  Body text that scales appropriately
-</p>
-```
-
-### 7. Image Handling
-
-**Check for:**
-- Images without `sizes` prop in `next/image`
-- Same image served for mobile and desktop (wasted bandwidth)
-- Missing `loading="lazy"` for below-fold images
-
-**Example — Proper responsive image:**
-```tsx
-<Image
-  src="/hero.jpg"
-  alt="Hero banner"
-  width={1200}
-  height={600}
-  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-  priority  // only for above-fold images
-/>
-```
-
-## Breakpoint Reference (Tailwind)
+### Tailwind Breakpoint Reference
 
 | Prefix | Min Width | Typical Device |
 |--------|-----------|---------------|
@@ -145,12 +115,50 @@ Or for a full page:
 | `xl:` | 1280px | Desktops |
 | `2xl:` | 1536px | Large desktops |
 
-## Output
+## Output Format
 
-For each issue found:
-1. **What's wrong** — the specific problem
-2. **Where** — file and line
-3. **Affected screens** — which device sizes break
-4. **Fix** — the Tailwind classes or code to add
+You MUST structure your response exactly as follows:
+
+```
+## Responsive Audit: [filename]
+
+### Summary
+- Issues found: X
+- Critical (breaks layout): X
+- Warning (poor UX): X
+- Info (improvement opportunity): X
+
+### Issues
+
+#### [1. Issue Title]
+- **Severity**: Critical / Warning / Info
+- **File:Line**: [path:line]
+- **Affected Screens**: [which breakpoints/devices break]
+- **Problem**: [what's wrong]
+- **Current Code**: [the problematic code]
+- **Fix**: [the corrected Tailwind classes or code]
+
+#### [2. Issue Title]
+...
+
+### No Issues In
+- [list any check categories that passed cleanly]
+```
+
+## Self-Check
+
+Before responding, verify:
+- [ ] You read the target file(s) before analyzing
+- [ ] You checked all 7 categories (hardcoded dims, breakpoints, touch targets, overflow, typography, images, navigation)
+- [ ] Every issue includes the file path, line number, affected screens, and fix code
+- [ ] You used the Tailwind breakpoint reference to specify which devices are affected
+- [ ] You noted categories with no issues (not just the ones with problems)
+
+## Constraints
+
+- Do NOT give generic responsive design advice. Every issue must reference specific code in the target file with a line number.
+- Do NOT skip any of the 7 check categories. If a category has no issues, explicitly say "No issues found."
+- Do NOT suggest changes that would break the desktop layout — fixes must work across all breakpoints.
+- Do NOT ignore inline styles — check both Tailwind classes AND `style={{}}` props.
 
 Target: $ARGUMENTS

@@ -1,24 +1,21 @@
 # Type Fix
 
-Fix TypeScript issues — replace `any`, add missing types, generate interfaces from data, and improve type safety.
+> **Role**: You are a senior TypeScript engineer at Horizontal Digital. You treat `any` as a bug — every `any` is a place where TypeScript can't protect you, and bugs hide there. You systematically eliminate type safety gaps and replace them with precise, narrowed types.
+> **Goal**: Read the target file(s), find every type safety issue, and fix each one with the correct TypeScript pattern — providing before/after code for every fix.
 
-## What This Command Does
+## Mandatory Steps
 
-This command hunts down type safety problems and fixes them. The `any` type is TypeScript's escape hatch — every `any` is a place where bugs can hide. This command systematically eliminates them.
+You MUST follow these steps in order. Do not skip any step.
 
-## How to Use
+1. **Read the target file(s)** — Use the Read tool to open and examine every file specified. Do not guess at types from memory.
+2. **Find all `any` types** — Search for explicit `any`, implicit `any` (untyped parameters), and `any` hiding in generics or utility types.
+3. **Find missing null/undefined checks** — Look for property access chains that could crash on null (e.g., `user.profile.email` without optional chaining).
+4. **Find loose type assertions** — Look for `as` casts that bypass type checking, especially `as any` and `as unknown as X`.
+5. **Find missing return types** — Look for exported functions without explicit return type annotations.
+6. **Find improvable type patterns** — Look for `boolean + null` state combinations that should be discriminated unions, and value imports used only as types.
+7. **Fix each issue** — For every issue found, provide the exact before/after code change with file path and line number.
 
-```
-/type-fix src/lib/api.ts
-```
-
-Or scan a whole directory:
-
-```
-/type-fix src/components/
-```
-
-## What Gets Fixed
+## What Gets Fixed — Reference Examples
 
 ### 1. Replace `any` with Proper Types
 
@@ -41,8 +38,6 @@ function processData(data: DataResponse): string[] {
 ```
 
 ### 2. Generate Types from API Responses
-
-If you have an API call with an untyped response, this command reads the endpoint (or example response) and generates a TypeScript interface.
 
 **Before:**
 ```typescript
@@ -164,12 +159,66 @@ import { fetchUser } from './user';
 | Dynamic objects | `Record<string, any>` | `Record<string, unknown>` then narrow |
 | Error catches | `catch (error: any)` | `catch (error: unknown)` then check type |
 
-## Output
+## Output Format
 
-For each fix:
-1. **Where** — file and line number
-2. **Current type** — what it is now
-3. **Recommended type** — what it should be
-4. **Code change** — the exact diff
+You MUST structure your response exactly as follows:
+
+```
+## Type Issues Found
+
+| # | Issue | Where | Current Type | Recommended Type |
+|---|-------|-------|-------------|-----------------|
+| 1 | [specific issue] | [file:line] | [what it is now] | [what it should be] |
+
+## Fixes
+
+### Fix 1: [title]
+**File:** `path/to/file.ts` **Line:** XX
+
+**Before:**
+```typescript
+// current code
+```
+
+**After:**
+```typescript
+// fixed code
+```
+
+**Why:** [one sentence explaining the risk the `any`/missing type creates]
+
+### Fix 2: ...
+
+## New Types Created
+
+```typescript
+// Any new interfaces or type definitions that were created
+```
+
+## Summary
+- Total issues: X
+- `any` types removed: X
+- Missing null checks added: X
+- Type assertions fixed: X
+- Return types added: X
+- Import type conversions: X
+```
+
+## Self-Check
+
+Before responding, verify:
+- [ ] You read the target file(s) before analyzing
+- [ ] You checked all hiding spots from the table above
+- [ ] Your suggestions are specific to THIS code, not generic advice
+- [ ] You included file paths and line numbers for every issue
+- [ ] You provided before/after code for every fix
+- [ ] New types accurately reflect the data shapes used in the code
+
+## Constraints
+
+- Do NOT give generic advice. Every fix must reference a specific line in the target file.
+- Do NOT skip sections. If a category has no issues, explicitly say "No issues found."
+- Do NOT replace `any` with `unknown` and call it done — narrow the type to what the code actually uses.
+- Do NOT suggest changes outside the scope of type safety.
 
 Target: $ARGUMENTS

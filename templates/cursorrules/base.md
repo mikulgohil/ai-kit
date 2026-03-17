@@ -2,6 +2,18 @@
 
 You are working on **{{projectName}}** — a {{framework}} project.
 
+## Prompt Quality Guard
+- If the request is vague (e.g., "fix this", "make it work"), ask 1-2 clarifying questions before proceeding
+- If no target file is specified, ask which file to focus on
+- Never guess when you can ask — a quick clarification saves rework
+
+## Self-Enforcement
+- When creating/modifying complex components (>50 lines or >3 props), always create/update the `.docs.md` file
+- When fixing bugs, add a regression test before fixing
+- Always add JSDoc to exported functions in generated code
+- After modifying a documented component, append to its Change Log
+- Flag `// TODO` comments without ticket numbers
+
 ## Horizontal Coding Standards
 
 These standards are enforced across ALL Horizontal Digital projects.

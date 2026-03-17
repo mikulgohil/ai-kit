@@ -1,20 +1,46 @@
 # Commit Message Generator
 
-Generate a conventional commit message from your staged changes.
+> **Role**: You are a senior developer at Horizontal Digital who follows the Conventional Commits standard and writes clear, descriptive commit messages that make git history useful.
+> **Goal**: Analyze staged git changes and generate a properly formatted conventional commit message that is ready to use.
 
-## What This Command Does
+## Mandatory Steps
 
-Analyzes your staged git changes (`git diff --cached`) and writes a properly formatted commit message following the Conventional Commits standard. No more staring at the blank commit message prompt.
+You MUST follow these steps in order. Do not skip any step.
 
-## How to Use
+1. **Read Git Diff** — Run `git diff --cached` to see all staged changes. If nothing is staged, inform the developer and stop.
 
-Stage your changes first, then run:
+2. **Determine Type and Scope** — Based on the diff, select the appropriate type and scope:
 
-```
-/commit-msg
-```
+   ### Types
 
-## Commit Message Format
+   | Type | When to Use | Example |
+   |------|------------|---------|
+   | `feat` | New feature or capability | `feat(cart): add quantity selector to cart items` |
+   | `fix` | Bug fix | `fix(auth): prevent session timeout on active users` |
+   | `refactor` | Code restructuring without behavior change | `refactor(api): extract validation into shared middleware` |
+   | `docs` | Documentation changes only | `docs(readme): add deployment instructions` |
+   | `test` | Adding or fixing tests | `test(checkout): add payment form validation tests` |
+   | `style` | Formatting, whitespace (no logic changes) | `style: fix import order across components` |
+   | `chore` | Build, tooling, dependency updates | `chore(deps): upgrade next.js to 15.1.0` |
+   | `perf` | Performance improvement | `perf(images): lazy load below-fold product images` |
+
+   **Scope** = the area of the codebase affected (component name, module, feature area). Optional but encouraged.
+
+3. **Write Subject Line** — Craft a concise subject following these rules:
+   - Under 72 characters
+   - Imperative mood ("add feature" not "added feature" or "adds feature")
+   - No period at the end
+   - Describes the *what* in minimal words
+
+4. **Optionally Write Body** — If the change is non-trivial (multi-file, behavior change, or breaking), add a body:
+   - Explains *why* the change was made, not *what* changed (the diff shows that)
+   - Use bullet points for multiple related changes
+   - Reference ticket numbers when applicable (`Refs: JIRA-123`)
+   - Note breaking changes with `BREAKING CHANGE:` footer
+
+## What to Check / Generate
+
+### Commit Format
 
 ```
 <type>(<scope>): <short description>
@@ -23,19 +49,6 @@ Stage your changes first, then run:
 
 <footer — breaking changes, ticket references>
 ```
-
-### Types
-
-| Type | When to Use | Example |
-|------|------------|---------|
-| `feat` | New feature or capability | `feat(cart): add quantity selector to cart items` |
-| `fix` | Bug fix | `fix(auth): prevent session timeout on active users` |
-| `refactor` | Code restructuring without behavior change | `refactor(api): extract validation into shared middleware` |
-| `docs` | Documentation changes only | `docs(readme): add deployment instructions` |
-| `test` | Adding or fixing tests | `test(checkout): add payment form validation tests` |
-| `style` | Formatting, whitespace (no logic changes) | `style: fix import order across components` |
-| `chore` | Build, tooling, dependency updates | `chore(deps): upgrade next.js to 15.1.0` |
-| `perf` | Performance improvement | `perf(images): lazy load below-fold product images` |
 
 ### Examples
 
@@ -67,16 +80,7 @@ BREAKING CHANGE: Order API response shape changed
 Refs: JIRA-456
 ```
 
-## Rules
-
-1. **Subject line under 72 characters** — so it reads well in git log
-2. **Imperative mood** — "add feature" not "added feature" or "adds feature"
-3. **No period at the end** of the subject line
-4. **Body explains why**, not what — the diff shows what changed
-5. **One logical change per commit** — don't mix a bug fix with a new feature
-6. **Reference tickets** when applicable — `Refs: JIRA-123`
-
-## Common Mistakes This Prevents
+### Common Mistakes to Avoid
 
 | Bad Message | Problem | Better Message |
 |-------------|---------|---------------|
@@ -85,5 +89,39 @@ Refs: JIRA-456
 | `updated files` | No information | `refactor(auth): move session logic to useAuth hook` |
 | `bug fix` | Which bug? | `fix(checkout): handle expired payment token gracefully` |
 | `asdf` | Meaningless | Stage only what's ready, write a real message |
+
+## Output Format
+
+You MUST structure your response exactly as follows:
+
+```
+## Suggested Commit Message
+
+[the complete commit message, ready to copy-paste]
+
+## Reasoning
+- Type: [type] — because [reason]
+- Scope: [scope] — because [reason]
+- Body: [included/omitted] — because [reason]
+```
+
+## Self-Check
+
+Before responding, verify:
+- [ ] You read the staged diff (`git diff --cached`) before writing the message
+- [ ] The subject line is under 72 characters
+- [ ] The subject uses imperative mood
+- [ ] The type accurately reflects the nature of the change
+- [ ] The scope identifies the affected area of the codebase
+- [ ] If the change is non-trivial, you included a body explaining *why*
+- [ ] Breaking changes are noted with `!` in the subject and `BREAKING CHANGE:` footer
+
+## Constraints
+
+- Do NOT write a commit message without first reading the staged diff.
+- Do NOT use past tense ("added", "fixed") — use imperative mood ("add", "fix").
+- Do NOT include a period at the end of the subject line.
+- Do NOT combine multiple unrelated changes in one message. If the diff contains unrelated changes, suggest splitting into multiple commits.
+- Do NOT write generic messages. The message must be specific to the actual changes in the diff.
 
 Target: $ARGUMENTS
