@@ -88,6 +88,9 @@ export async function initCommand(targetPath?: string): Promise<void> {
   if (results.docs.length > 0)
     logSuccess(`${results.docs.length} doc scaffolds created in docs/`);
 
+  // Recommended tools & MCP servers
+  showRecommendations(scan);
+
   console.log('');
   logInfo('Run `ai-kit update` anytime to refresh configs after project changes.');
   logInfo('Check ai-kit/guides/getting-started.md to get started.');
@@ -255,4 +258,79 @@ async function generate(
   );
 
   return result;
+}
+
+function showRecommendations(scan: ProjectScan): void {
+  const toolRecs: { check: boolean; label: string; hint: string }[] = [
+    {
+      check: scan.tools.playwright,
+      label: 'Playwright not detected — install for E2E testing:',
+      hint: '  npm install -D @playwright/test && npx playwright install',
+    },
+    {
+      check: scan.tools.eslint,
+      label: 'ESLint not detected — install for code quality:',
+      hint: '  npm install -D eslint @typescript-eslint/eslint-plugin',
+    },
+    {
+      check: scan.tools.prettier,
+      label: 'Prettier not detected — install for code formatting:',
+      hint: '  npm install -D prettier',
+    },
+    {
+      check: scan.tools.axeCore,
+      label: 'axe-core not detected — install for accessibility testing:',
+      hint: '  npm install -D @axe-core/playwright',
+    },
+    {
+      check: scan.tools.knip,
+      label: 'Knip not detected — install to find unused code:',
+      hint: '  npm install -D knip',
+    },
+    {
+      check: scan.tools.bundleAnalyzer,
+      label: 'Bundle analyzer not detected — install for bundle insights:',
+      hint: '  npm install -D @next/bundle-analyzer',
+    },
+  ];
+
+  const mcpRecs: { check: boolean; label: string; hint: string }[] = [
+    {
+      check: scan.mcpServers.context7,
+      label: 'Context7 MCP not configured — enables up-to-date library docs:',
+      hint: '  Add to .claude/settings.json mcpServers',
+    },
+    {
+      check: scan.mcpServers.playwright,
+      label: 'Playwright MCP not configured — enables browser automation:',
+      hint: '  Add to .claude/settings.json mcpServers',
+    },
+    {
+      check: scan.mcpServers.github,
+      label: 'GitHub MCP not configured — enables PR/issue management:',
+      hint: '  Add to .claude/settings.json mcpServers',
+    },
+    {
+      check: scan.mcpServers.perplexity,
+      label: 'Perplexity MCP not configured — enables web research:',
+      hint: '  Add to .claude/settings.json mcpServers',
+    },
+  ];
+
+  const missingTools = toolRecs.filter((r) => !r.check);
+  const missingMcps = mcpRecs.filter((r) => !r.check);
+
+  if (missingTools.length === 0 && missingMcps.length === 0) return;
+
+  logSection('Recommended Setup');
+
+  for (const rec of missingTools) {
+    logInfo(rec.label);
+    logInfo(rec.hint);
+  }
+
+  for (const rec of missingMcps) {
+    logInfo(rec.label);
+    logInfo(rec.hint);
+  }
 }

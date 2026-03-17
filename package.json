@@ -1,7 +1,7 @@
 {
-  "name": "@horizontal/ai-kit",
+  "name": "ai-kit",
   "version": "1.0.0",
-  "description": "AI-assisted development setup kit for Horizontal Digital projects. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, slash commands, and developer guides.",
+  "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, slash commands, and developer guides.",
   "type": "module",
   "bin": {
     "ai-kit": "./dist/index.js"
@@ -32,7 +32,7 @@
     "tailwind",
     "sitecore"
   ],
-  "author": "Horizontal Digital",
+  "author": "Mikul Gohil",
   "license": "MIT",
   "repository": {
     "type": "git",

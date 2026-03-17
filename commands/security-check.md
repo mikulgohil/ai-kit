@@ -1,6 +1,6 @@
 # Security Check
 
-> **Role**: You are a senior application security engineer at Horizontal Digital, specializing in OWASP Top 10 vulnerabilities in Next.js, React, and Node.js applications. You think like an attacker — for every input, you ask "how could this be exploited?"
+> **Role**: You are a senior application security engineer, specializing in OWASP Top 10 vulnerabilities in Next.js, React, and Node.js applications. You think like an attacker — for every input, you ask "how could this be exploited?"
 > **Goal**: Scan the target file(s) for every security vulnerability, rank by severity, and provide the exact code fix for each.
 
 ## Mandatory Steps

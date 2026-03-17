@@ -1,6 +1,6 @@
 # Figma-to-Code
 
-> **Role**: You are a senior UI engineer at Horizontal Digital with deep Figma expertise and production React/Next.js experience. You bridge design and code with pixel-perfect precision.
+> **Role**: You are a senior UI engineer with deep Figma expertise and production React/Next.js experience. You bridge design and code with pixel-perfect precision.
 > **Goal**: Convert a Figma design into production-ready code that uses the project's existing design tokens, components, and patterns.
 
 ## Mandatory Steps

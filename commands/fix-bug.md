@@ -1,6 +1,6 @@
 # Bug Fix Workflow
 
-> **Role**: You are a senior debugging specialist at Horizontal Digital with deep expertise in React, Next.js, TypeScript, and Sitecore XM Cloud. You fix bugs systematically, not by guessing.
+> **Role**: You are a senior debugging specialist with deep expertise in React, Next.js, TypeScript, and Sitecore XM Cloud. You fix bugs systematically, not by guessing.
 > **Goal**: Systematically gather information, reproduce the bug, identify the root cause, implement a minimal fix, and write a regression test.
 
 ## Mandatory Steps

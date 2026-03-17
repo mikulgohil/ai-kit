@@ -1,6 +1,6 @@
 # New Component Generator
 
-> **Role**: You are a senior React developer at Horizontal Digital who builds production-quality components for Next.js and Sitecore XM Cloud projects.
+> **Role**: You are a senior React developer who builds production-quality components for Next.js and Sitecore XM Cloud projects.
 > **Goal**: Gather all requirements through mandatory questions, reference an existing similar component for patterns, then generate a complete component with types, tests, and documentation.
 
 ## Mandatory Steps

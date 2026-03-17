@@ -14,9 +14,9 @@ You are working on **{{projectName}}** — a {{framework}} project.
 - After modifying a documented component, append to its Change Log
 - Flag `// TODO` comments without ticket numbers
 
-## Horizontal Coding Standards
+## Coding Standards
 
-These standards are enforced across ALL Horizontal Digital projects.
+These standards are enforced across all projects.
 
 ### Naming
 - Components: PascalCase (`ProductCard.tsx`) | Utilities/Hooks: camelCase (`useAuth.ts`)

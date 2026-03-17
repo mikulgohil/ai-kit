@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Kit — Token Usage Dashboard</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-card: #f8f9fa;
+      --bg-hover: #e9ecef;
+      --text: #1a1a2e;
+      --text-muted: #6c757d;
+      --accent: #4361ee;
+      --accent-light: #e8ecff;
+      --green: #2dc653;
+      --yellow: #ffc107;
+      --red: #e63946;
+      --orange: #fd7e14;
+      --border: #dee2e6;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08);
+      --radius: 8px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --bg-card: #161b22;
+        --bg-hover: #21262d;
+        --text: #e6edf3;
+        --text-muted: #8b949e;
+        --accent: #58a6ff;
+        --accent-light: #1a2332;
+        --green: #3fb950;
+        --yellow: #d29922;
+        --red: #f85149;
+        --orange: #d18616;
+        --border: #30363d;
+        --shadow: 0 1px 3px rgba(0,0,0,0.3);
+      }
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--text); }
+    h3 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-muted); font-weight: 500; }
+
+    .subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem; }
+    .generated { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 2rem; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cost { color: var(--yellow); }
+    .sessions-count { color: var(--accent); }
+    .tokens-count { color: var(--green); }
+
+    /* Budget ring */
+    .budget-ring-container {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .budget-ring {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      flex-shrink: 0;
+    }
+
+    .budget-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .budget-ring .ring-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 8;
+    }
+
+    .budget-ring .ring-fill {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+
+    .budget-ring .ring-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .budget-ring .ring-percent {
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .budget-ring .ring-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .budget-details p {
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+
+    .budget-details .amount {
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    /* Bar chart */
+    .chart-container {
+      margin-bottom: 2rem;
+    }
+
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 200px;
+      padding: 0 0 30px 0;
+      position: relative;
+    }
+
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 48px;
+      border-radius: 3px 3px 0 0;
+      position: relative;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .bar:hover { opacity: 0.8; }
+
+    .bar-input { background: var(--accent); }
+    .bar-output { background: var(--green); }
+    .bar-cache { background: var(--yellow); }
+
+    .bar-label {
+      position: absolute;
+      bottom: -25px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .bar-tooltip {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text);
+      color: var(--bg);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      z-index: 10;
+      font-family: var(--font-mono);
+    }
+
+    .bar-group:hover .bar-tooltip { display: block; }
+
+    .chart-legend {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    /* Pie chart */
+    .pie-container {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .pie-chart {
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+    }
+
+    .pie-legend {
+      font-size: 0.85rem;
+    }
+
+    .pie-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pie-legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .pie-legend-value {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      margin-left: auto;
+      padding-left: 1rem;
+    }
+
+    /* Table */
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 2px solid var(--border);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    tr:hover td { background: var(--bg-hover); }
+
+    .td-date { color: var(--text-muted); font-family: var(--font); }
+    .td-cost { color: var(--yellow); font-weight: 600; }
+    .td-model { font-family: var(--font); }
+
+    .model-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .model-sonnet { background: var(--accent-light); color: var(--accent); }
+    .model-opus { background: #2d1b4e; color: #c084fc; }
+
+    @media (prefers-color-scheme: light) {
+      .model-opus { background: #f3e8ff; color: #7c3aed; }
+    }
+
+    /* Tips */
+    .tips {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .tip {
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+    }
+
+    .tip-impact {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .tip-high { color: var(--red); }
+    .tip-medium { color: var(--orange); }
+    .tip-low { color: var(--text-muted); }
+
+    /* Expensive sessions */
+    .expensive-list { list-style: none; }
+    .expensive-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .expensive-list li:last-child { border-bottom: none; }
+    .expensive-id {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .expensive-cost {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      color: var(--yellow);
+    }
+
+    .error-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+
+    .error-state code {
+      display: block;
+      margin-top: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>AI Kit — Token Usage Dashboard</h1>
+  <p class="subtitle">Claude Code token consumption and cost analysis</p>
+  <p class="generated" id="generated-at"></p>
+
+  <div id="app">
+    <div class="error-state" id="loading">Loading token data...<code>token-data.json</code></div>
+  </div>
+
+  <footer>
+    Generated by <strong>AI Kit</strong> &mdash; run <code>ai-kit tokens --export</code> to refresh
+  </footer>
+
+  <script>
+    (async function() {
+      const app = document.getElementById('app');
+      const genEl = document.getElementById('generated-at');
+
+      try {
+        const res = await fetch('./token-data.json');
+        if (!res.ok) throw new Error('Could not load token-data.json');
+        const data = await res.json();
+        render(data);
+      } catch (e) {
+        app.innerHTML = `
+          <div class="error-state">
+            <p>Could not load token data.</p>
+            <p>Make sure <code>token-data.json</code> is in the same directory as this HTML file.</p>
+            <p style="margin-top:1rem">Run: <code>ai-kit tokens --export</code></p>
+          </div>`;
+      }
+
+      function fmt(n) {
+        return (n || 0).toLocaleString('en-US');
+      }
+
+      function fmtCost(n) {
+        return '$' + (n || 0).toFixed(2);
+      }
+
+      function render(data) {
+        genEl.textContent = 'Generated: ' + new Date(data.generatedAt).toLocaleString();
+
+        const t = data.totals;
+        const budget = data.planBudget || 20;
+        const monthCost = t.thisMonth.cost;
+        const budgetPct = Math.min((monthCost / budget) * 100, 100);
+
+        app.innerHTML = `
+          <!-- Summary cards -->
+          <div class="grid">
+            <div class="card">
+              <h3>Today</h3>
+              <div class="stat-value cost">${fmtCost(t.today.cost)}</div>
+              <div class="stat-label">${t.today.sessions} sessions &middot; ${fmt(t.today.usage.inputTokens + t.today.usage.outputTokens)} tokens</div>
+            </div>
+            <div class="card">
+              <h3>This Week</h3>
+              <div class="stat-value cost">${fmtCost(t.thisWeek.cost)}</div>
+              <div class="stat-label">${t.thisWeek.sessions} sessions &middot; ${fmt(t.thisWeek.usage.inputTokens + t.thisWeek.usage.outputTokens)} tokens</div>
+            </div>
+            <div class="card">
+              <h3>This Month</h3>
+              <div class="stat-value cost">${fmtCost(t.thisMonth.cost)}</div>
+              <div class="stat-label">${t.thisMonth.sessions} sessions &middot; ${fmt(t.thisMonth.usage.inputTokens + t.thisMonth.usage.outputTokens)} tokens</div>
+            </div>
+          </div>
+
+          <!-- Budget -->
+          <div class="card" style="margin-bottom:2rem">
+            <h2>${fmtCost(budget)} Plan Budget</h2>
+            <div class="budget-ring-container">
+              <div class="budget-ring">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle class="ring-bg" cx="60" cy="60" r="50"/>
+                  <circle class="ring-fill" cx="60" cy="60" r="50"
+                    stroke="${budgetPct > 80 ? 'var(--red)' : budgetPct > 50 ? 'var(--yellow)' : 'var(--green)'}"
+                    stroke-dasharray="${2 * Math.PI * 50}"
+                    stroke-dashoffset="${2 * Math.PI * 50 * (1 - budgetPct / 100)}"
+                  />
+                </svg>
+                <div class="ring-text">
+                  <div class="ring-percent">${Math.round(budgetPct)}%</div>
+                  <div class="ring-label">used</div>
+                </div>
+              </div>
+              <div class="budget-details">
+                <p>Spent: <span class="amount">${fmtCost(monthCost)}</span> of <span class="amount">${fmtCost(budget)}</span></p>
+                <p>Remaining: <span class="amount">${fmtCost(Math.max(budget - monthCost, 0))}</span></p>
+                <p>Daily average: <span class="amount">${fmtCost(getDailyAvg(monthCost))}</span></p>
+                <p>Est. days left: <span class="amount">${getEstDaysLeft(monthCost, budget)}</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily bar chart -->
+          <div class="card chart-container">
+            <h2>Daily Usage (Last 14 Days)</h2>
+            ${renderBarChart(data.daily)}
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span> Input</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--green)"></span> Output</span>
+              <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span> Cache</span>
+            </div>
+          </div>
+
+          <!-- Cost breakdown pie -->
+          <div class="grid">
+            <div class="card">
+              <h2>Cost Breakdown (Month)</h2>
+              ${renderPieChart(t.thisMonth.usage)}
+            </div>
+            <div class="card">
+              <h2>Most Expensive Sessions</h2>
+              ${renderExpensiveSessions(data.sessions)}
+            </div>
+          </div>
+
+          <!-- Session table -->
+          <div class="card" style="margin-top:2rem">
+            <h2>Recent Sessions</h2>
+            <div class="table-container">
+              ${renderSessionTable(data.sessions)}
+            </div>
+          </div>
+
+          <!-- Tips -->
+          <div class="card" style="margin-top:2rem">
+            <h2>Token-Saving Tips</h2>
+            <div class="tips" style="margin-top:1rem">
+              ${renderTips()}
+            </div>
+          </div>
+        `;
+      }
+
+      function getDailyAvg(monthCost) {
+        const day = new Date().getDate();
+        return day > 0 ? monthCost / day : 0;
+      }
+
+      function getEstDaysLeft(monthCost, budget) {
+        const day = new Date().getDate();
+        const dailyAvg = day > 0 ? monthCost / day : 0;
+        if (dailyAvg <= 0) return '--';
+        const remaining = budget - monthCost;
+        return Math.max(Math.floor(remaining / dailyAvg), 0);
+      }
+
+      function renderBarChart(daily) {
+        const last14 = daily.slice(0, 14).reverse();
+        if (last14.length === 0) return '<p style="color:var(--text-muted);padding:2rem 0">No daily data available</p>';
+
+        const maxTokens = Math.max(...last14.map(d =>
+          d.usage.inputTokens + d.usage.outputTokens + d.usage.cacheReadTokens
+        ), 1);
+
+        const chartHeight = 170;
+
+        const bars = last14.map(d => {
+          const total = d.usage.inputTokens + d.usage.outputTokens + d.usage.cacheReadTokens;
+          const inputH = (d.usage.inputTokens / maxTokens) * chartHeight;
+          const outputH = (d.usage.outputTokens / maxTokens) * chartHeight;
+          const cacheH = (d.usage.cacheReadTokens / maxTokens) * chartHeight;
+          const dateLabel = d.date.slice(5); // MM-DD
+          const cost = fmtCost(d.cost);
+
+          return `
+            <div class="bar-group">
+              <div class="bar-tooltip">${d.date}: ${fmt(total)} tokens (${cost})</div>
+              <div class="bar bar-cache" style="height:${cacheH}px"></div>
+              <div class="bar bar-output" style="height:${outputH}px"></div>
+              <div class="bar bar-input" style="height:${inputH}px"></div>
+              <span class="bar-label">${dateLabel}</span>
+            </div>`;
+        }).join('');
+
+        return `<div class="bar-chart">${bars}</div>`;
+      }
+
+      function renderPieChart(usage) {
+        const input = usage.inputTokens || 0;
+        const output = usage.outputTokens || 0;
+        const cache = usage.cacheReadTokens || 0;
+        const total = input + output + cache;
+
+        if (total === 0) {
+          return '<p style="color:var(--text-muted)">No data</p>';
+        }
+
+        const inputPct = input / total;
+        const outputPct = output / total;
+        const cachePct = cache / total;
+
+        // SVG pie using stroke-dasharray on circles
+        const r = 50;
+        const circ = 2 * Math.PI * r;
+
+        const inputLen = inputPct * circ;
+        const outputLen = outputPct * circ;
+        const cacheLen = cachePct * circ;
+
+        const inputOffset = 0;
+        const outputOffset = inputLen;
+        const cacheOffset = inputLen + outputLen;
+
+        return `
+          <div class="pie-container">
+            <svg class="pie-chart" viewBox="0 0 140 140">
+              <circle cx="70" cy="70" r="${r}" fill="none" stroke="var(--accent)" stroke-width="20"
+                stroke-dasharray="${inputLen} ${circ - inputLen}"
+                stroke-dashoffset="0" transform="rotate(-90 70 70)"/>
+              <circle cx="70" cy="70" r="${r}" fill="none" stroke="var(--green)" stroke-width="20"
+                stroke-dasharray="${outputLen} ${circ - outputLen}"
+                stroke-dashoffset="${-inputLen}" transform="rotate(-90 70 70)"/>
+              <circle cx="70" cy="70" r="${r}" fill="none" stroke="var(--yellow)" stroke-width="20"
+                stroke-dasharray="${cacheLen} ${circ - cacheLen}"
+                stroke-dashoffset="${-(inputLen + outputLen)}" transform="rotate(-90 70 70)"/>
+            </svg>
+            <div class="pie-legend">
+              <div class="pie-legend-item">
+                <span class="pie-legend-dot" style="background:var(--accent)"></span>
+                Input <span class="pie-legend-value">${fmt(input)} (${Math.round(inputPct * 100)}%)</span>
+              </div>
+              <div class="pie-legend-item">
+                <span class="pie-legend-dot" style="background:var(--green)"></span>
+                Output <span class="pie-legend-value">${fmt(output)} (${Math.round(outputPct * 100)}%)</span>
+              </div>
+              <div class="pie-legend-item">
+                <span class="pie-legend-dot" style="background:var(--yellow)"></span>
+                Cache <span class="pie-legend-value">${fmt(cache)} (${Math.round(cachePct * 100)}%)</span>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      function renderExpensiveSessions(sessions) {
+        const sorted = [...sessions]
+          .map(s => ({ ...s, cost: calcCost(s) }))
+          .sort((a, b) => b.cost - a.cost)
+          .slice(0, 8);
+
+        if (sorted.length === 0) return '<p style="color:var(--text-muted)">No sessions</p>';
+
+        const items = sorted.map(s =>
+          `<li>
+            <span>
+              <span class="expensive-id">${s.sessionId.slice(0, 16)}...</span>
+              <span style="color:var(--text-muted);font-size:0.75rem;margin-left:0.5rem">${s.date}</span>
+            </span>
+            <span class="expensive-cost">${fmtCost(s.cost)}</span>
+          </li>`
+        ).join('');
+
+        return `<ul class="expensive-list">${items}</ul>`;
+      }
+
+      function calcCost(s) {
+        const model = s.model || 'sonnet';
+        const rates = model === 'opus'
+          ? { input: 15, output: 75, cache: 0.3 }
+          : { input: 3, output: 15, cache: 0.3 };
+        return (
+          ((s.usage.inputTokens || 0) / 1e6) * rates.input +
+          ((s.usage.outputTokens || 0) / 1e6) * rates.output +
+          ((s.usage.cacheReadTokens || 0) / 1e6) * rates.cache
+        );
+      }
+
+      function renderSessionTable(sessions) {
+        const rows = sessions.slice(0, 20).map(s => {
+          const cost = calcCost(s);
+          const modelClass = (s.model || 'sonnet') === 'opus' ? 'model-opus' : 'model-sonnet';
+          const modelName = (s.model || 'sonnet') === 'opus' ? 'Opus' : 'Sonnet';
+          return `
+            <tr>
+              <td class="td-date">${s.date}</td>
+              <td><span class="model-badge ${modelClass}">${modelName}</span></td>
+              <td>${fmt(s.usage.inputTokens)}</td>
+              <td>${fmt(s.usage.outputTokens)}</td>
+              <td>${fmt(s.usage.cacheReadTokens)}</td>
+              <td>${s.messageCount || '--'}</td>
+              <td class="td-cost">${fmtCost(cost)}</td>
+            </tr>`;
+        }).join('');
+
+        return `
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Model</th>
+                <th>Input</th>
+                <th>Output</th>
+                <th>Cache</th>
+                <th>Messages</th>
+                <th>Cost</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>`;
+      }
+
+      function renderTips() {
+        const tips = [
+          { impact: 'high', text: 'Be specific about files \u2014 "fix auth in src/lib/auth.ts:45" not "fix the auth"' },
+          { impact: 'high', text: 'Use /understand BEFORE modifying unfamiliar code \u2014 cheaper than a failed attempt' },
+          { impact: 'high', text: 'Break large tasks into focused prompts \u2014 5 small prompts < 1 vague prompt with 3 follow-ups' },
+          { impact: 'high', text: 'Use slash commands \u2014 they provide structured context efficiently' },
+          { impact: 'medium', text: 'Close and reopen sessions when switching tasks to prevent context bloat' },
+          { impact: 'medium', text: 'Use git diff to show AI only what changed, not entire files' },
+          { impact: 'medium', text: 'Don\'t ask AI to read the entire codebase \u2014 point to specific files' },
+          { impact: 'low', text: 'Keep files under 200 lines \u2014 smaller reads per file' },
+          { impact: 'low', text: 'Use barrel exports so AI reads index files, not every module' },
+        ];
+
+        return tips.map(t =>
+          `<div class="tip">
+            <div class="tip-impact tip-${t.impact}">${t.impact} impact</div>
+            <div>${t.text}</div>
+          </div>`
+        ).join('');
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -230,7 +230,7 @@ describe('generateClaudeMd', () => {
 
   it('includes the version comment at the top', () => {
     const result = generateClaudeMd(minimalScan());
-    expect(result).toContain(`@horizontal/ai-kit v${VERSION}`);
+    expect(result).toContain(`ai-kit v${VERSION}`);
   });
 
   it('includes the project name from the scan', () => {

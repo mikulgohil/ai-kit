@@ -28,6 +28,7 @@ const AVAILABLE_COMMANDS = [
   'sitecore-debug',
   'responsive-check',
   'document',
+  'token-tips',
 ];
 
 export async function copyCommands(targetDir: string): Promise<string[]> {

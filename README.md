@@ -1,11 +1,11 @@
-# @horizontal/ai-kit
+# ai-kit
 
-AI-assisted development setup kit for Horizontal Digital projects. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, slash commands, and developer guides.
+AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, slash commands, and developer guides.
 
 ## Installation
 
 ```bash
-npx @horizontal/ai-kit init
+npx ai-kit init
 ```
 
 Requires Node >= 18.
@@ -51,13 +51,13 @@ Running `init` scans your project and produces:
 To pick up new dependencies or config changes after your stack evolves:
 
 ```bash
-npx @horizontal/ai-kit update
+npx ai-kit update
 ```
 
 To remove all generated files and start clean:
 
 ```bash
-npx @horizontal/ai-kit reset
+npx ai-kit reset
 ```
 
 ## Further Reading

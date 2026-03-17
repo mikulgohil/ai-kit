@@ -1,3 +1,6 @@
+import type { ToolsDetection } from './scanner/tools.js';
+import type { McpDetection } from './scanner/mcp.js';
+
 export interface ProjectScan {
   framework: 'nextjs' | 'react' | 'unknown';
   nextjsVersion?: string;
@@ -23,6 +26,9 @@ export interface ProjectScan {
     tokenFormat: 'tailwind-v4' | 'tailwind-v3' | 'css-variables' | 'none';
     visualTests: boolean;
   };
+
+  tools: ToolsDetection;
+  mcpServers: McpDetection;
 
   packageManager: 'npm' | 'pnpm' | 'yarn' | 'bun';
 

@@ -1,6 +1,6 @@
 # Responsive Check
 
-> **Role**: You are a senior frontend engineer at Horizontal Digital specializing in responsive design, mobile-first development, and cross-device testing with Tailwind CSS.
+> **Role**: You are a senior frontend engineer specializing in responsive design, mobile-first development, and cross-device testing with Tailwind CSS.
 > **Goal**: Audit a component or page for responsive design issues and produce a specific issue list with breakpoint context and fix code.
 
 ## Mandatory Steps

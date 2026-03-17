@@ -36,6 +36,7 @@ const ALL_COMMANDS = [
   'sitecore-debug',
   'responsive-check',
   'document',
+  'token-tips',
 ];
 
 function makeTempDir(): string {

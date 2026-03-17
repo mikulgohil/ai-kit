@@ -7,6 +7,8 @@ import { detectTypescript } from './typescript.js';
 import { detectMonorepo } from './monorepo.js';
 import { detectPackageManager } from './package-manager.js';
 import { detectFigma } from './figma.js';
+import { detectTools } from './tools.js';
+import { detectMcpServers } from './mcp.js';
 import type { ProjectScan } from '../types.js';
 
 export async function scanProject(projectPath: string): Promise<ProjectScan> {
@@ -24,6 +26,8 @@ export async function scanProject(projectPath: string): Promise<ProjectScan> {
   const monorepoResult = detectMonorepo(projectPath, pkg);
   const packageManager = detectPackageManager(projectPath);
   const figmaResult = detectFigma(projectPath, pkg);
+  const toolsResult = detectTools(projectPath, pkg);
+  const mcpResult = detectMcpServers(projectPath);
 
   const figmaDetected =
     figmaResult.figmaMcp ||
@@ -40,6 +44,8 @@ export async function scanProject(projectPath: string): Promise<ProjectScan> {
       detected: figmaDetected,
       ...figmaResult,
     },
+    tools: toolsResult,
+    mcpServers: mcpResult,
     packageManager,
     projectName,
     projectPath,
@@ -55,4 +61,6 @@ export {
   detectMonorepo,
   detectPackageManager,
   detectFigma,
+  detectTools,
+  detectMcpServers,
 };

@@ -28,9 +28,9 @@ When a developer's request is vague or missing critical context, you MUST push b
 - After completing a task that modifies a documented component, you MUST append an entry to the component's Change Log
 - When you encounter a `// TODO` without a ticket number, flag it to the developer
 
-## Horizontal Coding Standards
+## Coding Standards
 
-These standards are enforced across ALL Horizontal Digital projects to ensure consistency.
+These standards are enforced across all projects to ensure consistency.
 
 ### Naming Conventions
 - **Components**: PascalCase (`ProductCard.tsx`, `HeroBanner.tsx`)
