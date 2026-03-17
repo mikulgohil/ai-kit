@@ -1,5 +1,5 @@
 {
-  "name": "ai-kit",
+  "name": "@mikulgohil/ai-kit",
   "version": "1.0.0",
   "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, slash commands, and developer guides.",
   "type": "module",

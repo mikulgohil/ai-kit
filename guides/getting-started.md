@@ -50,12 +50,12 @@ Open any file and use Cmd+K or the chat panel. The `.cursorrules` file is automa
 
 When you add new packages or change your project structure:
 ```bash
-npx ai-kit update
+npx @mikulgohil/ai-kit update
 ```
 
 ## Removing
 
 To remove all AI Kit generated files:
 ```bash
-npx ai-kit reset
+npx @mikulgohil/ai-kit reset
 ```

@@ -5,7 +5,7 @@ AI-assisted development setup kit. Auto-detects your tech stack and generates ta
 ## Installation
 
 ```bash
-npx ai-kit init
+npx @mikulgohil/ai-kit init
 ```
 
 Requires Node >= 18.
@@ -51,13 +51,13 @@ Running `init` scans your project and produces:
 To pick up new dependencies or config changes after your stack evolves:
 
 ```bash
-npx ai-kit update
+npx @mikulgohil/ai-kit update
 ```
 
 To remove all generated files and start clean:
 
 ```bash
-npx ai-kit reset
+npx @mikulgohil/ai-kit reset
 ```
 
 ## Further Reading

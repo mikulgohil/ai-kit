@@ -17,9 +17,9 @@
 - [ ] Setup: Jest or Vitest, add `test` script to package.json
 
 ### 2. Real-World Validation
-- [ ] Run `npx ai-kit init` on `dpworld-xmc` — check generated CLAUDE.md makes sense
-- [ ] Run `npx ai-kit init` on `hztl-xcelerate-blueprint` — verify scanner detections are correct
-- [ ] Run `npx ai-kit init` on a pure Next.js project (no Sitecore) — verify no Sitecore rules leak in
+- [ ] Run `npx @mikulgohil/ai-kit init` on `dpworld-xmc` — check generated CLAUDE.md makes sense
+- [ ] Run `npx @mikulgohil/ai-kit init` on `hztl-xcelerate-blueprint` — verify scanner detections are correct
+- [ ] Run `npx @mikulgohil/ai-kit init` on a pure Next.js project (no Sitecore) — verify no Sitecore rules leak in
 - [ ] For each: manually review generated output, note any wrong/missing detections
 - [ ] Test `update` command on a project that already has ai-kit files
 - [ ] Test `reset` command — verify it removes only ai-kit generated files
@@ -32,7 +32,7 @@
 
 ### 4. README.md
 - [ ] What it is (one paragraph)
-- [ ] Installation: `npx ai-kit init`
+- [ ] Installation: `npx @mikulgohil/ai-kit init`
 - [ ] What gets generated (file list)
 - [ ] Commands overview (table)
 - [ ] Supported tech stacks
