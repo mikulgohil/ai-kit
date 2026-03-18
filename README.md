@@ -17,7 +17,7 @@ Running `init` scans your project and produces:
 - **CLAUDE.md** — Project-aware rules and conventions for Claude Code
 - **.cursorrules** — Equivalent rules for Cursor AI
 - **.cursor/rules/*.mdc** — Modular rule files for Cursor
-- **.claude/skills/** — 44 slash commands across 7 categories
+- **.claude/skills/** — 39 slash commands across 7 categories
 - **.claude/agents/** — 8 specialized AI agents for delegation (planner, reviewer, security, E2E, build-resolver, doc-updater, refactor-cleaner, sitecore-specialist)
 - **.claude/contexts/** — 3 context modes (dev, review, research)
 - **.claude/settings.local.json** — Automated hooks (auto-format, typecheck, console.log warnings, git safety)
@@ -88,7 +88,6 @@ Three modes change how the AI approaches work:
 | `/save-session` | Persist session context for later |
 | `/resume-session` | Restore and continue previous work |
 | `/checkpoint` | Snapshot all quality checks |
-| `/learn` | Extract reusable patterns from session |
 
 ### Multi-Agent Orchestration
 

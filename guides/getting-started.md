@@ -61,7 +61,6 @@ Open any file and use Cmd+K or the chat panel. The `.cursorrules` file is automa
 | `/save-session` | Save current session for later resumption |
 | `/resume-session` | Pick up where you left off |
 | `/checkpoint` | Snapshot all quality check results |
-| `/learn` | Extract reusable patterns from session |
 | `/orchestrate` | Coordinate multiple agents on complex tasks |
 | `/harness-audit` | Check AI configuration health |
 

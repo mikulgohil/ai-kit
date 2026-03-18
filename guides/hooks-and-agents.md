@@ -102,7 +102,6 @@ New skills help you persist context across sessions:
 | `/save-session` | Save current session state and decisions |
 | `/resume-session` | Restore context from a previous session |
 | `/checkpoint` | Run all quality checks and record results |
-| `/learn` | Extract patterns from the current session |
 
 ### Quality & Orchestration
 
