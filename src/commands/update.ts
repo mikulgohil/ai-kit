@@ -7,8 +7,11 @@ import { generateClaudeMd } from '../generator/claude-md.js';
 import { generateCursorRules } from '../generator/cursorrules.js';
 import { generateMdcFiles } from '../generator/cursor-mdc.js';
 import { generateConfig } from '../generator/config.js';
+import { generateSettingsLocal } from '../generator/hooks.js';
 import { copySkills } from '../copier/skills.js';
 import { copyGuides } from '../copier/guides.js';
+import { copyAgents } from '../copier/agents.js';
+import { copyContexts } from '../copier/contexts.js';
 import { loadCustomFragments } from '../generator/assembler.js';
 import { AI_KIT_CONFIG_FILE, GENERATED_FILES, VERSION } from '../constants.js';
 import {
@@ -62,6 +65,7 @@ export async function updateCommand(targetPath?: string): Promise<void> {
   logSection('Updating Files');
 
   const strictness = existingConfig.strictness || 'standard';
+  const hookProfile = existingConfig.hookProfile || 'standard';
   const customFragments = loadCustomFragments(projectDir);
   const genOpts = { strictness, customFragments };
 
@@ -110,15 +114,39 @@ export async function updateCommand(targetPath?: string): Promise<void> {
     logSuccess(`${mdcFiles.length} .cursor/rules/*.mdc files updated`);
   }
 
-  // Update commands and guides
+  // Update skills
   const commands = await copySkills(projectDir);
   logSuccess(`${commands.length} skills updated (.claude/skills/ + .cursor/skills/)`);
 
+  // Update agents
+  const agents = await copyAgents(projectDir, scan);
+  logSuccess(`${agents.length} agents updated (.claude/agents/)`);
+
+  // Update contexts
+  const contexts = await copyContexts(projectDir);
+  logSuccess(`${contexts.length} context modes updated (.claude/contexts/)`);
+
+  // Update hooks
+  if (existingConfig.hooks !== false) {
+    const settingsLocalPath = path.join(projectDir, GENERATED_FILES.claudeSettingsLocal);
+    const settingsLocal = generateSettingsLocal(scan, hookProfile);
+    await fs.ensureDir(path.dirname(settingsLocalPath));
+    await fs.writeJson(settingsLocalPath, settingsLocal, { spaces: 2 });
+    logSuccess(`Hooks updated (profile: ${hookProfile})`);
+  }
+
+  // Update guides
   const guides = await copyGuides(projectDir);
   logSuccess(`${guides.length} guides updated`);
 
   // Update config
-  const config = generateConfig(scan, templates, commands, guides, genOpts);
+  const config = generateConfig(scan, templates, commands, guides, {
+    ...genOpts,
+    agents,
+    contexts,
+    hooks: existingConfig.hooks !== false,
+    hookProfile,
+  });
   await fs.writeJson(configPath, config, { spaces: 2 });
   logSuccess('ai-kit.config.json updated');
 

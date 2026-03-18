@@ -7,9 +7,12 @@ import { generateClaudeMd } from '../generator/claude-md.js';
 import { generateCursorRules } from '../generator/cursorrules.js';
 import { generateMdcFiles } from '../generator/cursor-mdc.js';
 import { generateConfig } from '../generator/config.js';
+import { generateSettingsLocal } from '../generator/hooks.js';
 import { copySkills } from '../copier/skills.js';
 import { copyGuides } from '../copier/guides.js';
 import { scaffoldDocs } from '../copier/docs.js';
+import { copyAgents } from '../copier/agents.js';
+import { copyContexts } from '../copier/contexts.js';
 import { AI_KIT_CONFIG_FILE, GENERATED_FILES } from '../constants.js';
 import {
   logSuccess,
@@ -20,7 +23,7 @@ import {
   fileExists,
 } from '../utils.js';
 import { loadCustomFragments } from '../generator/assembler.js';
-import type { ProjectScan, ConflictResolution, ClarificationAnswer, StrictnessLevel } from '../types.js';
+import type { ProjectScan, ConflictResolution, ClarificationAnswer, StrictnessLevel, HookProfile } from '../types.js';
 
 export async function initCommand(targetPath?: string): Promise<void> {
   const projectDir = path.resolve(targetPath || process.cwd());
@@ -61,6 +64,7 @@ export async function initCommand(targetPath?: string): Promise<void> {
   logInfo(`TypeScript: ${scan.typescript ? 'Yes' : 'No'}`);
   logInfo(`Monorepo: ${scan.monorepo ? `Yes (${scan.monorepoTool})` : 'No'}`);
   logInfo(`Package Manager: ${scan.packageManager}`);
+  logInfo(`Formatter: ${scan.tools.biome ? 'Biome' : scan.tools.prettier ? 'Prettier' : 'None detected'}`);
 
   // Clarification questions for ambiguous detections
   const clarifications = await askClarifications(scan);
@@ -72,6 +76,9 @@ export async function initCommand(targetPath?: string): Promise<void> {
   // Ask strictness level
   const strictness = await selectStrictness();
 
+  // Ask hook profile
+  const hookProfile = await selectHookProfile();
+
   // Load custom fragments
   const customFragments = loadCustomFragments(projectDir);
 
@@ -80,7 +87,11 @@ export async function initCommand(targetPath?: string): Promise<void> {
 
   // Generate files
   logSection('Generating Files');
-  const results = await generate(projectDir, scan, tools, conflict, { strictness, customFragments });
+  const results = await generate(projectDir, scan, tools, conflict, {
+    strictness,
+    customFragments,
+    hookProfile,
+  });
 
   // Summary
   logSection('Setup Complete');
@@ -90,6 +101,12 @@ export async function initCommand(targetPath?: string): Promise<void> {
     logSuccess(`${results.cursorMdcFiles} .cursor/rules/*.mdc files generated`);
   if (results.commands.length > 0)
     logSuccess(`${results.commands.length} skills generated (.claude/skills/ + .cursor/skills/)`);
+  if (results.agents.length > 0)
+    logSuccess(`${results.agents.length} agents generated (.claude/agents/)`);
+  if (results.contexts.length > 0)
+    logSuccess(`${results.contexts.length} context modes generated (.claude/contexts/)`);
+  if (results.hooks)
+    logSuccess(`Hooks configured (.claude/settings.local.json) — profile: ${hookProfile}`);
   if (results.guides.length > 0)
     logSuccess(`${results.guides.length} guides added to ai-kit/guides/`);
   if (results.docs.length > 0)
@@ -100,6 +117,7 @@ export async function initCommand(targetPath?: string): Promise<void> {
 
   console.log('');
   logInfo('Run `ai-kit update` anytime to refresh configs after project changes.');
+  logInfo('Run `ai-kit audit` to check your AI agent configuration health.');
   logInfo('Check ai-kit/guides/getting-started.md to get started.');
 }
 
@@ -170,6 +188,27 @@ async function selectStrictness(): Promise<StrictnessLevel> {
   });
 }
 
+async function selectHookProfile(): Promise<HookProfile> {
+  return select({
+    message: 'Hook automation profile (runs checks automatically as you code):',
+    choices: [
+      {
+        name: 'Standard — auto-format + typecheck + console.log warnings',
+        value: 'standard' as const,
+      },
+      {
+        name: 'Strict — all standard hooks + ESLint + stop checks',
+        value: 'strict' as const,
+      },
+      {
+        name: 'Minimal — auto-format + git push safety only',
+        value: 'minimal' as const,
+      },
+    ],
+    default: 'standard',
+  });
+}
+
 async function selectConflictStrategy(
   projectDir: string,
 ): Promise<ConflictResolution> {
@@ -200,6 +239,9 @@ interface GenerateResult {
   cursorRules: boolean;
   cursorMdcFiles: number;
   commands: string[];
+  agents: string[];
+  contexts: string[];
+  hooks: boolean;
   guides: string[];
   docs: string[];
 }
@@ -209,13 +251,20 @@ async function generate(
   scan: ProjectScan,
   tools: { claude: boolean; cursor: boolean },
   conflict: ConflictResolution,
-  opts?: { strictness?: StrictnessLevel; customFragments?: string[] },
+  opts?: {
+    strictness?: StrictnessLevel;
+    customFragments?: string[];
+    hookProfile?: HookProfile;
+  },
 ): Promise<GenerateResult> {
   const result: GenerateResult = {
     claudeMd: false,
     cursorRules: false,
     cursorMdcFiles: 0,
     commands: [],
+    agents: [],
+    contexts: [],
+    hooks: false,
     guides: [],
     docs: [],
   };
@@ -233,6 +282,20 @@ async function generate(
 
     // Copy skills (also generates legacy .claude/commands/)
     result.commands = await copySkills(projectDir);
+
+    // Copy agents (scan-aware — conditional agents based on detected stack)
+    result.agents = await copyAgents(projectDir, scan);
+
+    // Copy context modes
+    result.contexts = await copyContexts(projectDir);
+
+    // Generate hooks in .claude/settings.local.json
+    const hookProfile = opts?.hookProfile || 'standard';
+    const settingsLocalPath = path.join(projectDir, GENERATED_FILES.claudeSettingsLocal);
+    const settingsLocal = generateSettingsLocal(scan, hookProfile);
+    await fs.ensureDir(path.dirname(settingsLocalPath));
+    await fs.writeJson(settingsLocalPath, settingsLocal, { spaces: 2 });
+    result.hooks = true;
   }
 
   // Generate .cursorrules
@@ -267,7 +330,14 @@ async function generate(
   if (result.claudeMd) templates.push('CLAUDE.md');
   if (result.cursorRules) templates.push('.cursorrules');
 
-  const config = generateConfig(scan, templates, result.commands, result.guides, { strictness: opts?.strictness, customFragments: opts?.customFragments });
+  const config = generateConfig(scan, templates, result.commands, result.guides, {
+    strictness: opts?.strictness,
+    customFragments: opts?.customFragments,
+    agents: result.agents,
+    contexts: result.contexts,
+    hooks: result.hooks,
+    hookProfile: opts?.hookProfile,
+  });
   await fs.writeJson(
     path.join(projectDir, AI_KIT_CONFIG_FILE),
     config,
@@ -290,9 +360,9 @@ function showRecommendations(scan: ProjectScan): void {
       hint: '  npm install -D eslint @typescript-eslint/eslint-plugin',
     },
     {
-      check: scan.tools.prettier,
-      label: 'Prettier not detected — install for code formatting:',
-      hint: '  npm install -D prettier',
+      check: scan.tools.prettier || scan.tools.biome,
+      label: 'No formatter detected — install Prettier or Biome for auto-formatting hooks:',
+      hint: '  npm install -D prettier  (or)  npm install -D @biomejs/biome',
     },
     {
       check: scan.tools.axeCore,

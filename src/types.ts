@@ -5,6 +5,8 @@ export type StrictnessLevel = 'strict' | 'standard' | 'relaxed';
 
 export type TeamProfile = 'solo-dev' | 'small-team' | 'enterprise';
 
+export type HookProfile = 'minimal' | 'standard' | 'strict';
+
 export interface ProjectScan {
   framework: 'nextjs' | 'react' | 'unknown';
   nextjsVersion?: string;
@@ -42,6 +44,17 @@ export interface ProjectScan {
   scripts: Record<string, string>;
 }
 
+export interface HookDefinition {
+  matcher: string;
+  hooks: { type: 'command'; command: string }[];
+}
+
+export interface HooksConfig {
+  PreToolUse?: HookDefinition[];
+  PostToolUse?: HookDefinition[];
+  Stop?: HookDefinition[];
+}
+
 export interface AiKitConfig {
   version: string;
   scanResult: ProjectScan;
@@ -49,6 +62,10 @@ export interface AiKitConfig {
   templates: string[];
   commands: string[];
   guides: string[];
+  agents: string[];
+  contexts: string[];
+  hooks: boolean;
+  hookProfile: HookProfile;
   strictness: StrictnessLevel;
   teamProfile?: TeamProfile;
   customFragments: string[];

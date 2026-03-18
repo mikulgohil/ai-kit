@@ -6,6 +6,7 @@ export interface ToolsDetection {
   storybook: boolean;
   eslint: boolean;
   prettier: boolean;
+  biome: boolean;
   axeCore: boolean;
   snyk: boolean;
   knip: boolean;
@@ -26,6 +27,7 @@ export function detectTools(
     storybook: detectStorybook(projectPath, deps),
     eslint: detectEslint(projectPath, deps),
     prettier: detectPrettier(projectPath, deps),
+    biome: detectBiome(projectPath, deps),
     axeCore: detectAxeCore(deps),
     snyk: detectSnyk(projectPath, deps),
     knip: detectKnip(projectPath, deps),
@@ -95,6 +97,16 @@ function detectPrettier(
   for (const config of prettierConfigs) {
     if (fileExists(path.join(projectPath, config))) return true;
   }
+  return false;
+}
+
+function detectBiome(
+  projectPath: string,
+  deps: Record<string, string>,
+): boolean {
+  if ('@biomejs/biome' in deps) return true;
+  if (fileExists(path.join(projectPath, 'biome.json'))) return true;
+  if (fileExists(path.join(projectPath, 'biome.jsonc'))) return true;
   return false;
 }
 

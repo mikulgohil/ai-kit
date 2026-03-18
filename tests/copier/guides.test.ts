@@ -11,6 +11,7 @@ const ALL_GUIDES = [
   'when-to-use-ai',
   'token-saving-tips',
   'figma-workflow',
+  'hooks-and-agents',
 ];
 
 function makeTempDir(): string {

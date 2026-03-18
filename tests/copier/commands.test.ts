@@ -37,6 +37,27 @@ const ALL_COMMANDS = [
   'responsive-check',
   'document',
   'token-tips',
+  // v1.1.0
+  'perf-audit',
+  'bundle-check',
+  'i18n-check',
+  'schema-gen',
+  'docker-debug',
+  'ci-fix',
+  'changelog',
+  'release',
+  'storybook-gen',
+  'visual-diff',
+  'db-migrate',
+  'dependency-graph',
+  // v1.2.0
+  'learn',
+  'save-session',
+  'resume-session',
+  'checkpoint',
+  'orchestrate',
+  'quality-gate',
+  'harness-audit',
 ];
 
 function makeTempDir(): string {

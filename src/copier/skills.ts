@@ -42,6 +42,14 @@ const AVAILABLE_SKILLS = [
   'visual-diff',
   'db-migrate',
   'dependency-graph',
+  // New skills (v1.2.0) — hooks, agents, sessions, orchestration
+  'learn',
+  'save-session',
+  'resume-session',
+  'checkpoint',
+  'orchestrate',
+  'quality-gate',
+  'harness-audit',
 ];
 
 // Short descriptions for auto-discovery — AI reads these to decide when to apply
@@ -85,6 +93,14 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'visual-diff': 'Visual regression testing plan for changed components and pages',
   'db-migrate': 'Create safe database migrations with rollback strategies for Prisma, Drizzle, or SQL',
   'dependency-graph': 'Map module dependencies, find circular imports, and analyze coupling metrics',
+  // New skills (v1.2.0) — hooks, agents, sessions, orchestration
+  'learn': 'Extract patterns from the current session — what worked, what failed, what to repeat',
+  'save-session': 'Persist current session context, decisions, and pending work for later resumption',
+  'resume-session': 'Restore context from a previous session and continue where you left off',
+  'checkpoint': 'Create a verification snapshot — run all quality checks and record pass/fail status',
+  'orchestrate': 'Multi-agent orchestration — break complex tasks into subtasks and delegate to agents',
+  'quality-gate': 'Run comprehensive quality checks: types, lint, format, tests, bundle, a11y, security',
+  'harness-audit': 'Audit AI agent configuration — check CLAUDE.md, hooks, agents, skills, MCP servers',
 };
 
 export async function copySkills(targetDir: string): Promise<string[]> {

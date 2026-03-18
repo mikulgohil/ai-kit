@@ -1,7 +1,7 @@
 {
   "name": "@mikulgohil/ai-kit",
-  "version": "1.1.0",
-  "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, slash commands, and developer guides.",
+  "version": "1.2.0",
+  "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, and developer guides.",
   "type": "module",
   "bin": {
     "ai-kit": "./dist/index.js"
@@ -11,7 +11,9 @@
     "templates",
     "commands",
     "guides",
-    "docs-scaffolds"
+    "docs-scaffolds",
+    "agents",
+    "contexts"
   ],
   "scripts": {
     "build": "tsup",
@@ -36,7 +38,10 @@
     "sitecore",
     "docker",
     "storybook",
-    "i18n"
+    "i18n",
+    "hooks",
+    "agents",
+    "security-audit"
   ],
   "author": "Mikul Gohil",
   "license": "MIT",

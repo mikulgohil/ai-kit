@@ -22,6 +22,24 @@ function minimalScan(overrides: Partial<ProjectScan> = {}): ProjectScan {
       tokenFormat: 'none',
       visualTests: false,
     },
+    tools: {
+      playwright: false,
+      storybook: false,
+      eslint: false,
+      prettier: false,
+      biome: false,
+      axeCore: false,
+      snyk: false,
+      knip: false,
+      bundleAnalyzer: false,
+    },
+    mcpServers: {
+      playwright: false,
+      figma: false,
+      github: false,
+      context7: false,
+      perplexity: false,
+    },
     packageManager: 'pnpm',
     projectName: 'test-project',
     projectPath: '/tmp/test-project',
@@ -125,10 +143,16 @@ describe('generateConfig', () => {
       const config = generateConfig(minimalScan(), [], [], []);
       const keys = Object.keys(config).sort();
       expect(keys).toEqual([
+        'agents',
         'commands',
+        'contexts',
+        'customFragments',
         'generatedAt',
         'guides',
+        'hookProfile',
+        'hooks',
         'scanResult',
+        'strictness',
         'templates',
         'version',
       ]);

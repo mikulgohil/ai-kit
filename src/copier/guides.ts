@@ -8,6 +8,7 @@ const AVAILABLE_GUIDES = [
   'when-to-use-ai',
   'token-saving-tips',
   'figma-workflow',
+  'hooks-and-agents',
 ];
 
 export async function copyGuides(targetDir: string): Promise<string[]> {

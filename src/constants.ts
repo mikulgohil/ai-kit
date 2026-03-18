@@ -9,8 +9,10 @@ export const TEMPLATES_DIR = path.join(PACKAGE_ROOT, 'templates');
 export const COMMANDS_DIR = path.join(PACKAGE_ROOT, 'commands');
 export const GUIDES_DIR = path.join(PACKAGE_ROOT, 'guides');
 export const DOCS_SCAFFOLDS_DIR = path.join(PACKAGE_ROOT, 'docs-scaffolds');
+export const AGENTS_DIR = path.join(PACKAGE_ROOT, 'agents');
+export const CONTEXTS_DIR = path.join(PACKAGE_ROOT, 'contexts');
 
-export const VERSION = '1.1.0';
+export const VERSION = '1.2.0';
 
 export const AI_KIT_FOLDER = 'ai-kit';
 export const AI_KIT_CONFIG_FILE = 'ai-kit.config.json';
@@ -20,8 +22,11 @@ export const GENERATED_FILES = {
   cursorRules: '.cursorrules',
   cursorMdcDir: '.cursor/rules',
   claudeSettings: '.claude/settings.json',
+  claudeSettingsLocal: '.claude/settings.local.json',
   claudeCommands: '.claude/commands',
   claudeSkills: '.claude/skills',
+  claudeAgents: '.claude/agents',
+  claudeContexts: '.claude/contexts',
   cursorSkills: '.cursor/skills',
 } as const;
 
