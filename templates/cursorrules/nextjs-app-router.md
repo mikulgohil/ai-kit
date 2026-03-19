@@ -6,3 +6,8 @@
 - Data fetching: use `fetch()` in Server Components, Server Actions for mutations
 - Use `<Link>` for navigation, `next/image` for images
 - No `useEffect` for data fetching in Server Components
+- Server Actions: validate with Zod, return `{ success, error }`, call `revalidatePath`/`revalidateTag` after mutations
+- Streaming: wrap slow components in `<Suspense fallback={...}>` for progressive rendering
+- ISR: use `fetch(url, { next: { revalidate: N } })` or `export const revalidate = N`
+- Middleware: place `middleware.ts` at project root, use `matcher` config, Edge-compatible APIs only
+- Route Groups: use `(groupName)/` for organization without affecting URL paths

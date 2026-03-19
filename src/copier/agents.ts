@@ -10,6 +10,7 @@ const UNIVERSAL_AGENTS = [
   'build-resolver',
   'doc-updater',
   'refactor-cleaner',
+  'architect',
 ];
 
 const CONDITIONAL_AGENTS: { name: string; condition: (scan: ProjectScan) => boolean }[] = [
@@ -20,6 +21,10 @@ const CONDITIONAL_AGENTS: { name: string; condition: (scan: ProjectScan) => bool
   {
     name: 'sitecore-specialist',
     condition: (scan) => scan.cms !== 'none',
+  },
+  {
+    name: 'tdd-guide',
+    condition: (scan) => scan.tools.playwright || !!scan.scripts['test'],
   },
 ];
 

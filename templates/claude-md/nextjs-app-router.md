@@ -22,8 +22,42 @@ app/
   api/                ← Route Handlers
 ```
 
+## Server Actions
+- Use `'use server'` directive at the top of the file or inline in a function
+- For form handling: pass Server Action directly to `<form action={myAction}>`
+- Use `useActionState` (React 19) for form state management with pending/error states
+- Always validate input with Zod before processing
+- Call `revalidatePath()` or `revalidateTag()` after mutations to update cached data
+- Return structured results `{ success, error, data }` — do not throw from Server Actions
+
+## Streaming & Suspense
+- Use `loading.tsx` for route-level loading states (automatic Suspense boundary)
+- Wrap slow data-fetching components in `<Suspense fallback={...}>` for granular streaming
+- Nested Suspense boundaries enable progressive page rendering
+- `loading.tsx` applies to the entire route segment; `<Suspense>` is per-component
+
+## Route Groups & Layouts
+- Use `(groupName)/` directories to organize routes without affecting URL structure
+- Route groups can have their own `layout.tsx` for section-specific layouts
+- Example: `(marketing)/about/page.tsx` → URL is `/about`, not `/(marketing)/about`
+- Use parallel routes (`@slot/`) for independent loading states within a layout
+
+## Middleware
+- Place `middleware.ts` in the project root (next to `app/`)
+- Use `matcher` config to scope middleware to specific routes
+- Common uses: authentication guards, redirects, i18n locale detection, Sitecore preview mode
+- Middleware runs on the Edge — use only Edge-compatible APIs (no Node.js fs, path, etc.)
+
+## ISR (Incremental Static Regeneration)
+- Set `revalidate` in `fetch()` options: `fetch(url, { next: { revalidate: 60 } })`
+- Use `export const revalidate = 60` at the page/layout level for time-based ISR
+- Use `revalidateTag(tag)` or `revalidatePath(path)` in Server Actions for on-demand ISR
+- Tag fetches with `fetch(url, { next: { tags: ['posts'] } })` for targeted revalidation
+
 ## Common Mistakes to Avoid
 - Don't use `useEffect` for data fetching in Server Components
 - Don't import server-only code in Client Components
 - Don't use `router.push` for simple navigation — use `<Link>`
 - Don't forget to add `loading.tsx` for route transitions
+- Don't throw errors from Server Actions — return error objects instead
+- Don't use Node.js APIs in Middleware — it runs on the Edge runtime

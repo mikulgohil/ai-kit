@@ -21,7 +21,11 @@ export function buildCursorVariables(scan: ProjectScan): Record<string, string> 
     techStack.push(`Next.js ${scan.nextjsVersion || ''}`);
   }
   if (scan.cms !== 'none') {
-    techStack.push(scan.cms === 'sitecore-xmc' ? 'Sitecore XM Cloud' : 'Sitecore JSS');
+    techStack.push(
+      scan.cms === 'sitecore-xmc-v2' || scan.cms === 'sitecore-xmc'
+        ? 'Sitecore XM Cloud'
+        : 'Sitecore JSS',
+    );
   }
   if (scan.typescript) techStack.push('TypeScript');
   if (scan.styling.includes('tailwind')) techStack.push('Tailwind CSS');

@@ -46,6 +46,10 @@ const ALL_COMMANDS = [
   'release',
   'storybook-gen',
   // v1.2.0
+  'search-first',
+  'quality-gate-check',
+  'server-action',
+  'middleware',
   'save-session',
   'resume-session',
   'checkpoint',

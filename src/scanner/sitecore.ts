@@ -1,6 +1,7 @@
 interface SitecoreResult {
-  cms: 'sitecore-xmc' | 'sitecore-jss' | 'none';
+  cms: 'sitecore-xmc-v2' | 'sitecore-xmc' | 'sitecore-jss' | 'none';
   sitecorejssVersion?: string;
+  sitecoreContentSdkVersion?: string;
 }
 
 export function detectSitecore(pkg: Record<string, unknown>): SitecoreResult {
@@ -13,8 +14,18 @@ export function detectSitecore(pkg: Record<string, unknown>): SitecoreResult {
   const jssReact = deps['@sitecore-jss/sitecore-jss-react'];
   const contentSdk = deps['@sitecore-content-sdk/nextjs'];
 
-  if (contentSdk || jssNextjs) {
-    const version = (contentSdk || jssNextjs || '').replace(/[\^~>=<]/g, '');
+  // Content SDK v2.x — newer XM Cloud projects
+  if (contentSdk) {
+    const version = contentSdk.replace(/[\^~>=<]/g, '');
+    return {
+      cms: 'sitecore-xmc-v2',
+      sitecoreContentSdkVersion: version || undefined,
+    };
+  }
+
+  // JSS-based XM Cloud projects
+  if (jssNextjs) {
+    const version = jssNextjs.replace(/[\^~>=<]/g, '');
     return { cms: 'sitecore-xmc', sitecorejssVersion: version || undefined };
   }
 

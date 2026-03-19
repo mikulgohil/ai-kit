@@ -12,8 +12,9 @@ export interface ProjectScan {
   nextjsVersion?: string;
   routerType?: 'app' | 'pages' | 'hybrid';
 
-  cms: 'sitecore-xmc' | 'sitecore-jss' | 'none';
+  cms: 'sitecore-xmc-v2' | 'sitecore-xmc' | 'sitecore-jss' | 'none';
   sitecorejssVersion?: string;
+  sitecoreContentSdkVersion?: string;
 
   styling: ('tailwind' | 'css-modules' | 'styled-components' | 'scss')[];
   tailwindVersion?: string;
@@ -82,7 +83,7 @@ export interface GeneratorOptions {
 export type ConflictResolution = 'overwrite' | 'merge' | 'skip';
 
 export interface ClarificationAnswer {
-  cms?: 'sitecore-xmc' | 'sitecore-jss' | 'none';
+  cms?: 'sitecore-xmc-v2' | 'sitecore-xmc' | 'sitecore-jss' | 'none';
   routerType?: 'app' | 'pages' | 'hybrid';
   primaryBranch?: string;
   useStorybook?: boolean;

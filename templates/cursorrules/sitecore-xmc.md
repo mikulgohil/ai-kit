@@ -7,3 +7,7 @@
 - GraphQL queries go in `.graphql` files alongside components
 - Don't use `getStaticProps` directly — use Sitecore's SSG/SSR integration
 - Don't hardcode content that should come from Sitecore fields
+- Content SDK v2.x: import from `@sitecore-content-sdk/nextjs` instead of `@sitecore-jss/sitecore-jss-nextjs`
+- Experience Edge: use `first`/`after` for pagination, cache responses appropriately
+- Personalized pages require SSR — do not statically generate them
+- Use `next/image` with Sitecore image fields — configure CDN domain in `next.config.js`
