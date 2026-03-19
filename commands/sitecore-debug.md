@@ -196,6 +196,64 @@ You MUST structure your response exactly as follows:
 [how to verify the fix worked]
 ```
 
+### 6. Content SDK v2.x Issues
+
+**Symptoms:** Components work with JSS but break after migrating to Content SDK v2.x.
+
+```
+[ ] Are imports updated from @sitecore-jss/sitecore-jss-nextjs to @sitecore-content-sdk/nextjs?
+    Check: All import statements in component files
+    Fix: Update import paths throughout the component
+
+[ ] Is useSitecoreContext imported from the correct package?
+    Check: import { useSitecoreContext } from '@sitecore-content-sdk/nextjs'
+    Common mistake: Still importing from JSS package after migration
+
+[ ] Are field types updated to Content SDK v2.x types?
+    Check: Field<string> instead of TextField, ImageField stays the same
+    Fix: Update type imports and interface definitions
+
+[ ] Is the component factory using Content SDK registration?
+    Check: Component registration follows v2.x patterns
+    Fix: Update componentFactory to use Content SDK APIs
+```
+
+### 7. Experience Edge Connectivity
+
+```
+[ ] Is the GraphQL endpoint correct?
+    Check: GRAPH_QL_ENDPOINT=https://edge.sitecorecloud.io/api/graphql/v1
+    Common mistake: Using CM GraphQL endpoint instead of Edge
+
+[ ] Is the API key valid for Experience Edge?
+    Check: API key must be published and have Edge access
+    Test: curl -H "sc_apikey: YOUR_KEY" https://edge.sitecorecloud.io/api/graphql/v1
+
+[ ] Are queries using the correct search predicates?
+    Check: _path, _language, _templatename fields
+    Common mistake: Using item paths without /sitecore/content/ prefix
+
+[ ] Is pagination handled correctly?
+    Check: Using first/after parameters, checking hasNext in pageInfo
+    Fix: Add pageInfo { hasNext endCursor } to query and loop until !hasNext
+```
+
+### 8. Image Optimization Issues
+
+```
+[ ] Is the Sitecore CDN domain configured in next.config.js?
+    Check: images.remotePatterns includes the Sitecore media domain
+    Fix: Add { protocol: 'https', hostname: '*.sitecorecloud.io' } to remotePatterns
+
+[ ] Is the image src extracted correctly from the field?
+    Check: field.value.src contains the full URL
+    Common mistake: Using field.value directly instead of field.value.src
+
+[ ] Are width and height provided to next/image?
+    Check: Width and height from field.value or explicit dimensions
+    Fix: Extract width/height from ImageField or provide defaults
+```
+
 ## Self-Check
 
 Before responding, verify:

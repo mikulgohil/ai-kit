@@ -38,6 +38,10 @@ const AVAILABLE_SKILLS = [
   'release',
   'storybook-gen',
   // New skills (v1.2.0) — hooks, agents, sessions, orchestration
+  'search-first',
+  'quality-gate-check',
+  'server-action',
+  'middleware',
   'save-session',
   'resume-session',
   'checkpoint',
@@ -83,6 +87,10 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'release': 'Guided release workflow with versioning, changelog, tagging, and release notes',
   'storybook-gen': 'Generate Storybook stories with controls, play functions, and visual tests',
   // New skills (v1.2.0) — hooks, agents, sessions, orchestration
+  'search-first': 'Research-before-coding — search docs, existing patterns, and APIs before writing code',
+  'quality-gate-check': 'Post-implementation quality checklist — type safety, a11y, security, performance, Sitecore',
+  'server-action': 'Scaffold Next.js Server Actions with Zod validation, error handling, and revalidation',
+  'middleware': 'Create or update Next.js middleware for auth, redirects, i18n, or Sitecore preview mode',
   'save-session': 'Persist current session context, decisions, and pending work for later resumption',
   'resume-session': 'Restore context from a previous session and continue where you left off',
   'checkpoint': 'Create a verification snapshot — run all quality checks and record pass/fail status',

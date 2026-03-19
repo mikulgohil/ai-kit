@@ -76,11 +76,13 @@ function calculateComplexity(config: AiKitConfig): {
   const hasCms = scan.cms !== 'none';
   if (hasCms) score += 2;
   const cmsLabel =
-    scan.cms === 'sitecore-xmc'
-      ? 'Sitecore XM Cloud'
-      : scan.cms === 'sitecore-jss'
-        ? 'Sitecore JSS'
-        : 'CMS';
+    scan.cms === 'sitecore-xmc-v2'
+      ? 'Sitecore XM Cloud (Content SDK v2)'
+      : scan.cms === 'sitecore-xmc'
+        ? 'Sitecore XM Cloud'
+        : scan.cms === 'sitecore-jss'
+          ? 'Sitecore JSS'
+          : 'CMS';
   items.push({ label: cmsLabel, active: hasCms });
 
   // TypeScript: +1

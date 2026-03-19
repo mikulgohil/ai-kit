@@ -55,11 +55,17 @@ function buildVariables(scan: ProjectScan): Record<string, string> {
     techStack.push(`Next.js ${scan.nextjsVersion || ''}`);
   }
   if (scan.cms !== 'none') {
-    techStack.push(
-      scan.cms === 'sitecore-xmc'
-        ? `Sitecore XM Cloud${scan.sitecorejssVersion ? ` (JSS ${scan.sitecorejssVersion})` : ''}`
-        : 'Sitecore JSS',
-    );
+    if (scan.cms === 'sitecore-xmc-v2') {
+      techStack.push(
+        `Sitecore XM Cloud${scan.sitecoreContentSdkVersion ? ` (Content SDK ${scan.sitecoreContentSdkVersion})` : ' (Content SDK v2)'}`,
+      );
+    } else if (scan.cms === 'sitecore-xmc') {
+      techStack.push(
+        `Sitecore XM Cloud${scan.sitecorejssVersion ? ` (JSS ${scan.sitecorejssVersion})` : ''}`,
+      );
+    } else {
+      techStack.push('Sitecore JSS');
+    }
   }
   if (scan.typescript) techStack.push('TypeScript');
   if (scan.styling.includes('tailwind'))

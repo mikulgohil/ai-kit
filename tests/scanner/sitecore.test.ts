@@ -19,15 +19,16 @@ describe('detectSitecore', () => {
       expect(result.cms).toBe('sitecore-xmc');
     });
 
-    it('detects sitecore-xmc when @sitecore-content-sdk/nextjs is in dependencies', () => {
+    it('detects sitecore-xmc-v2 when @sitecore-content-sdk/nextjs is in dependencies', () => {
       const pkg = {
         dependencies: { '@sitecore-content-sdk/nextjs': '^1.0.0' },
       };
       const result = detectSitecore(pkg);
-      expect(result.cms).toBe('sitecore-xmc');
+      expect(result.cms).toBe('sitecore-xmc-v2');
+      expect(result.sitecoreContentSdkVersion).toBe('1.0.0');
     });
 
-    it('prefers content-sdk version when both content-sdk and jss-nextjs present', () => {
+    it('prefers content-sdk when both content-sdk and jss-nextjs present', () => {
       const pkg = {
         dependencies: {
           '@sitecore-content-sdk/nextjs': '^1.0.0',
@@ -35,8 +36,8 @@ describe('detectSitecore', () => {
         },
       };
       const result = detectSitecore(pkg);
-      expect(result.cms).toBe('sitecore-xmc');
-      expect(result.sitecorejssVersion).toBe('1.0.0');
+      expect(result.cms).toBe('sitecore-xmc-v2');
+      expect(result.sitecoreContentSdkVersion).toBe('1.0.0');
     });
   });
 
@@ -103,7 +104,7 @@ describe('detectSitecore', () => {
         dependencies: { '@sitecore-content-sdk/nextjs': '~1.2.0' },
       };
       const result = detectSitecore(pkg);
-      expect(result.sitecorejssVersion).toBe('1.2.0');
+      expect(result.sitecoreContentSdkVersion).toBe('1.2.0');
     });
 
     it('strips caret from jss-react version', () => {
