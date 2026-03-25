@@ -1,6 +1,6 @@
 {
   "name": "@mikulgohil/ai-kit",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, and developer guides.",
   "type": "module",
   "bin": {
