@@ -1,0 +1,279 @@
+# =============================================================================
+# AI-Powered PR Review — GitHub Actions Workflow Template
+# =============================================================================
+#
+# This workflow uses the Anthropic Claude API to review pull request diffs
+# against your project's coding standards defined in CLAUDE.md.
+#
+# Template variables (replace before use):
+#   {{PROJECT_NAME}}  — Your project/repo name (e.g., "my-app")
+#   {{MODEL}}         — Claude model to use (default: claude-sonnet-4-20250514)
+#
+# Setup:
+#   1. Copy this file to your project's .github/workflows/ai-review.yml
+#   2. Replace template variables with your values
+#   3. Add ANTHROPIC_API_KEY to your repository secrets:
+#      Settings → Secrets and variables → Actions → New repository secret
+#   4. Ensure CLAUDE.md exists at the repo root with your project rules
+#
+# =============================================================================
+
+name: "AI PR Review — {{PROJECT_NAME}}"
+
+# Trigger on pull request events: when a PR is opened or new commits are pushed
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+# Restrict permissions to the minimum required
+permissions:
+  contents: read        # Read repo contents (for CLAUDE.md and diff)
+  pull-requests: write  # Post review comments on the PR
+
+# Cancel in-progress runs for the same PR when new commits are pushed
+concurrency:
+  group: ai-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  ai-review:
+    name: Claude PR Review
+    runs-on: ubuntu-latest
+
+    # Skip reviews on draft PRs and bot-authored PRs
+    if: |
+      github.event.pull_request.draft == false &&
+      github.actor != 'dependabot[bot]' &&
+      github.actor != 'renovate[bot]'
+
+    steps:
+      # -----------------------------------------------------------------------
+      # Step 1: Checkout the repository
+      # We need the full repo to read CLAUDE.md and generate the diff.
+      # fetch-depth: 0 ensures we have the base branch for accurate diff.
+      # -----------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # -----------------------------------------------------------------------
+      # Step 2: Fetch the base branch
+      # Ensures we can compute an accurate diff between base and head.
+      # -----------------------------------------------------------------------
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref }}
+
+      # -----------------------------------------------------------------------
+      # Step 3: Read project rules from CLAUDE.md
+      # This file contains your project's coding standards, conventions, and
+      # guidelines that the AI reviewer will enforce.
+      # Falls back to a sensible default if CLAUDE.md doesn't exist.
+      # -----------------------------------------------------------------------
+      - name: Read project rules
+        id: rules
+        run: |
+          if [ -f "CLAUDE.md" ]; then
+            echo "rules_found=true" >> "$GITHUB_OUTPUT"
+            # Store rules content in a file for the review step
+            cp CLAUDE.md /tmp/project-rules.md
+            echo "Project rules loaded from CLAUDE.md"
+          else
+            echo "rules_found=false" >> "$GITHUB_OUTPUT"
+            echo "No CLAUDE.md found — review will use general best practices"
+            echo "No project-specific CLAUDE.md found. Use general best practices." > /tmp/project-rules.md
+          fi
+
+      # -----------------------------------------------------------------------
+      # Step 4: Generate the PR diff
+      # Produces a unified diff of all changes in this PR relative to the
+      # base branch. Limited to 100KB to stay within API token limits.
+      # Binary files and lockfiles are excluded to reduce noise.
+      # -----------------------------------------------------------------------
+      - name: Generate PR diff
+        id: diff
+        run: |
+          DIFF=$(git diff \
+            origin/${{ github.event.pull_request.base.ref }}..HEAD \
+            -- . \
+            ':!package-lock.json' \
+            ':!pnpm-lock.yaml' \
+            ':!yarn.lock' \
+            ':!*.lock' \
+            ':!*.png' ':!*.jpg' ':!*.jpeg' ':!*.gif' ':!*.svg' ':!*.ico' \
+            ':!*.woff' ':!*.woff2' ':!*.ttf' ':!*.eot' \
+            | head -c 100000)
+
+          if [ -z "$DIFF" ]; then
+            echo "No reviewable diff found (only lockfiles, images, or binary changes)"
+            echo "empty=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "empty=false" >> "$GITHUB_OUTPUT"
+            # Write diff to file to avoid shell escaping issues
+            echo "$DIFF" > /tmp/pr-diff.txt
+          fi
+
+      # -----------------------------------------------------------------------
+      # Step 5: Collect PR metadata
+      # Gathers PR title, description, changed file list, and author info
+      # to give the AI reviewer full context.
+      # -----------------------------------------------------------------------
+      - name: Collect PR metadata
+        if: steps.diff.outputs.empty != 'true'
+        id: metadata
+        run: |
+          # Get the list of changed files with status (Added, Modified, Deleted)
+          git diff --name-status \
+            origin/${{ github.event.pull_request.base.ref }}..HEAD \
+            -- . \
+            ':!package-lock.json' ':!pnpm-lock.yaml' ':!yarn.lock' ':!*.lock' \
+            > /tmp/changed-files.txt
+
+          FILE_COUNT=$(wc -l < /tmp/changed-files.txt | tr -d ' ')
+          echo "file_count=$FILE_COUNT" >> "$GITHUB_OUTPUT"
+          echo "Changed files: $FILE_COUNT"
+
+      # -----------------------------------------------------------------------
+      # Step 6: Call Claude API for review
+      # Sends the diff, project rules, and PR context to Claude for analysis.
+      # The prompt instructs Claude to act as a code reviewer and output
+      # structured markdown feedback.
+      # -----------------------------------------------------------------------
+      - name: Run AI review
+        if: steps.diff.outputs.empty != 'true'
+        id: review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # Read inputs into variables
+          PROJECT_RULES=$(cat /tmp/project-rules.md)
+          PR_DIFF=$(cat /tmp/pr-diff.txt)
+          CHANGED_FILES=$(cat /tmp/changed-files.txt)
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_BODY="${{ github.event.pull_request.body }}"
+
+          # Build the review prompt
+          REVIEW_PROMPT=$(cat <<'PROMPT_END'
+          You are a senior code reviewer for the {{PROJECT_NAME}} project. Review the following pull request diff against the project rules and coding standards.
+
+          ## Your Task
+          1. Check for bugs, logic errors, and security vulnerabilities
+          2. Verify the changes follow the project rules and conventions below
+          3. Look for performance issues, missing error handling, and edge cases
+          4. Check for accessibility issues in any UI changes
+          5. Note any missing tests for new functionality
+
+          ## Output Format
+          Structure your review as markdown with these sections:
+
+          ### Summary
+          One paragraph overview of what the PR does and overall quality assessment.
+
+          ### Issues Found
+          List issues by severity. Use this format for each:
+          - **[Critical]** / **[Warning]** / **[Suggestion]** `file:line` — Description of the issue and how to fix it.
+
+          If no issues are found in a severity level, omit that level.
+
+          ### Positive Highlights
+          Brief notes on things done well (max 3 items). This encourages good patterns.
+
+          ## Rules
+          - Be constructive and specific — always suggest a fix, not just point out problems
+          - Do not flag style issues that are consistent with the existing codebase
+          - Do not suggest changes that would significantly expand the PR scope
+          - Focus on substantive issues over nitpicks
+          - If the diff is too large to review thoroughly, focus on the highest-risk files
+          PROMPT_END
+          )
+
+          # Build the JSON payload using jq to handle escaping safely
+          PAYLOAD=$(jq -n \
+            --arg model "{{MODEL}}" \
+            --arg system "You are a code reviewer. Be concise, constructive, and specific." \
+            --arg rules "$PROJECT_RULES" \
+            --arg diff "$PR_DIFF" \
+            --arg files "$CHANGED_FILES" \
+            --arg title "$PR_TITLE" \
+            --arg body "$PR_BODY" \
+            --arg prompt "$REVIEW_PROMPT" \
+            '{
+              model: (if $model == "{{MODEL}}" then "claude-sonnet-4-20250514" else $model end),
+              max_tokens: 4096,
+              messages: [
+                {
+                  role: "user",
+                  content: ($prompt + "\n\n## Project Rules (from CLAUDE.md)\n\n" + $rules + "\n\n## PR: " + $title + "\n\n" + $body + "\n\n## Changed Files\n\n```\n" + $files + "\n```\n\n## Diff\n\n```diff\n" + $diff + "\n```")
+                }
+              ]
+            }')
+
+          # Call the Anthropic Messages API
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            https://api.anthropic.com/v1/messages \
+            -H "content-type: application/json" \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -d "$PAYLOAD")
+
+          # Separate response body and HTTP status code
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "API request failed with status $HTTP_CODE"
+            echo "$BODY" | jq '.error' 2>/dev/null || echo "$BODY"
+            exit 1
+          fi
+
+          # Extract the review text from the API response
+          REVIEW=$(echo "$BODY" | jq -r '.content[0].text')
+
+          # Write review to file for the comment step
+          echo "$REVIEW" > /tmp/review-output.md
+
+      # -----------------------------------------------------------------------
+      # Step 7: Post the review as a PR comment
+      # Uses the GitHub API to post the AI review as a comment on the PR.
+      # Includes a header identifying it as an automated review.
+      # -----------------------------------------------------------------------
+      - name: Post review comment
+        if: steps.diff.outputs.empty != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REVIEW_BODY=$(cat /tmp/review-output.md)
+          FILE_COUNT="${{ steps.metadata.outputs.file_count }}"
+
+          # Build the comment with a clear header
+          COMMENT=$(cat <<EOF
+          ## AI Code Review
+
+          > Automated review by Claude ({{MODEL}}) | $FILE_COUNT files reviewed
+          > Rules source: $([ "${{ steps.rules.outputs.rules_found }}" = "true" ] && echo "CLAUDE.md" || echo "general best practices")
+
+          ---
+
+          $REVIEW_BODY
+
+          ---
+
+          <sub>This review was generated automatically. It supplements but does not replace human review.</sub>
+          EOF
+          )
+
+          # Post the comment using GitHub CLI
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "$COMMENT"
+
+      # -----------------------------------------------------------------------
+      # Step 8: Handle empty diff (no reviewable changes)
+      # Posts a brief note when the PR only contains lockfiles or binary assets.
+      # -----------------------------------------------------------------------
+      - name: Skip review (no diff)
+        if: steps.diff.outputs.empty == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "## AI Code Review\n\nNo reviewable code changes found in this PR (only lockfiles, images, or binary assets). Skipping automated review."

@@ -91,6 +91,77 @@ export function generateHooks(
     });
   }
 
+  // --- Bundle Impact Warning ---
+  // Warns when new dependencies are added (standard + strict)
+  if (profile !== 'minimal') {
+    postToolUse.push({
+      matcher: 'Edit|Write',
+      hooks: [
+        {
+          type: 'command',
+          command: [
+            'case "$CLAUDE_FILE_PATH" in',
+            '  */package.json)',
+            '    ADDED=$(git diff --no-index /dev/null "$CLAUDE_FILE_PATH" 2>/dev/null | grep "^+" | grep -E \'"dependencies"|"devDependencies"\' | head -1)',
+            '    if [ -n "$ADDED" ]; then',
+            '      NEW_DEPS=$(git diff "$CLAUDE_FILE_PATH" 2>/dev/null | grep "^+" | grep -v "^+++" | grep -E \'"[^"]+": "[^"]+"\' | sed \'s/.*"\\([^"]*\\)".*/\\1/\' | head -5)',
+            '      if [ -n "$NEW_DEPS" ]; then',
+            '        echo "📦 New dependencies detected:"',
+            '        echo "$NEW_DEPS" | while read dep; do echo "  → $dep"; done',
+            '        echo "⚠️  Check bundle impact before committing. Run: npx bundlesize or npm run build"',
+            '      fi',
+            '    fi',
+            '  ;;',
+            'esac',
+          ].join('\n'),
+        },
+      ],
+    });
+  }
+
+  // --- Pre-Commit Review Hook ---
+  // Lightweight review of staged changes before git commit (strict only)
+  if (profile === 'strict') {
+    preToolUse.push({
+      matcher: 'Bash(git commit*)',
+      hooks: [
+        {
+          type: 'command',
+          command: [
+            'STAGED=$(git diff --cached --name-only 2>/dev/null | grep -E "\\.(ts|tsx|js|jsx)$")',
+            'if [ -n "$STAGED" ]; then',
+            '  ISSUES=""',
+            '  for f in $STAGED; do',
+            '    if [ -f "$f" ]; then',
+            '      # Check for any types',
+            '      ANY_COUNT=$(grep -c ": any" "$f" 2>/dev/null || echo 0)',
+            '      if [ "$ANY_COUNT" -gt 0 ]; then',
+            '        ISSUES="$ISSUES\\n  ⚠️  $f: $ANY_COUNT \\`any\\` type(s) found"',
+            '      fi',
+            '      # Check for console.log',
+            '      LOG_COUNT=$(grep -c "console\\.log" "$f" 2>/dev/null || echo 0)',
+            '      if [ "$LOG_COUNT" -gt 0 ]; then',
+            '        ISSUES="$ISSUES\\n  ⚠️  $f: $LOG_COUNT console.log(s) found"',
+            '      fi',
+            '      # Check for TODO without ticket',
+            '      TODO_COUNT=$(grep -c "// TODO[^(]\\|// TODO$" "$f" 2>/dev/null || echo 0)',
+            '      if [ "$TODO_COUNT" -gt 0 ]; then',
+            '        ISSUES="$ISSUES\\n  ⚠️  $f: $TODO_COUNT TODO(s) without ticket reference"',
+            '      fi',
+            '    fi',
+            '  done',
+            '  if [ -n "$ISSUES" ]; then',
+            '    echo "🔍 Pre-commit review found issues:"',
+            '    printf "$ISSUES\\n"',
+            '    echo "Fix these before committing, or proceed if intentional."',
+            '  fi',
+            'fi',
+          ].join('\n'),
+        },
+      ],
+    });
+  }
+
   // --- Mistakes Auto-Capture Hook ---
   // Captures build/lint/typecheck failures into docs/mistakes-log.md
   if (profile !== 'minimal') {

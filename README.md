@@ -23,12 +23,12 @@ Every team using AI coding assistants hits these problems. AI Kit solves each on
 |---|---------|---------------------|
 | 1 | **AI forgets everything each session** — Every new chat starts from zero. No memory of project rules, patterns, or past decisions. | Generates a persistent `CLAUDE.md` with project rules, conventions, and stack details. The AI knows your project from the first prompt, every time. |
 | 2 | **AI generates wrong framework patterns** — Writes Pages Router code when you use App Router. Uses CSS when you use Tailwind. Creates default exports when your project uses named exports. | Auto-detects your exact stack (framework, router, CMS, styling, TypeScript config) and generates rules specific to your setup. The AI can't use the wrong patterns. |
-| 3 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. Junior developers waste the most time. | Ships **39 pre-built skills** so developers don't write prompts from scratch — just run `/review`, `/security-check`, `/new-component`, `/refactor`, etc. |
+| 3 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. Junior developers waste the most time. | Ships **46 pre-built skills** so developers don't write prompts from scratch — just run `/review`, `/security-check`, `/new-component`, `/refactor`, etc. |
 | 4 | **Same mistakes happen repeatedly** — No system to track what went wrong, so the team keeps hitting the same build failures and lint errors. | Generates a **mistakes log** (`docs/mistakes-log.md`) with **auto-capture hook** that logs every build/lint failure automatically. The AI references it to avoid repeating them. |
 | 5 | **Every developer gets different AI behavior** — No consistency in how the team uses AI tools, leading to inconsistent code quality and style. | One `ai-kit init` command generates the same rules for the entire team — everyone's AI follows identical project standards. Commit the generated files to the repo. |
 | 6 | **No quality checks on AI-generated code** — AI output goes straight to PR without type checking, linting, or security review. | Automated **hooks** run formatting, type-checking, linting, and git safety checks in real-time as the AI writes code. **Quality gate** runs everything before merge. |
 | 7 | **AI generates insecure code** — No guardrails for secrets exposure, XSS, SQL injection, or other vulnerabilities. AI doesn't scan its own output. | Built-in **security audit** scans for exposed secrets, OWASP risks, and misconfigurations. **Security review agent** catches issues at development time, not production. |
-| 8 | **AI can't handle multi-file reasoning** — Changes to one component break related files. AI loses context across linked models and shared types. | **8 specialized agents** with focused expertise — planner, code-reviewer, build-resolver, doc-updater, refactor-cleaner — each maintains context for their domain. |
+| 8 | **AI can't handle multi-file reasoning** — Changes to one component break related files. AI loses context across linked models and shared types. | **10 specialized agents** with focused expertise — planner, code-reviewer, build-resolver, doc-updater, refactor-cleaner — each maintains context for their domain. |
 | 9 | **No decision trail** — Nobody remembers why a technical decision was made 3 months ago. Knowledge walks out the door when developers leave. | Auto-scaffolds a **decisions log** (`docs/decisions-log.md`) to capture what was decided, why, and by whom — fully searchable and traceable. |
 | 10 | **Onboarding takes too long** — New developers spend days understanding the project and its AI setup before they can contribute. | AI Kit generates developer guides and project-aware configurations — new team members get productive AI assistance from day one with zero manual setup. |
 | 11 | **Context gets repeated every conversation** — You explain the same conventions in every session: import order, naming, component structure, testing patterns. | All conventions are encoded in the generated rules file. The AI reads them automatically at session start. You explain once, it remembers forever. |
@@ -64,8 +64,8 @@ npx @mikulgohil/ai-kit health
 |---|---|
 | `CLAUDE.md` | Project-aware rules for Claude Code — your stack, conventions, and patterns |
 | `.cursorrules` + `.cursor/rules/*.mdc` | Same rules formatted for Cursor AI with scoped file matching |
-| 39 Skills | Auto-discovered workflows — `/review`, `/new-component`, `/security-check`, `/pre-pr`, and 35 more |
-| 8 Agents | Specialized AI assistants — planner, reviewer, security, E2E, build-resolver, and more |
+| 46 Skills | Auto-discovered workflows — `/review`, `/new-component`, `/security-check`, `/pre-pr`, and 42 more |
+| 10 Agents | Specialized AI assistants — planner, reviewer, security, E2E, build-resolver, ci-debugger, and more |
 | 3 Context Modes | Switch between dev (build fast), review (check quality), and research (understand code) |
 | Automated Hooks | Auto-format, TypeScript checks, console.log warnings, mistakes auto-capture, git safety |
 | 6 Guides | Developer playbooks for prompts, tokens, hooks, agents, Figma workflow |
@@ -89,21 +89,21 @@ Scans your `package.json`, config files, and directory structure to detect your 
 | Turborepo monorepo | Workspace conventions, cross-package imports |
 | Figma + design tokens | Token mapping, design-to-code workflow |
 
-### 39 Pre-Built Skills
+### 46 Pre-Built Skills
 
 Structured AI workflows applied automatically — the AI recognizes what you're doing and loads the right skill:
 
 | Category | Skills |
 |---|---|
 | Getting Started | `prompt-help`, `understand` |
-| Building | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen` |
-| Quality & Review | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check` |
-| Maintenance | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` |
-| Workflow | `document`, `commit-msg`, `env-setup`, `changelog`, `release` |
+| Building | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen`, `scaffold-spec` |
+| Quality & Review | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check`, `test-gaps` |
+| Maintenance | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `upgrade` |
+| Workflow | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `pr-description`, `standup`, `learn-from-pr`, `release-notes` |
 | Session | `save-session`, `resume-session`, `checkpoint` |
 | Orchestration | `orchestrate`, `quality-gate`, `harness-audit` |
 
-### 8 Specialized Agents
+### 10 Specialized Agents
 
 | Agent | Purpose | Conditional |
 |---|---|---|
@@ -113,6 +113,8 @@ Structured AI workflows applied automatically — the AI recognizes what you're 
 | `build-resolver` | Diagnose and fix build/type errors | No |
 | `doc-updater` | Keep documentation in sync with code | No |
 | `refactor-cleaner` | Find and remove dead code | No |
+| `tdd-guide` | Test-driven development guidance and workflow | No |
+| `ci-debugger` | CI/CD failure debugger — analyzes logs and suggests fixes | No |
 | `e2e-runner` | Playwright tests with Page Object Model | Yes — Playwright only |
 | `sitecore-specialist` | Sitecore XM Cloud patterns and debugging | Yes — Sitecore only |
 
@@ -121,8 +123,8 @@ Structured AI workflows applied automatically — the AI recognizes what you're 
 | Profile | What Runs Automatically |
 |---|---|
 | Minimal | Auto-format + git push safety |
-| Standard | + TypeScript type-check + console.log warnings + mistakes auto-capture |
-| Strict | + ESLint check + stop-time console.log audit |
+| Standard | + TypeScript type-check + console.log warnings + mistakes auto-capture + bundle impact warning |
+| Strict | + ESLint check + stop-time console.log audit + pre-commit AI review + bundle impact warning |
 
 **Mistakes auto-capture** — When a build/lint command fails, the hook logs the error to `docs/mistakes-log.md` with timestamp and error preview. The mistakes log builds itself over time.
 
@@ -176,6 +178,9 @@ Period summaries, budget progress with alerts, per-project cost breakdown, week-
 | `ai-kit tokens` | Token usage summary and cost estimates |
 | `ai-kit stats [path]` | Project complexity metrics |
 | `ai-kit export [path]` | Export rules to Windsurf, Aider, Cline |
+| `ai-kit patterns [path]` | Generate pattern library from recurring code patterns |
+| `ai-kit dead-code [path]` | Find unused components and dead code |
+| `ai-kit drift [path]` | Detect drift between code and .ai.md docs |
 
 ---
 
@@ -242,11 +247,11 @@ Only content between `AI-KIT:START/END` markers is refreshed. Your custom rules 
 | Page | What You'll Learn |
 |---|---|
 | [Getting Started](https://mikulgohil.github.io/ai-kit-docs/getting-started) | Step-by-step setup walkthrough |
-| [CLI Reference](https://mikulgohil.github.io/ai-kit-docs/cli-reference) | All 10 commands with examples |
-| [Skills & Commands](https://mikulgohil.github.io/ai-kit-docs/slash-commands) | All 39 skills with usage guides |
+| [CLI Reference](https://mikulgohil.github.io/ai-kit-docs/cli-reference) | All 13 commands with examples |
+| [Skills & Commands](https://mikulgohil.github.io/ai-kit-docs/slash-commands) | All 46 skills with usage guides |
 | [What Gets Generated](https://mikulgohil.github.io/ai-kit-docs/what-gets-generated) | Detailed breakdown of every generated file |
 | [Hooks](https://mikulgohil.github.io/ai-kit-docs/hooks) | Hook profiles, mistakes auto-capture |
-| [Agents](https://mikulgohil.github.io/ai-kit-docs/agents) | 8 specialized agents |
+| [Agents](https://mikulgohil.github.io/ai-kit-docs/agents) | 10 specialized agents |
 | [Changelog](https://mikulgohil.github.io/ai-kit-docs/changelog) | Version history and release notes |
 
 ---

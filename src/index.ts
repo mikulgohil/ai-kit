@@ -10,6 +10,9 @@ import { exportCommand } from './commands/export.js';
 import { statsCommand } from './commands/stats.js';
 import { auditCommand } from './commands/audit.js';
 import { healthCommand } from './commands/health.js';
+import { patternsCommand } from './commands/patterns.js';
+import { deadCodeCommand } from './commands/dead-code.js';
+import { driftCommand } from './commands/drift.js';
 
 const program = new Command();
 
@@ -174,6 +177,54 @@ program
   .action(async (targetPath?: string) => {
     try {
       await healthCommand(targetPath);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('patterns')
+  .description('Generate a pattern library from recurring code patterns')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .action(async (targetPath?: string) => {
+    try {
+      await patternsCommand(targetPath);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('dead-code')
+  .description('Find unused components and dead code')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .action(async (targetPath?: string) => {
+    try {
+      await deadCodeCommand(targetPath);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('drift')
+  .description('Detect drift between component code and .ai.md documentation')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .action(async (targetPath?: string) => {
+    try {
+      await driftCommand(targetPath);
     } catch (err) {
       if ((err as Error).name === 'ExitPromptError') {
         process.exit(0);
