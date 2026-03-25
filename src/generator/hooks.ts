@@ -91,6 +91,54 @@ export function generateHooks(
     });
   }
 
+  // --- Mistakes Auto-Capture Hook ---
+  // Captures build/lint/typecheck failures into docs/mistakes-log.md
+  if (profile !== 'minimal') {
+    postToolUse.push({
+      matcher: 'Bash',
+      hooks: [
+        {
+          type: 'command',
+          command: [
+            'if [ "$CLAUDE_TOOL_EXIT_CODE" != "0" ] && [ -n "$CLAUDE_TOOL_EXIT_CODE" ]; then',
+            '  OUTPUT="$CLAUDE_TOOL_OUTPUT"',
+            '  IS_BUILD_ERROR=false',
+            '  case "$OUTPUT" in',
+            '    *"error TS"*|*"tsc"*) IS_BUILD_ERROR=true ;;',
+            '    *"ESLint"*|*"eslint"*|*"Lint error"*) IS_BUILD_ERROR=true ;;',
+            '    *"Build error"*|*"build failed"*|*"ELIFECYCLE"*) IS_BUILD_ERROR=true ;;',
+            '    *"Module not found"*|*"Cannot find module"*) IS_BUILD_ERROR=true ;;',
+            '    *"SyntaxError"*|*"TypeError"*) IS_BUILD_ERROR=true ;;',
+            '  esac',
+            '  if [ "$IS_BUILD_ERROR" = "true" ]; then',
+            '    LOG_FILE="docs/mistakes-log.md"',
+            '    if [ -f "$LOG_FILE" ]; then',
+            '      DATE=$(date +"%Y-%m-%d %H:%M")',
+            '      ERROR_PREVIEW=$(echo "$OUTPUT" | grep -i "error" | head -3 | sed "s/^/  /")',
+            '      {',
+            '        echo ""',
+            '        echo "### $DATE — Build/lint failure (auto-captured)"',
+            '        echo "- **What happened**: Command exited with code $CLAUDE_TOOL_EXIT_CODE"',
+            '        echo "- **Error preview**:"',
+            '        echo "\\`\\`\\`"',
+            '        echo "$ERROR_PREVIEW"',
+            '        echo "\\`\\`\\`"',
+            '        echo "- **Root cause**: <!-- TODO: Fill in after investigating -->"',
+            '        echo "- **Fix**: <!-- TODO: How was it resolved? -->"',
+            '        echo "- **Lesson**: <!-- TODO: What to do differently -->"',
+            '        echo ""',
+            '        echo "---"',
+            '      } >> "$LOG_FILE"',
+            '      echo "📝 Mistake auto-logged to docs/mistakes-log.md"',
+            '    fi',
+            '  fi',
+            'fi',
+          ].join('\n'),
+        },
+      ],
+    });
+  }
+
   // --- Stop hooks ---
 
   // Console.log check in all modified files (strict only)

@@ -9,6 +9,7 @@ import { diffCommand } from './commands/diff.js';
 import { exportCommand } from './commands/export.js';
 import { statsCommand } from './commands/stats.js';
 import { auditCommand } from './commands/audit.js';
+import { healthCommand } from './commands/health.js';
 
 const program = new Command();
 
@@ -157,6 +158,22 @@ program
   .action(async (targetPath?: string) => {
     try {
       await auditCommand(targetPath);
+    } catch (err) {
+      if ((err as Error).name === 'ExitPromptError') {
+        process.exit(0);
+      }
+      console.error(err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('health')
+  .description('One-glance project health — setup, security, stack, tools, and docs')
+  .argument('[path]', 'Project directory (defaults to current directory)')
+  .action(async (targetPath?: string) => {
+    try {
+      await healthCommand(targetPath);
     } catch (err) {
       if ((err as Error).name === 'ExitPromptError') {
         process.exit(0);
