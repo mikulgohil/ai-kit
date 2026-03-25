@@ -12,7 +12,7 @@ export const DOCS_SCAFFOLDS_DIR = path.join(PACKAGE_ROOT, 'docs-scaffolds');
 export const AGENTS_DIR = path.join(PACKAGE_ROOT, 'agents');
 export const CONTEXTS_DIR = path.join(PACKAGE_ROOT, 'contexts');
 
-export const VERSION = '1.4.0';
+export const VERSION = '1.6.0';
 
 export const AI_KIT_FOLDER = 'ai-kit';
 export const AI_KIT_CONFIG_FILE = 'ai-kit.config.json';
@@ -39,6 +39,7 @@ export const TEMPLATE_FRAGMENTS = [
   'typescript',
   'monorepo',
   'figma',
+  'static-site',
 ] as const;
 
 export type TemplateFragment = (typeof TEMPLATE_FRAGMENTS)[number];

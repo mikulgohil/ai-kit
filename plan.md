@@ -167,3 +167,121 @@
 | `src/constants.ts` | EDIT |
 
 **Total: 6 new files, 14 edited files**
+
+---
+
+## Phase 7: Spec Kit-Inspired Improvements (New Capabilities)
+
+Inspired by [github/spec-kit](https://github.com/github/spec-kit) — borrowing the best ideas while staying true to AI Kit's auto-detect philosophy.
+
+### 7.1 — Add `constitution` skill (Project Principles Generator)
+
+- **File**: `commands/constitution.md`
+- **Purpose**: Generate a `PROJECT_PRINCIPLES.md` governance document that defines coding standards, testing requirements, UX consistency rules, and performance budgets for the project
+- **Why**: Spec Kit's `/speckit.constitution` is their most valuable concept — a single source of truth for project values that AI agents reference before making decisions. AI Kit currently generates *technical* rules but lacks a *principles* layer
+- **How it works**:
+  1. Asks 5-8 questions about project priorities (quality vs speed, testing philosophy, design system, accessibility targets, performance budgets)
+  2. Reads existing CLAUDE.md and detected stack
+  3. Generates `PROJECT_PRINCIPLES.md` with sections: Vision, Non-Negotiables, Quality Standards, Testing Requirements, Performance Budgets, Accessibility Targets
+  4. Adds a reference to principles in generated CLAUDE.md so all AI agents load it automatically
+- **Difference from Spec Kit**: AI Kit auto-detects what it can; the constitution captures *opinions* that can't be inferred from code
+
+### 7.2 — Add `specify` skill (Spec-First Feature Workflow)
+
+- **File**: `commands/specify.md`
+- **Purpose**: Create a structured feature specification before writing any code — captures the **what** and **why** before the **how**
+- **Why**: Spec Kit's core thesis is valid — specs produce better outcomes than jumping straight to code. AI Kit's existing `/new-component` asks questions but doesn't create a persistent spec document
+- **How it works**:
+  1. Developer describes the feature in plain language
+  2. AI generates a structured spec in `specs/<feature-name>.md` with: User Stories, Acceptance Criteria, Edge Cases, Out of Scope, Dependencies, Open Questions
+  3. Spec is reviewed/approved before implementation begins
+  4. Existing `/planner` agent references the spec during implementation
+  5. Spec is archived (not deleted) after feature ships
+- **Output**: `specs/<feature-name>.md` — a living document referenced throughout the feature lifecycle
+
+### 7.3 — Add Extension Catalog System
+
+- **Files**:
+  - `commands/extension.md` — skill for managing extensions
+  - `src/commands/extension.ts` — CLI command implementation
+  - `extensions/catalog.json` — built-in extension registry
+- **Purpose**: Allow community-contributed agents, skills, and template fragments to be installed and managed
+- **Why**: Spec Kit's `catalog.community.json` with categorized extensions (docs, code, process, integration, visibility) is their strongest ecosystem play. AI Kit currently bundles everything — no way to add third-party agents or skills
+- **How it works**:
+  - `ai-kit extension list` — browse available extensions
+  - `ai-kit extension install <name>` — install an extension (agent, skill, or template fragment)
+  - `ai-kit extension remove <name>` — uninstall an extension
+  - Extensions are Git repos with a standard structure (`agent.md`, `skill.md`, or `fragment.md` + `manifest.json`)
+  - Catalog supports categories: `agent`, `skill`, `template`, `hook`, `integration`
+- **Catalog schema**:
+  ```json
+  {
+    "name": "sitecore-perf-audit",
+    "category": "skill",
+    "description": "Sitecore XM Cloud performance audit with Experience Edge caching analysis",
+    "repo": "github.com/author/ai-kit-sitecore-perf",
+    "compatibility": ">=1.5.0"
+  }
+  ```
+
+### 7.4 — Add Preset Bundles
+
+- **Files**:
+  - `presets/enterprise.json` — enterprise-focused preset
+  - `presets/startup.json` — lean/fast preset
+  - `presets/sitecore-xmc.json` — Sitecore XM Cloud preset
+  - `src/commands/preset.ts` — CLI command
+- **Purpose**: Curated bundles of agents, skills, hooks, and settings for common project types
+- **Why**: Spec Kit offers presets as a way to get opinionated setups without manual configuration. AI Kit auto-detects the stack but doesn't offer opinionated *workflow* bundles
+- **How it works**:
+  - `ai-kit preset list` — see available presets
+  - `ai-kit preset apply <name>` — apply a preset (installs extensions + configures hooks)
+  - Presets are JSON files that define: which agents to enable, which skills to include, hook profile, quality thresholds
+- **Built-in presets**:
+  | Preset | Focus | Agents | Hook Profile | Extras |
+  |---|---|---|---|---|
+  | `enterprise` | Compliance, security, audit trail | All 10 + security-reviewer priority | Strict | Decisions log required, security audit on every PR |
+  | `startup` | Speed, iteration, minimal ceremony | planner + code-reviewer only | Minimal | No doc scaffolds, fast feedback loop |
+  | `sitecore-xmc` | Sitecore XM Cloud best practices | All + sitecore-specialist priority | Standard | XM Cloud template fragments, Sitecore-specific skills |
+  | `fullstack` | Full-stack Next.js development | All universal agents | Standard | All Next.js skills, component scanner enabled |
+
+### 7.5 — Add `ai-kit compare` CLI command
+
+- **File**: `src/commands/compare.ts`
+- **Purpose**: Compare your AI Kit setup against other spec-driven tools (Spec Kit, etc.) and show gaps/advantages
+- **Why**: Helps teams evaluate whether they need additional tooling or if AI Kit covers their needs
+- **Output**: Gap analysis report showing what AI Kit covers, what's missing, and recommendations
+
+---
+
+## Phase 7 Files Changed Summary
+
+| File | Action |
+|---|---|
+| `commands/constitution.md` | **NEW** |
+| `commands/specify.md` | **NEW** |
+| `commands/extension.md` | **NEW** |
+| `src/commands/extension.ts` | **NEW** |
+| `src/commands/preset.ts` | **NEW** |
+| `src/commands/compare.ts` | **NEW** |
+| `extensions/catalog.json` | **NEW** |
+| `presets/enterprise.json` | **NEW** |
+| `presets/startup.json` | **NEW** |
+| `presets/sitecore-xmc.json` | **NEW** |
+| `presets/fullstack.json` | **NEW** |
+| `src/constants.ts` | EDIT — add extension/preset paths |
+| `src/copier/skills.ts` | EDIT — add constitution + specify skills |
+| `src/index.ts` | EDIT — register extension, preset, compare commands |
+| `README.md` | EDIT — document new capabilities |
+
+**Phase 7 Total: 11 new files, 4 edited files**
+
+---
+
+## Updated Grand Total
+
+| Phase | New Files | Edited Files |
+|---|---|---|
+| Phase 1-6 (existing) | 6 | 14 |
+| Phase 7 (Spec Kit-inspired) | 11 | 4 |
+| **Grand Total** | **17** | **18** |

@@ -7,7 +7,7 @@ One command. Project-aware AI from the first conversation.
 [![npm downloads](https://img.shields.io/npm/dm/@mikulgohil/ai-kit.svg)](https://www.npmjs.com/package/@mikulgohil/ai-kit)
 [![license](https://img.shields.io/npm/l/@mikulgohil/ai-kit.svg)](https://github.com/mikulgohil/ai-kit/blob/main/LICENSE)
 
-> **[Read the full documentation](https://mikulgohil.github.io/ai-kit-docs)** | [Getting Started](https://mikulgohil.github.io/ai-kit-docs/getting-started) | [CLI Reference](https://mikulgohil.github.io/ai-kit-docs/cli-reference) | [Skills & Commands](https://mikulgohil.github.io/ai-kit-docs/slash-commands) | [Hooks](https://mikulgohil.github.io/ai-kit-docs/hooks) | [Agents](https://mikulgohil.github.io/ai-kit-docs/agents) | [Changelog](https://mikulgohil.github.io/ai-kit-docs/changelog)
+> **[Read the full documentation](https://ai-kit-docs-beta.vercel.app/docs)** | [Getting Started](https://ai-kit-docs-beta.vercel.app/docs/getting-started) | [CLI Reference](https://ai-kit-docs-beta.vercel.app/docs/cli-reference) | [Skills & Commands](https://ai-kit-docs-beta.vercel.app/docs/slash-commands) | [Hooks](https://ai-kit-docs-beta.vercel.app/docs/hooks) | [Agents](https://ai-kit-docs-beta.vercel.app/docs/agents) | [Changelog](https://ai-kit-docs-beta.vercel.app/docs/changelog)
 
 ```bash
 npx @mikulgohil/ai-kit init
@@ -242,17 +242,53 @@ Only content between `AI-KIT:START/END` markers is refreshed. Your custom rules 
 
 ## Documentation
 
-**[mikulgohil.github.io/ai-kit-docs](https://mikulgohil.github.io/ai-kit-docs)**
+**[ai-kit-docs-beta.vercel.app/docs](https://ai-kit-docs-beta.vercel.app/docs)**
 
 | Page | What You'll Learn |
 |---|---|
-| [Getting Started](https://mikulgohil.github.io/ai-kit-docs/getting-started) | Step-by-step setup walkthrough |
-| [CLI Reference](https://mikulgohil.github.io/ai-kit-docs/cli-reference) | All 13 commands with examples |
-| [Skills & Commands](https://mikulgohil.github.io/ai-kit-docs/slash-commands) | All 46 skills with usage guides |
-| [What Gets Generated](https://mikulgohil.github.io/ai-kit-docs/what-gets-generated) | Detailed breakdown of every generated file |
-| [Hooks](https://mikulgohil.github.io/ai-kit-docs/hooks) | Hook profiles, mistakes auto-capture |
-| [Agents](https://mikulgohil.github.io/ai-kit-docs/agents) | 10 specialized agents |
-| [Changelog](https://mikulgohil.github.io/ai-kit-docs/changelog) | Version history and release notes |
+| [Getting Started](https://ai-kit-docs-beta.vercel.app/docs/getting-started) | Step-by-step setup walkthrough |
+| [CLI Reference](https://ai-kit-docs-beta.vercel.app/docs/cli-reference) | All 13 commands with examples |
+| [Skills & Commands](https://ai-kit-docs-beta.vercel.app/docs/slash-commands) | All 46 skills with usage guides |
+| [What Gets Generated](https://ai-kit-docs-beta.vercel.app/docs/what-gets-generated) | Detailed breakdown of every generated file |
+| [Hooks](https://ai-kit-docs-beta.vercel.app/docs/hooks) | Hook profiles, mistakes auto-capture |
+| [Agents](https://ai-kit-docs-beta.vercel.app/docs/agents) | 10 specialized agents |
+| [Changelog](https://ai-kit-docs-beta.vercel.app/docs/changelog) | Version history and release notes |
+
+---
+
+## Roadmap
+
+Features planned for upcoming releases, inspired by best practices from the spec-driven development ecosystem.
+
+| Feature | Description | Status |
+|---|---|---|
+| **Project Constitution** | `/constitution` skill — generate a `PROJECT_PRINCIPLES.md` governance doc that defines coding standards, testing philosophy, performance budgets, and accessibility targets. AI agents reference it before every decision. | Planned |
+| **Spec-First Workflow** | `/specify` skill — create structured feature specs (`specs/<feature>.md`) with user stories, acceptance criteria, and edge cases *before* writing code. Planner agent references specs during implementation. | Planned |
+| **Extension Catalog** | Community-contributed agents, skills, and template fragments. Install with `ai-kit extension install <name>`. Standard manifest format for third-party contributions. | Planned |
+| **Preset Bundles** | Curated workflow bundles for common project types: `enterprise` (strict compliance), `startup` (fast iteration), `sitecore-xmc` (XM Cloud best practices), `fullstack` (full-stack Next.js). Apply with `ai-kit preset apply <name>`. | Planned |
+| **Setup Comparison** | `ai-kit compare` — gap analysis comparing your AI Kit setup against other spec-driven tools. Shows what's covered and what's missing. | Planned |
+
+See [plan.md](./plan.md) for detailed implementation plans.
+
+---
+
+## How AI Kit Compares
+
+| Capability | AI Kit | Spec-Driven Tools (e.g., Spec Kit) |
+|---|---|---|
+| **Setup** | Auto-detect — zero manual config | Manual spec writing required |
+| **Stack awareness** | Scans package.json, configs, directory structure | User describes stack in specs |
+| **Rules generation** | Auto-generated from detected stack | User-written specifications |
+| **Multi-tool support** | 5+ tools from single source | Varies by tool |
+| **Quality hooks** | Built-in (minimal/standard/strict profiles) | Extension-dependent |
+| **Security audit** | Built-in CLI command | Extension-dependent |
+| **Token tracking** | Built-in with cost estimates | Not available |
+| **Component awareness** | Auto-scanned with health scores | Not available |
+| **Extension ecosystem** | Coming soon | Community catalog available |
+| **Project principles** | Coming soon (`/constitution`) | Available (`/speckit.constitution`) |
+| **Spec-first workflow** | Coming soon (`/specify`) | Core feature |
+
+**AI Kit's philosophy**: Auto-detect everything possible, only ask for what can't be inferred. Spec-driven tools require manual specification upfront. Both approaches have merit — AI Kit is adding spec-first capabilities as an *optional* layer on top of auto-detection.
 
 ---
 

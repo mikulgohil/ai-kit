@@ -1,7 +1,7 @@
 {
   "name": "@mikulgohil/ai-kit",
-  "version": "1.4.0",
-  "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, and developer guides.",
+  "version": "1.6.0",
+  "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, design token rules, component registries, developer guides, project principles, and spec-first workflows.",
   "type": "module",
   "bin": {
     "ai-kit": "./dist/index.js"
@@ -41,11 +41,22 @@
     "i18n",
     "hooks",
     "agents",
-    "security-audit"
+    "security-audit",
+    "design-tokens",
+    "component-registry",
+    "static-site",
+    "aiignore",
+    "figma-to-code",
+    "spec-driven",
+    "project-principles",
+    "extension-catalog",
+    "presets",
+    "constitution",
+    "spec-first"
   ],
   "author": "Mikul Gohil",
   "license": "MIT",
-  "homepage": "https://mikulgohil.github.io/ai-kit-docs",
+  "homepage": "https://ai-kit-docs-beta.vercel.app/docs",
   "repository": {
     "type": "git",
     "url": "https://github.com/mikulgohil/ai-kit.git"
