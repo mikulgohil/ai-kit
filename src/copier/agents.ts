@@ -11,6 +11,12 @@ const UNIVERSAL_AGENTS = [
   'doc-updater',
   'refactor-cleaner',
   'architect',
+  // New agents (v1.7.0) — inspired by oh-my-claudecode evaluation
+  'data-scientist',
+  'performance-profiler',
+  'migration-specialist',
+  'dependency-auditor',
+  'api-designer',
 ];
 
 const CONDITIONAL_AGENTS: { name: string; condition: (scan: ProjectScan) => boolean }[] = [

@@ -48,6 +48,9 @@ const AVAILABLE_SKILLS = [
   'orchestrate',
   'quality-gate',
   'harness-audit',
+  // New skills (v1.7.0) — requirements clarification (inspired by OMC Deep Interview)
+  'deep-interview',
+  'clarify-requirements',
 ];
 
 // Short descriptions for auto-discovery — AI reads these to decide when to apply
@@ -97,6 +100,9 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'orchestrate': 'Multi-agent orchestration — break complex tasks into subtasks and delegate to agents',
   'quality-gate': 'Run comprehensive quality checks: types, lint, format, tests, bundle, a11y, security',
   'harness-audit': 'Audit AI agent configuration — check CLAUDE.md, hooks, agents, skills, MCP servers',
+  // New skills (v1.7.0) — requirements clarification
+  'deep-interview': 'Socratic requirements gathering — structured interview to transform vague ideas into detailed specifications',
+  'clarify-requirements': 'Quick task clarification — identify gaps and ambiguities in under 5 minutes before coding',
 };
 
 export async function copySkills(targetDir: string): Promise<string[]> {

@@ -31,8 +31,8 @@ A multi-agent orchestration framework for Claude Code that provides team-based a
 |---|---|---|
 | **Core problem** | "What should the AI know about my project?" | "How should multiple AI agents work together?" |
 | **Focus** | Project context & config generation | Runtime orchestration & coordination |
-| **Skills** | 46 markdown-based skills | YAML skills with auto-trigger matching |
-| **Agents** | 10 agent definitions | 32 agents with model routing |
+| **Skills** | 48 markdown-based skills | YAML skills with auto-trigger matching |
+| **Agents** | 16 agent definitions | 32 agents with model routing |
 | **Multi-tool support** | Claude Code, Cursor, Windsurf, Aider, Cline | Claude Code, Codex CLI, Gemini CLI |
 | **Output** | Config files (CLAUDE.md, .cursorrules, hooks) | Runtime agent spawning & coordination |
 
@@ -64,7 +64,7 @@ A multi-agent orchestration framework for Claude Code that provides team-based a
 
 ### 3. Additional agent definitions (borrow ideas from OMC's 32 agents)
 
-**Current state:** ai-kit ships 10 agents.
+**Current state:** ai-kit ships 16 agents (updated from 10).
 **What OMC has that we lack:**
 - Data science / ML agent
 - Performance profiler agent
@@ -73,11 +73,11 @@ A multi-agent orchestration framework for Claude Code that provides team-based a
 - API designer agent
 
 **Action items:**
-- [ ] Add `data-scientist.md` agent — ML pipeline, model evaluation, data analysis patterns
-- [ ] Add `performance-profiler.md` agent — Bundle analysis, runtime profiling, Core Web Vitals
-- [ ] Add `migration-specialist.md` agent — Framework upgrades, breaking change detection
-- [ ] Add `dependency-auditor.md` agent — Outdated deps, vulnerability checks, license compliance
-- [ ] Add `api-designer.md` agent — REST/GraphQL API design, schema validation, versioning
+- [x] Add `data-scientist.md` agent — ML pipeline, model evaluation, data analysis patterns
+- [x] Add `performance-profiler.md` agent — Bundle analysis, runtime profiling, Core Web Vitals
+- [x] Add `migration-specialist.md` agent — Framework upgrades, breaking change detection
+- [x] Add `dependency-auditor.md` agent — Outdated deps, vulnerability checks, license compliance
+- [x] Add `api-designer.md` agent — REST/GraphQL API design, schema validation, versioning
 
 ### 4. OMC as an export target
 
@@ -96,8 +96,8 @@ A multi-agent orchestration framework for Claude Code that provides team-based a
 **What OMC does:** "Deep Interview" — Socratic questioning to clarify vague requirements before coding begins.
 
 **Action items:**
-- [ ] Add `deep-interview.md` skill — A guided requirements-gathering prompt
-- [ ] Add `clarify-requirements.md` skill — Shorter version for quick task clarification
+- [x] Add `deep-interview.md` skill — A guided requirements-gathering prompt
+- [x] Add `clarify-requirements.md` skill — Shorter version for quick task clarification
 - [ ] Include interview output template in `docs-scaffolds/`
 
 ### 6. Notification / webhook integration config
@@ -149,8 +149,8 @@ A multi-agent orchestration framework for Claude Code that provides team-based a
 
 | Priority | Feature | Effort | Impact |
 |---|---|---|---|
-| P1 | Additional agent definitions (5 new agents) | Low | High |
-| P1 | Deep interview / requirements clarification skills | Low | Medium |
+| ~~P1~~ | ~~Additional agent definitions (5 new agents)~~ | ~~Low~~ | ~~High~~ | **Done** |
+| ~~P1~~ | ~~Deep interview / requirements clarification skills~~ | ~~Low~~ | ~~Medium~~ | **Done** |
 | P2 | YAML-based skills with auto-triggering | Medium | High |
 | P2 | OMC as an export target | Medium | Medium |
 | P2 | Smart model routing hints | Low | Medium |

@@ -40,10 +40,10 @@ Generates project-aware rule files for multiple AI tools:
 - **Export** to Windsurf, Aider, Cline formats
 
 ### 3. Pre-Built Slash Commands
-46 ready-to-use commands across 7 categories — no prompt writing needed. Includes session management, quality checks, orchestration, security, and more.
+48 ready-to-use commands across 8 categories — no prompt writing needed. Includes session management, quality checks, orchestration, security, requirements gathering, and more.
 
 ### 4. Specialized AI Agents
-10 purpose-built agents that handle delegated tasks:
+16 purpose-built agents that handle delegated tasks:
 - **Planner** — Break features into implementation plans
 - **Code Reviewer** — Deep quality and security review
 - **Security Reviewer** — OWASP Top 10, XSS, CSRF, secrets detection
@@ -54,6 +54,12 @@ Generates project-aware rule files for multiple AI tools:
 - **TDD Guide** — Test-driven development guidance and workflow
 - **CI Debugger** — CI/CD failure analysis and resolution
 - **Sitecore Specialist** — Sitecore XM Cloud patterns and debugging
+- **Architect** — System design and architecture decisions
+- **Data Scientist** — ML pipelines, model evaluation, data analysis patterns
+- **Performance Profiler** — Bundle analysis, Core Web Vitals, runtime profiling
+- **Migration Specialist** — Framework upgrades, breaking change detection, codemods
+- **Dependency Auditor** — Outdated packages, vulnerability scanning, license compliance
+- **API Designer** — REST/GraphQL API design, schema validation, versioning
 
 ### 5. Context Modes
 Three modes that change how the AI approaches work:
