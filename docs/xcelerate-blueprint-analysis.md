@@ -1,14 +1,14 @@
-# hztl-xcelerate-blueprint — AI Readiness Analysis
+# enterprise-xmc-starter — AI Readiness Analysis
 
 > Prepared by: Mikul Gohil
 > Date: 2026-03-10
-> Purpose: Evaluate current AI tooling in the Xcelerate Blueprint and demonstrate the value of @horizontal/ai-kit
+> Purpose: Evaluate current AI tooling in an enterprise XM Cloud starter and demonstrate the value of @mikulgohil/ai-kit
 
 ---
 
 ## 1. Project Overview
 
-**hztl-xcelerate-blueprint** is Horizontal's official Sitecore XM Cloud starter template — a GitHub template repo used to bootstrap new client projects.
+**enterprise-xmc-starter** is an enterprise Sitecore XM Cloud starter template — a GitHub template repo used to bootstrap new client projects.
 
 | Property | Value |
 |----------|-------|
@@ -93,7 +93,7 @@ The existing `.cursor/rules/xcelerator-rules.mdc` is solid — 73 lines of usefu
 
 **Also notable:** The Cursor rules are set to `alwaysApply: false` — meaning they only activate when manually referenced. Developers who don't know about the rules file will get zero benefit.
 
-**With ai-kit:** A comprehensive `.cursorrules` would be generated at the root level (always active) with all detected stack rules, Horizontal coding standards, and project scripts baked in.
+**With ai-kit:** A comprehensive `.cursorrules` would be generated at the root level (always active) with all detected stack rules, team coding standards, and project scripts baked in.
 
 ### Gap 3: Claude Code Is Locked to Read-Only
 
@@ -105,7 +105,7 @@ The settings only allow `git log`, `git diff`, and `gh pr` commands. Claude Code
 
 This suggests the team either doesn't trust AI output or hasn't configured it for productive use. Either way, Claude Code is essentially **disabled as a development tool**.
 
-**With ai-kit:** The generated CLAUDE.md with Horizontal coding standards, Sitecore field helper rules, and testing patterns would give the team confidence to enable file editing. The coding standards ensure AI output matches project conventions, reducing the trust gap.
+**With ai-kit:** The generated CLAUDE.md with team coding standards, Sitecore field helper rules, and testing patterns would give the team confidence to enable file editing. The coding standards ensure AI output matches project conventions, reducing the trust gap.
 
 ### Gap 4: No Slash Commands — No Guided Workflows
 
@@ -121,7 +121,7 @@ There are no `.claude/commands/` files. Every developer has to write prompts fro
 
 The Cursor rules define some conventions, but they're project-specific and not synced with Claude Code. If a developer uses Claude Code instead of Cursor, they get zero guidance.
 
-**With ai-kit:** Horizontal coding standards (naming, structure, imports, error handling, accessibility, git) are embedded in BOTH CLAUDE.md and .cursorrules. Same standards, every tool, every developer.
+**With ai-kit:** team coding standards (naming, structure, imports, error handling, accessibility, git) are embedded in BOTH CLAUDE.md and .cursorrules. Same standards, every tool, every developer.
 
 ### Gap 6: No Documentation for AI Usage
 
@@ -185,7 +185,7 @@ TailwindVariants is not a mainstream library. Without explicit rules, AI tools d
 
 ## 5. Side-by-Side Comparison
 
-| Capability | Current Setup | With @horizontal/ai-kit |
+| Capability | Current Setup | With @mikulgohil/ai-kit |
 |------------|--------------|------------------------|
 | **Claude Code context** | None (no CLAUDE.md) | Full project-aware CLAUDE.md |
 | **Cursor context** | Partial (73 lines, not always-on) | Comprehensive .cursorrules (always active) |
@@ -205,7 +205,7 @@ TailwindVariants is not a mainstream library. Without explicit rules, AI tools d
 
 ## 6. Impact Projection
 
-### For This Project (hztl-xcelerate-blueprint)
+### For This Project (enterprise-xmc-starter)
 
 - **68 existing components** — /review and /test commands can audit and improve coverage
 - **New components** — from ~40 min/component to ~5 min with /new-component
@@ -215,13 +215,13 @@ TailwindVariants is not a mainstream library. Without explicit rules, AI tools d
 
 ### For All Projects Bootstrapped from This Template
 
-Since hxtl-xcelerate-blueprint is a **GitHub template**, every new project created from it would inherit the ai-kit setup. This means:
+Since enterprise-xmc-starter is a **GitHub template**, every new project created from it would inherit the ai-kit setup. This means:
 
 - Every new client project starts with AI tooling on day one
-- Every developer on every project follows the same Horizontal standards
+- Every developer on every project follows the same team standards
 - No per-project manual setup — it's already there
 
-### For Horizontal Digital (200 developers)
+### For the organization (200 developers)
 
 - Consistent AI output quality across all projects
 - Lower token costs (developers prompted effectively, not trial-and-error)
@@ -234,7 +234,7 @@ Since hxtl-xcelerate-blueprint is a **GitHub template**, every new project creat
 
 | Step | Effort | Impact |
 |------|--------|--------|
-| Run `npx @horizontal/ai-kit init` | 30 seconds | CLAUDE.md + .cursorrules + commands + guides |
+| Run `npx @mikulgohil/ai-kit init` | 30 seconds | CLAUDE.md + .cursorrules + commands + guides |
 | Review and customize generated CLAUDE.md | 15 minutes | Add Content SDK specifics, TailwindVariants |
 | Enable Claude Code file permissions | 5 minutes | Unlock full AI development capabilities |
 | Commit to the template repo | 2 minutes | Every future project inherits the setup |
@@ -244,7 +244,7 @@ Since hxtl-xcelerate-blueprint is a **GitHub template**, every new project creat
 
 ## 8. Recommendation
 
-**hxtl-xcelerate-blueprint is the perfect candidate for ai-kit.** Here's why:
+**enterprise-xmc-starter is the perfect candidate for ai-kit.** Here's why:
 
 1. **It's a template repo** — adding ai-kit once means every new project gets it free
 2. **Strong existing patterns** — the 3-file component structure, TailwindVariants, Content SDK patterns are exactly what AI needs to be told about

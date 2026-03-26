@@ -1,11 +1,11 @@
-# Figma-to-Code Integration in @horizontal/ai-kit
+# Figma-to-Code Integration in @mikulgohil/ai-kit
 
 > Date: 2026-03-10
-> Purpose: How ai-kit should integrate with Horizontal's existing Figma-to-code ecosystem to standardize the design-to-code workflow across 200 developers.
+> Purpose: How ai-kit should integrate with an enterprise Figma-to-code ecosystem to standardize the design-to-code workflow across development teams.
 
 ---
 
-## 1. What Already Exists at Horizontal
+## 1. What Already Exists in the Ecosystem
 
 You've already built a significant Figma-to-code ecosystem:
 
@@ -280,7 +280,7 @@ if (scan.figma?.hasFigmaMcp || scan.figma?.hasDesignTokens) {
 ### New Slide: "Figma-to-Code — The Biggest Gap"
 
 ```
-Every developer at Horizontal converts Figma designs to code daily.
+Every developer converts Figma designs to code daily.
 Without AI context, this is what happens:
 
   Developer:  "Build this from Figma [link]"
@@ -319,7 +319,7 @@ Both follow: Same design token rules, same coding standards
 
 ## 7. Summary
 
-ai-kit's Figma integration is not about building another Figma-to-code tool — Horizontal already has those. It's about:
+ai-kit's Figma integration is not about building another Figma-to-code tool — teams already have those. It's about:
 
 1. **Making the tools discoverable** — developers learn about /figma-to-code on day one
 2. **Embedding the rules** — design token mapping, visual verification, component reuse are baked into every AI config

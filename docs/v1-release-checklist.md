@@ -16,7 +16,7 @@
 - [x] **195 tests passing**
 
 ### 2. Real-World Validation
-- [x] Run on dpworld-xmc
+- [x] Run on a real Sitecore XM Cloud project
 - [x] Run on pure Next.js project (no Sitecore)
 - [x] Test `update` command
 - [x] Test `reset` command
