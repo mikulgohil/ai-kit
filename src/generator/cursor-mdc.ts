@@ -26,6 +26,10 @@ const MDC_CONFIG: Record<string, { description: string; globs: string }> = {
     description: 'Sitecore XM Cloud component patterns and field helpers',
     globs: 'src/components/**/*.{ts,tsx}',
   },
+  'optimizely-saas': {
+    description: 'Optimizely SaaS CMS patterns, Visual Builder, and Graph API',
+    globs: 'src/components/**/*.{ts,tsx}, src/gql/**/*.{ts,graphql}',
+  },
   tailwind: {
     description: 'Tailwind CSS conventions and utility patterns',
     globs: '**/*.{tsx,jsx,css}',
@@ -41,6 +45,10 @@ const MDC_CONFIG: Record<string, { description: string; globs: string }> = {
   figma: {
     description: 'Figma-to-code workflow and design token rules',
     globs: 'src/components/**/*.{ts,tsx}, tokens/**/*',
+  },
+  'static-site': {
+    description: 'Static site generation (SSG/ISR) rules and patterns',
+    globs: 'app/**/*.{ts,tsx}, src/app/**/*.{ts,tsx}, next.config.*',
   },
 };
 

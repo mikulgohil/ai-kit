@@ -118,7 +118,7 @@ Coordinate multiple agents on complex tasks — review, test, document, and refa
 ## Supported Technology Stack
 
 - **Frameworks** — Next.js (App Router, Pages Router, Hybrid), React
-- **CMS** — Sitecore XM Cloud, Sitecore JSS
+- **CMS** — Sitecore XM Cloud, Sitecore JSS, Optimizely SaaS CMS
 - **Styling** — Tailwind CSS, SCSS, CSS Modules, styled-components
 - **Language** — TypeScript (with strict mode detection)
 - **Formatters** — Prettier, Biome (auto-detected for hooks)
@@ -172,6 +172,7 @@ Curated workflow bundles for common project types:
 - **Enterprise** — strict compliance, security-first, full audit trail
 - **Startup** — minimal ceremony, fast iteration, speed over perfection
 - **Sitecore XM Cloud** — XM Cloud best practices, Content SDK patterns, Experience Edge
+- **Optimizely SaaS CMS** — Optimizely Graph, Visual Builder, component factory, `@remkoj` SDK patterns
 - **Full-stack** — complete Next.js development with all agents and skills
 
 **Business value**: New projects get an opinionated, production-tested AI workflow in one command instead of manual configuration.
