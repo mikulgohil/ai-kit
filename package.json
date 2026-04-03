@@ -1,7 +1,7 @@
 {
   "name": "@mikulgohil/ai-kit",
-  "version": "1.7.0",
-  "description": "AI-assisted development setup kit. Auto-detects your tech stack and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, design token rules, component registries, developer guides, project principles, and spec-first workflows.",
+  "version": "1.9.0",
+  "description": "AI-assisted development setup kit. Auto-detects your tech stack (Next.js, Sitecore XM Cloud, Optimizely SaaS CMS, Tailwind, TypeScript, Turborepo) and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, design token rules, component registries, developer guides, and spec-first workflows.",
   "type": "module",
   "bin": {
     "ai-kit": "./dist/index.js"
@@ -13,7 +13,8 @@
     "guides",
     "docs-scaffolds",
     "agents",
-    "contexts"
+    "contexts",
+    "ai-kit.config.schema.json"
   ],
   "scripts": {
     "build": "tsup",
@@ -36,6 +37,13 @@
     "nextjs",
     "tailwind",
     "sitecore",
+    "sitecore-xm-cloud",
+    "sitecore-jss",
+    "optimizely",
+    "optimizely-saas-cms",
+    "optimizely-graph",
+    "optimizely-visual-builder",
+    "headless-cms",
     "docker",
     "storybook",
     "i18n",
@@ -54,9 +62,12 @@
     "constitution",
     "spec-first"
   ],
-  "author": "Mikul Gohil",
+  "author": {
+    "name": "Mikul Gohil",
+    "url": "https://www.mikul.me"
+  },
   "license": "MIT",
-  "homepage": "https://ai-kit-docs-beta.vercel.app/docs",
+  "homepage": "https://ai-kit.mikul.me",
   "repository": {
     "type": "git",
     "url": "https://github.com/mikulgohil/ai-kit.git"
