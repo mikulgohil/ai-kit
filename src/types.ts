@@ -81,6 +81,7 @@ export interface HookDefinition {
 }
 
 export interface HooksConfig {
+  SessionStart?: HookDefinition[];
   PreToolUse?: HookDefinition[];
   PostToolUse?: HookDefinition[];
   PostCompact?: HookDefinition[];

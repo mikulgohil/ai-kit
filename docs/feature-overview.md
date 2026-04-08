@@ -11,7 +11,7 @@ AI Kit is a CLI tool that automatically configures AI coding assistants for any 
 | # | Problem | How AI Kit Solves It |
 |---|---------|----------------------|
 | 1 | **AI forgets everything each session** — Every new chat starts from zero. No memory of project rules, patterns, or past decisions. | Generates a persistent `CLAUDE.md` with project rules, conventions, and stack details. The AI knows your project from the first prompt, every time. |
-| 2 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. | Ships 46 pre-built slash commands so developers don't need to write prompts from scratch — just run `/review`, `/security`, `/refactor`, etc. |
+| 2 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. | Ships 48 pre-built slash commands so developers don't need to write prompts from scratch — just run `/review`, `/security`, `/refactor`, etc. |
 | 3 | **Same mistakes happen repeatedly** — No system to track what went wrong, so the team keeps hitting the same issues. | Generates a **mistakes log** (`docs/mistakes-log.md`) that records every error and lesson learned — the AI references it to avoid repeating them. |
 | 4 | **No decision trail** — Nobody remembers why a technical decision was made 3 months ago. | Auto-scaffolds a **decisions log** (`docs/decisions-log.md`) to capture what was decided, why, and by whom — fully searchable and traceable. |
 | 5 | **Can't track what changed in a component** — When something breaks, there's no quick way to see what AI-assisted changes were made and when. | Encourages per-component documentation and change tracking through doc scaffolds and time logs — every change is logged with context. |
@@ -41,6 +41,9 @@ Generates project-aware rule files for multiple AI tools:
 
 ### 3. Pre-Built Slash Commands
 48 ready-to-use commands across 8 categories — no prompt writing needed. Includes session management, quality checks, orchestration, security, requirements gathering, and more.
+
+### 3a. Session Context (SessionStart Hook)
+Every new Claude Code session starts with an automatic context echo — the AI immediately knows your tech stack, package manager, available scripts, and when configs were last updated. No wasted turns re-discovering the project.
 
 ### 4. Specialized AI Agents
 16 purpose-built agents that handle delegated tasks:
@@ -85,18 +88,35 @@ Scans for exposed secrets, MCP config security, .env gitignore status, hook vali
 ### 9. Multi-Agent Orchestration
 Coordinate multiple agents on complex tasks — review, test, document, and refactor in parallel with a single command.
 
-### 10. CLI Commands
+### 10. Backup & Rollback
+Every `ai-kit update` automatically backs up current configs to `.ai-kit/backups/` before writing any files. If an update produces unexpected results, `ai-kit rollback` restores from any previous backup instantly.
+
+**Business value**: Teams can run `ai-kit update` confidently — every change is reversible. No more "I'm afraid to update because it might break my custom rules."
+
+### 11. Migration for Existing Projects
+`ai-kit migrate` lets teams with existing hand-written `CLAUDE.md` or `.cursorrules` adopt AI Kit without losing their custom rules. Custom sections are preserved at the top of the file, and AI Kit's generated content is placed in `AI-KIT:START/END` markers below. Future updates only touch the marked section.
+
+**Business value**: Removes the biggest adoption barrier — teams don't have to choose between their existing rules and AI Kit. They get both.
+
+### 12. CLI Commands
 | Command | Purpose |
 |---------|---------|
 | `ai-kit init` | Full project scan + generate everything |
-| `ai-kit update` | Re-scan and refresh all configs |
+| `ai-kit update` | Re-scan and refresh all configs (auto-backup) |
+| `ai-kit migrate` | Adopt ai-kit in a project with existing configs |
+| `ai-kit rollback` | Restore configs from a previous backup |
 | `ai-kit reset` | Remove all generated files cleanly |
+| `ai-kit health` | One-glance A-F project health dashboard |
 | `ai-kit audit` | Security + config health check |
 | `ai-kit doctor` | Diagnose setup issues |
 | `ai-kit diff` | Dry-run preview of changes |
 | `ai-kit tokens` | Token usage and cost estimates |
 | `ai-kit stats` | Project complexity metrics |
 | `ai-kit export` | Export rules to other AI tools |
+| `ai-kit patterns` | Generate pattern library from recurring code |
+| `ai-kit dead-code` | Find unused components and dead code |
+| `ai-kit drift` | Detect drift between code and .ai.md docs |
+| `ai-kit component-registry` | Generate component catalog for AI discovery |
 
 ---
 

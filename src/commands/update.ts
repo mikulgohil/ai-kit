@@ -24,6 +24,7 @@ import {
   readJsonSafe,
   readFileSafe,
   mergeWithMarkers,
+  backupFiles,
 } from '../utils.js';
 import type { AiKitConfig } from '../types.js';
 
@@ -62,19 +63,35 @@ export async function updateCommand(targetPath?: string): Promise<void> {
   const scan = await scanProject(projectDir);
   spinner.succeed('Project re-scanned');
 
+  // Backup existing files before any modifications
+  const filesToBackup = [
+    GENERATED_FILES.claudeMd,
+    GENERATED_FILES.cursorRules,
+    GENERATED_FILES.claudeSettingsLocal,
+    AI_KIT_CONFIG_FILE,
+  ];
+  const backupPath = await backupFiles(projectDir, filesToBackup);
+  if (backupPath) {
+    logSuccess(`Backed up current configs to ${path.relative(projectDir, backupPath)}`);
+  }
+
   logSection('Updating Files');
 
   const strictness = existingConfig.strictness || 'standard';
   const hookProfile = existingConfig.hookProfile || 'standard';
+  const tools = existingConfig.tools || { claude: true, cursor: true };
   const customFragments = loadCustomFragments(projectDir);
   const genOpts = { strictness, customFragments };
 
+  logInfo(`Using saved profile — Tools: ${tools.claude && tools.cursor ? 'Claude Code + Cursor' : tools.claude ? 'Claude Code' : 'Cursor'} · Strictness: ${strictness} · Hooks: ${hookProfile}`);
+
   const templates: string[] = [];
 
-  // Update CLAUDE.md if it was previously generated
+  // Update CLAUDE.md if it was previously generated or tools.claude is enabled
   if (
-    existingConfig.templates.includes('CLAUDE.md') ||
-    fileExists(path.join(projectDir, GENERATED_FILES.claudeMd))
+    tools.claude &&
+    (existingConfig.templates.includes('CLAUDE.md') ||
+    fileExists(path.join(projectDir, GENERATED_FILES.claudeMd)))
   ) {
     const claudeMdPath = path.join(projectDir, GENERATED_FILES.claudeMd);
     const newContent = generateClaudeMd(scan, genOpts);
@@ -88,10 +105,11 @@ export async function updateCommand(targetPath?: string): Promise<void> {
     logSuccess('CLAUDE.md updated');
   }
 
-  // Update .cursorrules if it was previously generated
+  // Update .cursorrules if it was previously generated or tools.cursor is enabled
   if (
-    existingConfig.templates.includes('.cursorrules') ||
-    fileExists(path.join(projectDir, GENERATED_FILES.cursorRules))
+    tools.cursor &&
+    (existingConfig.templates.includes('.cursorrules') ||
+    fileExists(path.join(projectDir, GENERATED_FILES.cursorRules)))
   ) {
     const cursorRulesPath = path.join(projectDir, GENERATED_FILES.cursorRules);
     const newContent = generateCursorRules(scan, genOpts);
@@ -139,17 +157,21 @@ export async function updateCommand(targetPath?: string): Promise<void> {
   const guides = await copyGuides(projectDir);
   logSuccess(`${guides.length} guides updated`);
 
-  // Update config
+  // Update config — preserve saved tools selection
   const config = generateConfig(scan, templates, commands, guides, {
     ...genOpts,
     agents,
     contexts,
     hooks: existingConfig.hooks !== false,
     hookProfile,
+    tools,
   });
   await fs.writeJson(configPath, config, { spaces: 2 });
   logSuccess('ai-kit.config.json updated');
 
   console.log('');
   logInfo('All AI configs refreshed with latest project scan.');
+  if (backupPath) {
+    logInfo('Rollback available: `ai-kit rollback --latest`');
+  }
 }

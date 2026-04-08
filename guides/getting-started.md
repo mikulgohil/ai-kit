@@ -68,10 +68,12 @@ Open any file and use Cmd+K or the chat panel. The `.cursorrules` file is automa
 
 Hooks run automatically as you code — no action needed. Based on your selected profile:
 
+- **Session init**: echoes your tech stack, scripts, and last scan date at every session start — the AI has full context immediately
 - **Auto-format**: files are formatted on save (Prettier or Biome)
 - **Type-check**: TypeScript errors caught after every edit
 - **Console.log warning**: catches debug statements before commit
 - **Git push safety**: reminder to review before pushing
+- **Context re-echo**: after context compaction in long sessions, re-echoes tech stack
 
 See `ai-kit/guides/hooks-and-agents.md` for details on profiles and customization.
 
@@ -103,7 +105,9 @@ Specialized AI assistants live in `.claude/agents/` and can be delegated to:
 ## CLI Commands
 
 ```bash
-npx @mikulgohil/ai-kit update    # Re-scan and update configs
+npx @mikulgohil/ai-kit update    # Re-scan and update configs (auto-backs up first)
+npx @mikulgohil/ai-kit migrate   # Adopt ai-kit in a project with existing CLAUDE.md
+npx @mikulgohil/ai-kit rollback  # Restore configs from a previous backup
 npx @mikulgohil/ai-kit audit     # Security & config health check
 npx @mikulgohil/ai-kit doctor    # Diagnose setup issues
 npx @mikulgohil/ai-kit diff      # Preview what would change on update
@@ -111,4 +115,24 @@ npx @mikulgohil/ai-kit stats     # Project complexity metrics
 npx @mikulgohil/ai-kit tokens    # Token usage and cost estimates
 npx @mikulgohil/ai-kit export    # Export to Windsurf, Aider, Cline
 npx @mikulgohil/ai-kit reset     # Remove all generated files
+```
+
+## Migrating an Existing Project
+
+Already have a hand-written `CLAUDE.md` or `.cursorrules`? Use `migrate` instead of `init`:
+
+```bash
+npx @mikulgohil/ai-kit migrate           # Preserves your custom rules, adds ai-kit sections
+npx @mikulgohil/ai-kit migrate --dry-run # Preview what would change without writing
+```
+
+Your custom sections stay at the top of the file. AI Kit's generated rules go below in `AI-KIT:START/END` markers. Future `ai-kit update` commands only touch the marked section.
+
+## Rolling Back
+
+Every `ai-kit update` automatically backs up your current configs before writing. If something goes wrong:
+
+```bash
+npx @mikulgohil/ai-kit rollback          # Pick from available backups
+npx @mikulgohil/ai-kit rollback --latest # Restore most recent backup instantly
 ```

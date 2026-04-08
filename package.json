@@ -1,7 +1,7 @@
 {
   "name": "@mikulgohil/ai-kit",
   "version": "1.10.0",
-  "description": "AI-assisted development setup kit. Auto-detects your tech stack (Next.js, Sitecore XM Cloud, Optimizely SaaS CMS, Tailwind, TypeScript, Turborepo) and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, design token rules, component registries, developer guides, and spec-first workflows.",
+  "description": "AI-assisted development setup kit. Auto-detects your tech stack (Next.js, Sitecore XM Cloud, Optimizely SaaS CMS, Tailwind, TypeScript, Turborepo) and generates tailored CLAUDE.md, .cursorrules, hooks, agents, context modes, slash commands, design token rules, component registries, developer guides, and spec-first workflows. Migrate existing projects, auto-backup on update, and rollback support.",
   "type": "module",
   "bin": {
     "ai-kit": "./dist/index.js"
@@ -60,7 +60,11 @@
     "extension-catalog",
     "presets",
     "constitution",
-    "spec-first"
+    "spec-first",
+    "migrate",
+    "rollback",
+    "backup",
+    "session-context"
   ],
   "author": {
     "name": "Mikul Gohil",

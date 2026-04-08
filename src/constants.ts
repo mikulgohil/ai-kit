@@ -16,6 +16,7 @@ export const VERSION = '1.10.0';
 
 export const AI_KIT_FOLDER = 'ai-kit';
 export const AI_KIT_CONFIG_FILE = 'ai-kit.config.json';
+export const BACKUP_DIR = '.ai-kit/backups';
 
 export const GENERATED_FILES = {
   claudeMd: 'CLAUDE.md',

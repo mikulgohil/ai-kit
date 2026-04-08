@@ -1,4 +1,5 @@
 import type { ProjectScan, HooksConfig, HookDefinition, HookProfile } from '../types.js';
+import { VERSION } from '../constants.js';
 
 export function generateHooks(
   scan: ProjectScan,
@@ -6,10 +7,45 @@ export function generateHooks(
 ): HooksConfig {
   const hooks: HooksConfig = {};
 
+  const sessionStart: HookDefinition[] = [];
   const preToolUse: HookDefinition[] = [];
   const postToolUse: HookDefinition[] = [];
   const postCompact: HookDefinition[] = [];
   const stop: HookDefinition[] = [];
+
+  // --- SessionStart hooks ---
+
+  // Echo project context at the start of every session (all profiles)
+  const stackParts = [
+    scan.framework === 'nextjs'
+      ? `Next.js ${scan.nextjsVersion || ''}`.trim()
+      : scan.framework,
+    scan.routerType ? `(${scan.routerType} router)` : '',
+    scan.cms !== 'none' ? scan.cms : '',
+    scan.styling.length > 0 ? scan.styling.join(', ') : '',
+  ].filter(Boolean);
+
+  const scriptNames = Object.keys(scan.scripts).slice(0, 8).join(', ');
+  const stackStr = stackParts.join(' + ');
+
+  sessionStart.push({
+    matcher: '',
+    hooks: [
+      {
+        type: 'command',
+        command: [
+          `echo "📋 ai-kit v${VERSION} | Stack: ${stackStr}"`,
+          `echo "   PM: ${scan.packageManager} | Scripts: ${scriptNames}"`,
+          scan.monorepo
+            ? `echo "   Monorepo: ${scan.monorepoTool || 'yes'}"`
+            : '',
+          `if [ -f "ai-kit.config.json" ]; then SCAN_DATE=$(node -e "try{const c=JSON.parse(require('fs').readFileSync('ai-kit.config.json','utf8'));console.log(c.generatedAt?.split('T')[0]||'unknown')}catch{console.log('unknown')}" 2>/dev/null); echo "   Last scan: $SCAN_DATE"; fi`,
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      },
+    ],
+  });
 
   // --- PreToolUse hooks ---
 
@@ -250,6 +286,7 @@ export function generateHooks(
     });
   }
 
+  if (sessionStart.length > 0) hooks.SessionStart = sessionStart;
   if (preToolUse.length > 0) hooks.PreToolUse = preToolUse;
   if (postToolUse.length > 0) hooks.PostToolUse = postToolUse;
   if (postCompact.length > 0) hooks.PostCompact = postCompact;

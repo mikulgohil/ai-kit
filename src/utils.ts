@@ -60,6 +60,8 @@ export function getRelativePath(from: string, to: string): string {
   return path.relative(from, to);
 }
 
+import { BACKUP_DIR } from './constants.js';
+
 const AI_KIT_START = '<!-- AI-KIT:START -->';
 const AI_KIT_END = '<!-- AI-KIT:END -->';
 
@@ -80,4 +82,126 @@ export function mergeWithMarkers(
   const after = existingContent.substring(endIdx + AI_KIT_END.length);
 
   return `${before}${newGenerated}${after}`;
+}
+
+// --- Backup & Rollback ---
+
+export async function backupFiles(
+  projectDir: string,
+  files: string[],
+): Promise<string> {
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/[:.]/g, '-')
+    .slice(0, 19);
+  const backupDir = path.join(projectDir, BACKUP_DIR, timestamp);
+
+  await fs.ensureDir(backupDir);
+
+  let backedUp = 0;
+  for (const file of files) {
+    const fullPath = path.join(projectDir, file);
+    if (await fs.pathExists(fullPath)) {
+      const dest = path.join(backupDir, file);
+      await fs.ensureDir(path.dirname(dest));
+      await fs.copy(fullPath, dest);
+      backedUp++;
+    }
+  }
+
+  if (backedUp === 0) {
+    await fs.remove(backupDir);
+    return '';
+  }
+
+  return backupDir;
+}
+
+export async function listBackups(
+  projectDir: string,
+): Promise<string[]> {
+  const backupsRoot = path.join(projectDir, BACKUP_DIR);
+  if (!(await fs.pathExists(backupsRoot))) return [];
+
+  const entries = await fs.readdir(backupsRoot);
+  return entries
+    .filter((e) => /^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}$/.test(e))
+    .sort()
+    .reverse();
+}
+
+export async function restoreBackup(
+  projectDir: string,
+  backupName: string,
+): Promise<string[]> {
+  const backupDir = path.join(projectDir, BACKUP_DIR, backupName);
+  if (!(await fs.pathExists(backupDir))) {
+    throw new Error(`Backup not found: ${backupName}`);
+  }
+
+  const restored: string[] = [];
+
+  async function walk(dir: string, rel: string): Promise<void> {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const entryRel = rel ? `${rel}/${entry.name}` : entry.name;
+      const srcPath = path.join(dir, entry.name);
+      const destPath = path.join(projectDir, entryRel);
+
+      if (entry.isDirectory()) {
+        await walk(srcPath, entryRel);
+      } else {
+        await fs.ensureDir(path.dirname(destPath));
+        await fs.copy(srcPath, destPath, { overwrite: true });
+        restored.push(entryRel);
+      }
+    }
+  }
+
+  await walk(backupDir, '');
+  return restored;
+}
+
+// --- Markdown section parsing ---
+
+export interface MarkdownSection {
+  heading: string;
+  level: number;
+  content: string;
+  raw: string;
+}
+
+export function parseSections(markdown: string): MarkdownSection[] {
+  const lines = markdown.split('\n');
+  const sections: MarkdownSection[] = [];
+  let current: MarkdownSection | null = null;
+  const contentLines: string[] = [];
+
+  function flush(): void {
+    if (current) {
+      current.content = contentLines.join('\n').trim();
+      current.raw =
+        `${'#'.repeat(current.level)} ${current.heading}\n\n${current.content}`.trim();
+      sections.push(current);
+      contentLines.length = 0;
+    }
+  }
+
+  for (const line of lines) {
+    const match = line.match(/^(#{1,6})\s+(.+)$/);
+    if (match) {
+      flush();
+      current = {
+        heading: match[2].trim(),
+        level: match[1].length,
+        content: '',
+        raw: '',
+      };
+    } else if (current) {
+      contentLines.push(line);
+    }
+  }
+  flush();
+
+  return sections;
 }

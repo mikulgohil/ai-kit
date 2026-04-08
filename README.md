@@ -123,13 +123,17 @@ Structured AI workflows applied automatically — the AI recognizes what you're 
 
 ### Automated Quality Hooks
 
-| Profile | What Runs Automatically |
+| Hook | What It Does |
 |---|---|
-| **Minimal** | Auto-format + git push safety |
-| **Standard** | + TypeScript type-check + console.log warnings + mistakes auto-capture + bundle impact warning |
-| **Strict** | + ESLint check + stop-time console.log audit + pre-commit AI review + bundle impact warning |
+| **Session Init** | Echoes project stack, package manager, available scripts, and last scan date at every session start — the AI has full context from the first prompt |
+| **Auto-format** | Formats files on edit via Prettier or Biome |
+| **TypeScript check** | Catches type errors after every edit (standard + strict) |
+| **Console.log warning** | Catches debug statements before commit (standard + strict) |
+| **Mistakes auto-capture** | Logs build/lint failures to `docs/mistakes-log.md` automatically (standard + strict) |
+| **Pre-commit review** | Checks for `any` types, console.logs, and TODOs without tickets in staged files (strict) |
+| **Context re-echo** | After context compaction in long sessions, re-echoes tech stack (standard + strict) |
 
-**Mistakes auto-capture** — When a build/lint command fails, the hook logs the error to `docs/mistakes-log.md` with timestamp and error preview. The mistakes log builds itself over time.
+Three strictness profiles: **Minimal** (format + git safety), **Standard** (+ typecheck + warnings + mistakes), **Strict** (+ ESLint + pre-commit review).
 
 <br />
 
@@ -180,7 +184,9 @@ Period summaries, budget progress with alerts, per-project cost breakdown, week-
 | Command | Description |
 |---|---|
 | `ai-kit init [path]` | Scan project and generate all configs |
-| `ai-kit update [path]` | Re-scan and update generated files (safe merge) |
+| `ai-kit update [path]` | Re-scan and update generated files (safe merge, auto-backup) |
+| `ai-kit migrate [path]` | Adopt ai-kit in a project with existing CLAUDE.md — preserves custom rules |
+| `ai-kit rollback [path]` | Restore configs from a previous backup created by `update` |
 | `ai-kit reset [path]` | Remove all AI Kit generated files |
 | `ai-kit health [path]` | One-glance A-F project health dashboard |
 | `ai-kit audit [path]` | Security and configuration health audit |
@@ -299,7 +305,25 @@ When your project evolves:
 npx @mikulgohil/ai-kit update
 ```
 
-Only content between `AI-KIT:START/END` markers is refreshed. Your custom rules and manual edits are preserved.
+Every update **automatically backs up** your current configs to `.ai-kit/backups/` before writing. Only content between `AI-KIT:START/END` markers is refreshed — your custom rules and manual edits are preserved.
+
+If something goes wrong, roll back instantly:
+
+```bash
+npx @mikulgohil/ai-kit rollback          # Pick from available backups
+npx @mikulgohil/ai-kit rollback --latest  # Restore most recent backup
+```
+
+### Migrating an Existing Project
+
+Already have a hand-written `CLAUDE.md`? Migrate without losing your custom rules:
+
+```bash
+npx @mikulgohil/ai-kit migrate              # Interactive — shows preview, asks confirmation
+npx @mikulgohil/ai-kit migrate --dry-run    # Preview changes without writing
+```
+
+Your custom sections are placed at the top of the file. AI Kit's generated rules go inside `AI-KIT:START/END` markers below. Future `ai-kit update` only touches the marked section — your rules are preserved forever.
 
 ---
 
@@ -317,7 +341,7 @@ Only content between `AI-KIT:START/END` markers is refreshed. Your custom rules 
 
 ## Requirements
 
-- Node.js 18+
+- Node.js 20+
 - A project with `package.json`
 - Claude Code or Cursor (at least one AI tool)
 
@@ -330,7 +354,7 @@ Full documentation at **[ai-kit.mikul.me](https://ai-kit.mikul.me)**
 | Page | What You'll Learn |
 |---|---|
 | [Getting Started](https://ai-kit.mikul.me/getting-started) | Step-by-step setup walkthrough |
-| [CLI Reference](https://ai-kit.mikul.me/cli-reference) | All 14 commands with examples |
+| [CLI Reference](https://ai-kit.mikul.me/cli-reference) | All 16 commands with examples |
 | [Skills & Commands](https://ai-kit.mikul.me/slash-commands) | All 48 skills with usage guides |
 | [What Gets Generated](https://ai-kit.mikul.me/what-gets-generated) | Detailed breakdown of every generated file |
 | [Hooks](https://ai-kit.mikul.me/hooks) | Hook profiles, mistakes auto-capture |
