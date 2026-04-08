@@ -143,6 +143,7 @@ describe('generateConfig', () => {
       const config = generateConfig(minimalScan(), [], [], []);
       const keys = Object.keys(config).sort();
       expect(keys).toEqual([
+        '$schema',
         'agents',
         'commands',
         'contexts',
@@ -154,6 +155,7 @@ describe('generateConfig', () => {
         'scanResult',
         'strictness',
         'templates',
+        'tools',
         'version',
       ]);
     });

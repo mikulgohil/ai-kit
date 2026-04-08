@@ -21,9 +21,10 @@ import {
   logInfo,
   logSection,
   fileExists,
+  readJsonSafe,
 } from '../utils.js';
 import { loadCustomFragments } from '../generator/assembler.js';
-import type { ProjectScan, ConflictResolution, ClarificationAnswer, StrictnessLevel, HookProfile } from '../types.js';
+import type { ProjectScan, ConflictResolution, ClarificationAnswer, StrictnessLevel, HookProfile, AiKitConfig, ToolsSelection } from '../types.js';
 
 export async function initCommand(targetPath?: string): Promise<void> {
   const projectDir = path.resolve(targetPath || process.cwd());
@@ -31,16 +32,39 @@ export async function initCommand(targetPath?: string): Promise<void> {
   logSection('AI Kit — Project Setup');
   logInfo(`Scanning: ${projectDir}`);
 
-  // Check for existing config
+  // Check for existing config — offer to reuse saved choices
   const configPath = path.join(projectDir, AI_KIT_CONFIG_FILE);
+  let savedConfig: AiKitConfig | null = null;
+  let reuseMode = false;
+
   if (fileExists(configPath)) {
-    const overwrite = await confirm({
-      message: 'AI Kit is already configured in this project. Re-initialize?',
-      default: false,
-    });
-    if (!overwrite) {
-      logInfo('Cancelled. Use `ai-kit update` to refresh configs.');
-      return;
+    savedConfig = readJsonSafe<AiKitConfig>(configPath);
+
+    if (savedConfig) {
+      logSection('Existing Profile Found');
+      logInfo(`Tools: ${formatToolsLabel(savedConfig.tools)}`);
+      logInfo(`Strictness: ${savedConfig.strictness}`);
+      logInfo(`Hook Profile: ${savedConfig.hookProfile}`);
+      logInfo(`Generated: ${savedConfig.generatedAt}`);
+      logInfo(`Version: v${savedConfig.version}`);
+      console.log('');
+
+      const action = await select({
+        message: 'What would you like to do?',
+        choices: [
+          { name: 'Update — re-scan project, keep saved settings', value: 'reuse' as const },
+          { name: 'Re-configure — change settings from scratch', value: 'fresh' as const },
+          { name: 'Cancel', value: 'cancel' as const },
+        ],
+        default: 'reuse',
+      });
+
+      if (action === 'cancel') {
+        logInfo('Cancelled.');
+        return;
+      }
+
+      reuseMode = action === 'reuse';
     }
   }
 
@@ -65,25 +89,42 @@ export async function initCommand(targetPath?: string): Promise<void> {
   logInfo(`Monorepo: ${scan.monorepo ? `Yes (${scan.monorepoTool})` : 'No'}`);
   logInfo(`Package Manager: ${scan.packageManager}`);
   logInfo(`Formatter: ${scan.tools.biome ? 'Biome' : scan.tools.prettier ? 'Prettier' : 'None detected'}`);
+  if (scan.staticSite?.isStatic) {
+    logInfo(`Static Site: Yes (${scan.staticSite.outputMode})`);
+  }
+  if (scan.designTokens?.detected) {
+    logInfo(`Design Tokens: ${scan.designTokens.colors.length} colors, ${scan.designTokens.fonts.length} fonts (${scan.designTokens.source})`);
+  }
+  if (scan.aiIgnorePatterns.length > 0) {
+    logInfo(`.aiignore: ${scan.aiIgnorePatterns.length} patterns loaded`);
+  }
 
-  // Clarification questions for ambiguous detections
-  const clarifications = await askClarifications(scan);
-  scan = applyClarifications(scan, clarifications);
+  // Clarification questions for ambiguous detections (skip in reuse mode)
+  if (!reuseMode) {
+    const clarifications = await askClarifications(scan);
+    scan = applyClarifications(scan, clarifications);
+  }
 
-  // Ask what to generate
-  const tools = await selectTools();
+  // Use saved choices or ask new ones
+  const tools: ToolsSelection = reuseMode && savedConfig?.tools
+    ? savedConfig.tools
+    : await selectTools();
 
-  // Ask strictness level
-  const strictness = await selectStrictness();
+  const strictness: StrictnessLevel = reuseMode && savedConfig?.strictness
+    ? savedConfig.strictness
+    : await selectStrictness();
 
-  // Ask hook profile
-  const hookProfile = await selectHookProfile();
+  const hookProfile: HookProfile = reuseMode && savedConfig?.hookProfile
+    ? savedConfig.hookProfile
+    : await selectHookProfile();
 
   // Load custom fragments
   const customFragments = loadCustomFragments(projectDir);
 
-  // Ask conflict resolution strategy
-  const conflict = await selectConflictStrategy(projectDir);
+  // Conflict strategy — overwrite when reusing, ask otherwise
+  const conflict: ConflictResolution = reuseMode
+    ? 'overwrite'
+    : await selectConflictStrategy(projectDir);
 
   // Generate files
   logSection('Generating Files');
@@ -119,6 +160,14 @@ export async function initCommand(targetPath?: string): Promise<void> {
   logInfo('Run `ai-kit update` anytime to refresh configs after project changes.');
   logInfo('Run `ai-kit audit` to check your AI agent configuration health.');
   logInfo('Check ai-kit/guides/getting-started.md to get started.');
+}
+
+function formatToolsLabel(tools?: ToolsSelection): string {
+  if (!tools) return 'Unknown';
+  if (tools.claude && tools.cursor) return 'Claude Code + Cursor';
+  if (tools.claude) return 'Claude Code only';
+  if (tools.cursor) return 'Cursor only';
+  return 'None';
 }
 
 function formatFramework(scan: ProjectScan): string {
@@ -159,7 +208,7 @@ function applyClarifications(
   };
 }
 
-async function selectTools(): Promise<{ claude: boolean; cursor: boolean }> {
+async function selectTools(): Promise<ToolsSelection> {
   const tool = await select({
     message: 'Which AI tools does this project use?',
     choices: [
@@ -249,7 +298,7 @@ interface GenerateResult {
 async function generate(
   projectDir: string,
   scan: ProjectScan,
-  tools: { claude: boolean; cursor: boolean },
+  tools: ToolsSelection,
   conflict: ConflictResolution,
   opts?: {
     strictness?: StrictnessLevel;
@@ -337,6 +386,7 @@ async function generate(
     contexts: result.contexts,
     hooks: result.hooks,
     hookProfile: opts?.hookProfile,
+    tools,
   });
   await fs.writeJson(
     path.join(projectDir, AI_KIT_CONFIG_FILE),

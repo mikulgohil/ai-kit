@@ -15,7 +15,7 @@ export async function resetCommand(targetPath?: string): Promise<void> {
   logInfo(`  - ${GENERATED_FILES.claudeCommands}/`);
   logInfo(`  - ${GENERATED_FILES.claudeSkills}/`);
   logInfo(`  - ${GENERATED_FILES.cursorSkills}/`);
-  logInfo(`  - ai-kit/`);
+  logInfo(`  - ai-kit/ (includes component-registry, patterns, guides)`);
   logInfo(`  - ${AI_KIT_CONFIG_FILE}`);
   console.log('');
 

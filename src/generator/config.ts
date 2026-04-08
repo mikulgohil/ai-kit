@@ -1,4 +1,4 @@
-import type { AiKitConfig, ProjectScan, StrictnessLevel, HookProfile } from '../types.js';
+import type { AiKitConfig, ProjectScan, StrictnessLevel, HookProfile, ToolsSelection } from '../types.js';
 import { VERSION } from '../constants.js';
 
 export function generateConfig(
@@ -13,9 +13,11 @@ export function generateConfig(
     contexts?: string[];
     hooks?: boolean;
     hookProfile?: HookProfile;
+    tools?: ToolsSelection;
   },
 ): AiKitConfig {
   return {
+    $schema: 'https://ai-kit.mikul.me/schema/ai-kit.config.schema.json',
     version: VERSION,
     scanResult: scan,
     generatedAt: new Date().toISOString(),
@@ -28,5 +30,6 @@ export function generateConfig(
     hookProfile: options?.hookProfile || 'standard',
     strictness: options?.strictness || 'standard',
     customFragments: options?.customFragments || [],
+    tools: options?.tools || { claude: true, cursor: true },
   };
 }

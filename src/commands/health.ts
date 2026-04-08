@@ -225,6 +225,39 @@ function checkStack(config: AiKitConfig): HealthSection {
     });
   }
 
+  // Static site
+  if (scan.staticSite?.isStatic) {
+    checks.push({
+      name: 'Static Site',
+      status: 'pass',
+      detail: `${scan.staticSite.outputMode} mode`,
+    });
+  }
+
+  // Design tokens
+  if (scan.designTokens?.detected) {
+    checks.push({
+      name: 'Design Tokens',
+      status: 'pass',
+      detail: `${scan.designTokens.colors.length} colors, ${scan.designTokens.fonts.length} fonts (${scan.designTokens.source})`,
+    });
+  } else if (scan.styling.includes('tailwind')) {
+    checks.push({
+      name: 'Design Tokens',
+      status: 'warn',
+      detail: 'Tailwind detected but no custom tokens found — AI may use arbitrary values',
+    });
+  }
+
+  // .aiignore
+  if (scan.aiIgnorePatterns?.length > 0) {
+    checks.push({
+      name: '.aiignore',
+      status: 'pass',
+      detail: `${scan.aiIgnorePatterns.length} patterns loaded`,
+    });
+  }
+
   return { title: 'Stack Detection', checks };
 }
 
