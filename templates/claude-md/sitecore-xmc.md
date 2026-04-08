@@ -1,7 +1,7 @@
-# Sitecore XM Cloud
+# Sitecore XM Cloud (SitecoreAI)
 
 ## Architecture
-- This is a headless CMS project using Sitecore XM Cloud with Next.js as the rendering host
+- This is a headless CMS project using Sitecore XM Cloud (part of the SitecoreAI platform) with Next.js as the rendering host
 - Components receive data through Sitecore Layout Service via `ComponentRendering` props
 - Use `@sitecore-jss/sitecore-jss-nextjs` or `@sitecore-content-sdk/nextjs` for component bindings
 

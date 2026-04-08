@@ -4,6 +4,7 @@ import { dirExists, readJsonSafe } from '../utils.js';
 interface NextjsResult {
   framework: 'nextjs' | 'react' | 'unknown';
   nextjsVersion?: string;
+  nextjsMajorVersion?: number;
   routerType?: 'app' | 'pages' | 'hybrid';
 }
 
@@ -22,6 +23,7 @@ export function detectNextjs(
   }
 
   const nextjsVersion = deps.next.replace(/[\^~>=<]/g, '');
+  const nextjsMajorVersion = parseInt(nextjsVersion.split('.')[0], 10) || undefined;
 
   const hasAppDir =
     dirExists(path.join(projectPath, 'app')) ||
@@ -36,5 +38,5 @@ export function detectNextjs(
   else if (hasAppDir) routerType = 'app';
   else if (hasPagesDir) routerType = 'pages';
 
-  return { framework: 'nextjs', nextjsVersion, routerType };
+  return { framework: 'nextjs', nextjsVersion, nextjsMajorVersion, routerType };
 }

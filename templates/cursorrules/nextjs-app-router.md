@@ -11,3 +11,6 @@
 - ISR: use `fetch(url, { next: { revalidate: N } })` or `export const revalidate = N`
 - Middleware: place `middleware.ts` at project root, use `matcher` config, Edge-compatible APIs only
 - Route Groups: use `(groupName)/` for organization without affecting URL paths
+- Turbopack (Next.js 16+): use `next dev --turbopack` for ~4x faster dev, Server Fast Refresh for instant HMR
+- Caching (Next.js 16+): route stale time is decoupled from data — use `staleTimes` in `next.config.js` for control
+- Don't use custom `webpack()` in Next.js 16+ without checking Turbopack compatibility

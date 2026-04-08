@@ -8,6 +8,7 @@ export function generateHooks(
 
   const preToolUse: HookDefinition[] = [];
   const postToolUse: HookDefinition[] = [];
+  const postCompact: HookDefinition[] = [];
   const stop: HookDefinition[] = [];
 
   // --- PreToolUse hooks ---
@@ -210,6 +211,29 @@ export function generateHooks(
     });
   }
 
+  // --- PostCompact hooks ---
+
+  // Re-echo critical context after context compaction (standard + strict)
+  if (profile !== 'minimal') {
+    postCompact.push({
+      matcher: '',
+      hooks: [
+        {
+          type: 'command',
+          command: [
+            'echo "🔄 Context was compacted. Key reminders:"',
+            'if [ -f "CLAUDE.md" ]; then echo "  → CLAUDE.md is loaded — project rules are preserved"; fi',
+            'if [ -f "ai-kit.config.json" ]; then',
+            '  STACK=$(node -e "try{const c=JSON.parse(require(\'fs\').readFileSync(\'ai-kit.config.json\',\'utf8\'));console.log([c.scanResult.framework,c.scanResult.cms,c.scanResult.styling?.join(\',\')].filter(Boolean).join(\' + \'))}catch{}" 2>/dev/null)',
+            '  if [ -n "$STACK" ]; then echo "  → Tech stack: $STACK"; fi',
+            'fi',
+            'echo "  → Run /effort to adjust reasoning depth if needed"',
+          ].join('\n'),
+        },
+      ],
+    });
+  }
+
   // --- Stop hooks ---
 
   // Console.log check in all modified files (strict only)
@@ -228,6 +252,7 @@ export function generateHooks(
 
   if (preToolUse.length > 0) hooks.PreToolUse = preToolUse;
   if (postToolUse.length > 0) hooks.PostToolUse = postToolUse;
+  if (postCompact.length > 0) hooks.PostCompact = postCompact;
   if (stop.length > 0) hooks.Stop = stop;
 
   return hooks;

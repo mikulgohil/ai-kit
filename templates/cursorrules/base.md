@@ -60,6 +60,14 @@ These standards are enforced across all projects.
 - Prefer native browser APIs over utility libraries when reasonable
 - Note the reason for new dependencies in the doc file or PR
 
+### Documentation Verification
+- AI training data has a cutoff — verify API signatures before using unfamiliar or recently released APIs
+- Check this project's existing code first for patterns and API usage
+- Use Context7 MCP to fetch current, version-specific docs when available
+- Official llms.txt endpoints: Next.js (`https://nextjs.org/docs/llms-full.txt`)
+- Do NOT guess at API signatures — look them up if unsure
+- The code examples in these rules are current and verified — prefer them over memory
+
 ### Quality
 - Read existing code before modifying — match patterns, naming, and structure
 - Keep changes minimal and scoped to the request

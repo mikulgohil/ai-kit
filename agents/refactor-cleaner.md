@@ -2,6 +2,8 @@
 name: refactor-cleaner
 description: Dead code cleanup and refactoring agent — finds unused exports, cleans imports, and removes dead code.
 tools: Read, Edit, Glob, Grep, Bash
+isolation: worktree
+initialPrompt: Scan for dead code and unused exports in this project using Knip or manual analysis.
 ---
 
 # Refactor & Cleanup Agent

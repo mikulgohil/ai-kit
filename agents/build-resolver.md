@@ -2,6 +2,8 @@
 name: build-resolver
 description: Build error resolution agent — diagnoses and fixes Next.js, TypeScript, and Sitecore build errors.
 tools: Read, Edit, Glob, Grep, Bash
+isolation: worktree
+initialPrompt: Run the build command from package.json and diagnose any errors found.
 ---
 
 # Build Error Resolver

@@ -1,4 +1,4 @@
-# Sitecore XM Cloud Rules
+# Sitecore XM Cloud (SitecoreAI) Rules
 
 - Use Sitecore field helpers (`<Text>`, `<RichText>`, `<Image>`, `<Link>`) — never render `.value` directly
 - Component names must match Sitecore rendering items exactly

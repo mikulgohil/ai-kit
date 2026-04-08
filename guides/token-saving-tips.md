@@ -45,6 +45,21 @@ If the AI doesn't get it right in 2 attempts:
 2. The task might be too complex for a single prompt
 3. Take over manually — you'll save tokens and time
 
+## Know Your Context Limits
+
+Claude Code now supports up to **1M tokens of context** (Opus 4.6) with **64K default output** (128K ceiling). This is massive — but context still costs money.
+
+| Model | Context Window | Default Output | Max Output |
+|-------|---------------|----------------|------------|
+| Opus 4.6 | 1M tokens | 64K tokens | 128K tokens |
+| Sonnet 4.6 | 200K tokens | 64K tokens | 128K tokens |
+
+### Use `/effort` to Control Token Spend
+Claude Code's `/effort` command lets you set reasoning effort levels. For simple tasks, lower effort saves tokens. For complex architecture decisions, higher effort produces better results.
+
+### Context Compaction
+When conversations get long, Claude Code automatically compacts earlier context. The **PostCompact hook** fires after this happens — your AI Kit hooks use it to ensure important context survives compaction.
+
 ## CLAUDE.md Is Free Context
 
 Your `CLAUDE.md` file is loaded automatically — everything in it gives the AI context without using your conversation tokens. That's why `ai-kit` generates it: better output from fewer tokens.

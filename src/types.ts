@@ -32,6 +32,7 @@ export interface ToolsSelection {
 export interface ProjectScan {
   framework: 'nextjs' | 'react' | 'unknown';
   nextjsVersion?: string;
+  nextjsMajorVersion?: number;
   routerType?: 'app' | 'pages' | 'hybrid';
 
   cms: 'sitecore-xmc-v2' | 'sitecore-xmc' | 'sitecore-jss' | 'optimizely-saas' | 'none';
@@ -82,6 +83,7 @@ export interface HookDefinition {
 export interface HooksConfig {
   PreToolUse?: HookDefinition[];
   PostToolUse?: HookDefinition[];
+  PostCompact?: HookDefinition[];
   Stop?: HookDefinition[];
 }
 

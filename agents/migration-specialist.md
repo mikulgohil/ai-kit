@@ -1,7 +1,9 @@
 ---
 name: migration-specialist
 description: Migration specialist agent — framework upgrades, breaking change detection, codemods, dependency migration, and incremental adoption strategies.
-tools: Read, Glob, Grep, Bash
+tools: Read, Edit, Glob, Grep, Bash
+isolation: worktree
+initialPrompt: Audit the current dependency versions and identify available upgrades with breaking changes.
 ---
 
 # Migration Specialist

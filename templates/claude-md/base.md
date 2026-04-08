@@ -105,6 +105,30 @@ These standards are enforced across all projects to ensure consistency.
 - Pin dependency versions — avoid `^` or `~` for critical packages
 - When adding a new dependency, note the reason in the component's doc file or PR description
 
+## Documentation Verification
+
+AI training data has a cutoff date. When working with framework APIs, **verify your knowledge is current** before writing code:
+
+### When to Verify
+- Using an API you haven't seen in this project's codebase
+- Working with recently released features (Next.js 16+, Tailwind v4, Sitecore Content SDK v2.x)
+- When you're unsure about an API signature, parameter order, or return type
+- When a build error suggests an API doesn't exist or has changed
+
+### How to Verify (in priority order)
+1. **Check this project's code first** — existing implementations are the most reliable reference
+2. **Use Context7 MCP** — if available, use `resolve-library-id` then `query-docs` to fetch current, version-specific documentation
+3. **Use llms.txt endpoints** — fetch from official AI-friendly docs:
+   - Next.js: `https://nextjs.org/docs/llms-full.txt`
+   - Sitecore XM Cloud: check the project repo for `LLMs.txt`
+4. **Use WebFetch** — fetch the specific docs page for the API in question
+
+### Rules
+- Do NOT guess at API signatures — look them up if unsure
+- Do NOT assume a library API works the same as a previous version
+- The code examples in this CLAUDE.md file are current and verified — prefer them over memory
+- When you look something up, briefly note what you found so the developer knows the source
+
 ## Code Quality
 - Match existing patterns, naming conventions, and file structure
 - Keep changes minimal — don't refactor surrounding code unless asked
@@ -170,6 +194,7 @@ AI will auto-discover and apply these when your task matches. You can also invok
 - `/document` — Generate documentation for existing code
 - `/commit-msg` — Generate conventional commit message from staged changes
 - `/env-setup` — Generate .env.example and validate environment variables
+- `/fetch-docs` — Pre-load current docs for your tech stack (run at session start)
 
 ## Scripts
 {{scripts}}

@@ -51,6 +51,8 @@ const AVAILABLE_SKILLS = [
   // New skills (v1.7.0) — requirements clarification (inspired by OMC Deep Interview)
   'deep-interview',
   'clarify-requirements',
+  // New skills (v1.10.0) — documentation freshness
+  'fetch-docs',
 ];
 
 // Short descriptions for auto-discovery — AI reads these to decide when to apply
@@ -103,6 +105,8 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   // New skills (v1.7.0) — requirements clarification
   'deep-interview': 'Socratic requirements gathering — structured interview to transform vague ideas into detailed specifications',
   'clarify-requirements': 'Quick task clarification — identify gaps and ambiguities in under 5 minutes before coding',
+  // New skills (v1.10.0) — documentation freshness
+  'fetch-docs': 'Pre-load current, version-specific docs for your tech stack using Context7 MCP — run at session start to prevent outdated API usage',
 };
 
 export async function copySkills(targetDir: string): Promise<string[]> {

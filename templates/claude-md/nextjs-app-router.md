@@ -54,6 +54,22 @@ app/
 - Use `revalidateTag(tag)` or `revalidatePath(path)` in Server Actions for on-demand ISR
 - Tag fetches with `fetch(url, { next: { tags: ['posts'] } })` for targeted revalidation
 
+## Turbopack (Next.js 16+)
+- Turbopack is stable and production-ready — use `next dev --turbopack` for ~4x faster dev startup
+- Server Fast Refresh: instant HMR for server-side changes (no full reload)
+- Supports SRI (Subresource Integrity) for security
+- Tree shakes dynamic imports automatically
+- If using custom webpack config, migrate to Turbopack-compatible patterns:
+  - Replace `webpack()` in `next.config.js` with Turbopack-native configuration
+  - Most loaders have Turbopack equivalents — check the Next.js docs
+- Web Workers: use `new Worker(new URL('./worker.ts', import.meta.url))` for proper bundling
+
+## Caching (Next.js 16+)
+- Route stale time is decoupled from segment-level data — configure independently
+- Browser cache no longer serves stale RSC (React Server Component) responses
+- Use `staleTimes` in `next.config.js` for fine-grained stale time control
+- Prefer `fetch()` cache options over route-level `revalidate` for granular control
+
 ## Common Mistakes to Avoid
 - Don't use `useEffect` for data fetching in Server Components
 - Don't import server-only code in Client Components
@@ -61,3 +77,4 @@ app/
 - Don't forget to add `loading.tsx` for route transitions
 - Don't throw errors from Server Actions — return error objects instead
 - Don't use Node.js APIs in Middleware — it runs on the Edge runtime
+- Don't use custom `webpack()` config in Next.js 16+ without checking Turbopack compatibility

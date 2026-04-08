@@ -284,4 +284,69 @@ Inspired by [github/spec-kit](https://github.com/github/spec-kit) — borrowing 
 |---|---|---|
 | Phase 1-6 (existing) | 6 | 14 |
 | Phase 7 (Spec Kit-inspired) | 11 | 4 |
-| **Grand Total** | **17** | **18** |
+| Phase 8 (Research-driven) | 0 | 14 |
+| **Grand Total** | **17** | **32** |
+
+---
+
+## Phase 8: Research-Driven Improvements (v1.10.0)
+
+Based on comprehensive research of Claude Code v2.1.92, Next.js 16, MCP ecosystem, and Cursor IDE changes (April 2026).
+
+### 8.1 — Agent Worktree Isolation & InitialPrompt (DONE)
+- **Files**: `agents/refactor-cleaner.md`, `agents/build-resolver.md`, `agents/e2e-runner.md`, `agents/migration-specialist.md`
+- **Change**: Added `isolation: worktree` and `initialPrompt` frontmatter fields to code-modifying agents
+- **Why**: Claude Code v2.1.x supports worktree isolation — agents run in temporary git worktrees, preventing working directory conflicts during parallel agent execution
+
+### 8.2 — Next.js 16 Detection & Turbopack Rules (DONE)
+- **Files**: `src/scanner/nextjs.ts`, `src/types.ts`, `templates/claude-md/nextjs-app-router.md`, `templates/cursorrules/nextjs-app-router.md`
+- **Change**: Scanner extracts `nextjsMajorVersion`, templates include Turbopack (stable in Next.js 16), Server Fast Refresh, new caching model
+- **Why**: Next.js 16.2.2 is current LTS (April 2026) — Turbopack is production-ready with ~4x faster dev startup
+
+### 8.3 — PostCompact Hook (DONE)
+- **Files**: `src/types.ts`, `src/generator/hooks.ts`
+- **Change**: Added `PostCompact` hook event to standard and strict profiles — re-echoes tech stack context after Claude Code compacts conversation history
+- **Why**: Claude Code v2.1.x added PostCompact hook event — critical for long conversations to preserve project context
+
+### 8.4 — .cursor/index.mdc Generation (DONE)
+- **Files**: `src/generator/cursor-mdc.ts`
+- **Change**: Generates `index.mdc` as repo-wide Cursor rules entry point with tech stack summary and links to fragment-specific rules
+- **Why**: Cursor IDE's `.cursor/rules/index.mdc` with `alwaysApply: true` is the recommended entry point for project-wide conventions
+
+### 8.5 — SitecoreAI Branding (DONE)
+- **Files**: `templates/claude-md/sitecore-xmc.md`, `templates/cursorrules/sitecore-xmc.md`
+- **Change**: Added SitecoreAI branding alongside XM Cloud (rebranded November 2025)
+
+### 8.6 — Token Guide & Context Limits Update (DONE)
+- **Files**: `guides/token-saving-tips.md`
+- **Change**: Updated with 1M context window (Opus 4.6), 64K/128K output limits, `/effort` command, context compaction guidance
+
+### 8.7 — Node.js Engine Bump (DONE)
+- **File**: `package.json`
+- **Change**: `engines.node` bumped from `>=18` to `>=20` (Node 18 EOL April 2025, Next.js 16 requires 20+)
+
+---
+
+## Phase 9: Future Roadmap (Planned, Not Implemented)
+
+### 9.1 — MCP Server for AI Kit
+- **Purpose**: Expose project scan results, health checks, and component registries via MCP protocol
+- **Why**: MCP ecosystem has exploded (20,000+ servers, 500+ public). An ai-kit MCP server makes scan results accessible to any MCP-compatible client (Claude Desktop, Cursor, Windsurf, Augment) without generating static config files
+- **Scope**: New `src/mcp/` module, MCP tools for `scan`, `health`, `component-registry`, `config`
+- **Priority**: HIGH — promotes from previous P3 given MCP ecosystem growth
+
+### 9.2 — CI/CD GitHub Action
+- **Purpose**: Run `ai-kit health` in CI/CD pipelines and comment on PRs
+- **Format**: GitHub Action that runs health checks and posts results as PR comments
+- **Scope**: `.github/actions/ai-kit-health/` with action.yml
+- **Priority**: MEDIUM
+
+### 9.3 — Sparse Worktree Support for Monorepos
+- **Purpose**: Generate `worktree.sparsePaths` config for monorepo projects so agents only checkout relevant packages
+- **Why**: Claude Code v2.1.x supports sparse worktrees — large monorepos benefit from faster agent startup
+- **Scope**: Update `src/generator/hooks.ts` to include `worktree.sparsePaths` in settings when monorepo detected
+
+### 9.4 — Cursor RULE.md Folder Format
+- **Purpose**: Generate `.cursor/rules/rule-name/RULE.md` folder format alongside `.mdc` files
+- **Why**: Cursor is migrating from `.mdc` to folder-based rules — currently buggy but expected to stabilize
+- **Status**: WAITING — Cursor team needs to fix folder detection bugs first (tracked in Cursor forum)
