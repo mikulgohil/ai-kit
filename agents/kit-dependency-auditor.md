@@ -1,5 +1,5 @@
 ---
-name: dependency-auditor
+name: kit-dependency-auditor
 description: Dependency auditor agent — outdated packages, vulnerability scanning, license compliance, bundle impact analysis, and dependency hygiene.
 tools: Read, Glob, Grep, Bash
 ---

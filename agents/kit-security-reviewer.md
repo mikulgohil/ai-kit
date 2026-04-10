@@ -1,5 +1,5 @@
 ---
-name: security-reviewer
+name: kit-security-reviewer
 description: Security-focused review agent — checks XSS, CSRF, injection, secrets, and OWASP Top 10 for Next.js applications.
 tools: Read, Glob, Grep, Bash
 ---

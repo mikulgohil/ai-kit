@@ -18,14 +18,14 @@ Coordinate multiple specialized agents to tackle complex tasks.
 
 | Agent | Best For |
 |-------|----------|
-| `planner` | Breaking down requirements into implementation steps |
-| `code-reviewer` | Quality review of existing or new code |
-| `security-reviewer` | Security-focused audit |
-| `e2e-runner` | Generating and running Playwright tests |
-| `build-resolver` | Fixing build and type errors |
-| `doc-updater` | Updating documentation |
-| `refactor-cleaner` | Finding and removing dead code |
-| `sitecore-specialist` | Sitecore-specific patterns and issues |
+| `kit-planner` | Breaking down requirements into implementation steps |
+| `kit-code-reviewer` | Quality review of existing or new code |
+| `kit-security-reviewer` | Security-focused audit |
+| `kit-e2e-runner` | Generating and running Playwright tests |
+| `kit-build-resolver` | Fixing build and type errors |
+| `kit-doc-updater` | Updating documentation |
+| `kit-refactor-cleaner` | Finding and removing dead code |
+| `kit-sitecore-specialist` | Sitecore-specific patterns and issues |
 
 ### 3. Delegate
 Launch agents in parallel where possible:
@@ -48,9 +48,9 @@ Present a merged summary:
 ### Task: [description]
 
 ### Agent Results
-- **planner**: [key findings]
-- **code-reviewer**: [key findings]
-- **security-reviewer**: [key findings]
+- **kit-planner**: [key findings]
+- **kit-code-reviewer**: [key findings]
+- **kit-security-reviewer**: [key findings]
 
 ### Conflicts
 - [Agent A recommends X, but Agent B recommends Y — resolution]

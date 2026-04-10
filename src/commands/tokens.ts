@@ -443,7 +443,7 @@ export async function tokensCommand(options: { export?: boolean; csv?: boolean; 
 
   // Tip
   console.log(
-    `\n${chalk.dim('Tip: Use /understand before modifying unfamiliar code \u2014')}`,
+    `\n${chalk.dim('Tip: Use /kit-understand before modifying unfamiliar code \u2014')}`,
   );
   console.log(
     chalk.dim("     it's cheaper than a failed implementation attempt."),
@@ -526,14 +526,14 @@ async function exportDashboard(
 
   // Try to open in browser
   try {
-    const { exec } = await import('child_process');
+    const { execFile } = await import('child_process');
     const openCmd =
       process.platform === 'darwin'
         ? 'open'
         : process.platform === 'win32'
           ? 'start'
           : 'xdg-open';
-    exec(`${openCmd} "${dashboardDest}"`);
+    execFile(openCmd, [dashboardDest]);
     logInfo('Opening dashboard in browser...');
   } catch {
     logInfo(`Open ${dashboardDest} in your browser to view the dashboard.`);

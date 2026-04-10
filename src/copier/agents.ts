@@ -1,9 +1,10 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { AGENTS_DIR } from '../constants.js';
+import { AGENTS_DIR, SKILL_PREFIX } from '../constants.js';
 import type { ProjectScan } from '../types.js';
 
-const UNIVERSAL_AGENTS = [
+// Base agent names — SKILL_PREFIX is prepended at runtime
+const BASE_UNIVERSAL_AGENTS = [
   'planner',
   'code-reviewer',
   'security-reviewer',
@@ -19,17 +20,19 @@ const UNIVERSAL_AGENTS = [
   'api-designer',
 ];
 
+const UNIVERSAL_AGENTS = BASE_UNIVERSAL_AGENTS.map((a) => `${SKILL_PREFIX}${a}`);
+
 const CONDITIONAL_AGENTS: { name: string; condition: (scan: ProjectScan) => boolean }[] = [
   {
-    name: 'e2e-runner',
+    name: `${SKILL_PREFIX}e2e-runner`,
     condition: (scan) => scan.tools.playwright,
   },
   {
-    name: 'sitecore-specialist',
+    name: `${SKILL_PREFIX}sitecore-specialist`,
     condition: (scan) => scan.cms !== 'none',
   },
   {
-    name: 'tdd-guide',
+    name: `${SKILL_PREFIX}tdd-guide`,
     condition: (scan) => scan.tools.playwright || !!scan.scripts['test'],
   },
 ];
@@ -69,3 +72,6 @@ export async function copyAgents(
 
   return copied;
 }
+
+/** Base agent names without prefix — used by update command to clean up old unprefixed files */
+export { BASE_UNIVERSAL_AGENTS };

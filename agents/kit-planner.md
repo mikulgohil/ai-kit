@@ -1,5 +1,5 @@
 ---
-name: planner
+name: kit-planner
 description: Implementation planning agent — breaks features into tasks, identifies files, and considers architectural tradeoffs for Next.js/React/Sitecore projects.
 tools: Read, Glob, Grep, Bash
 ---

@@ -14,7 +14,7 @@ Developer:  Spends 2 hours manually fixing tokens and spacing
 ## The Right Way (With ai-kit)
 
 ```
-Developer:  /figma-to-code
+Developer:  /kit-figma-to-code
 AI:         Asks targeted questions → extracts Figma context via MCP →
             maps to project tokens → reuses existing components →
             generates clean code → verifies visually
@@ -67,7 +67,7 @@ A good link looks like:
 https://www.figma.com/design/ABC123/MyProject?node-id=1234-5678
 ```
 
-### Step 2: Use /figma-to-code
+### Step 2: Use /kit-figma-to-code
 
 Run the slash command. It will:
 1. Ask what you're building (component, page, update)
@@ -101,8 +101,8 @@ The output should use correct design tokens, reuse existing components, and foll
 
 | Scenario | Tool |
 |----------|------|
-| Single component from Figma | `/figma-to-code` in Claude Code |
-| Quick design token extraction | `/design-tokens` in Claude Code |
+| Single component from Figma | `/kit-figma-to-code` in Claude Code |
+| Quick design token extraction | `/kit-design-tokens` in Claude Code |
 | Full page with 5+ components | `figma-code-cli` pipeline |
 | Sitecore component + YML items | `figma-code-cli` (4-gate pipeline) |
 | Brand implementation from scratch | `figma-code-cli` + reference ssd-figma-code |
@@ -120,7 +120,7 @@ The output should use correct design tokens, reuse existing components, and foll
 
 4. **Skipping mobile verification** — Never assume mobile is just "desktop but smaller". Check mobile designs in Figma separately.
 
-5. **Not reading design tokens first** — Run `/design-tokens` before starting Figma work. Know what tokens are available.
+5. **Not reading design tokens first** — Run `/kit-design-tokens` before starting Figma work. Know what tokens are available.
 
 ---
 

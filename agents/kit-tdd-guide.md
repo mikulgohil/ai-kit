@@ -1,5 +1,5 @@
 ---
-name: tdd-guide
+name: kit-tdd-guide
 description: Test-driven development guide — red-green-refactor workflow for Next.js pages, Sitecore components, and React hooks.
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---

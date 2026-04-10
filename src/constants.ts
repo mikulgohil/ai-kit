@@ -12,7 +12,10 @@ export const DOCS_SCAFFOLDS_DIR = path.join(PACKAGE_ROOT, 'docs-scaffolds');
 export const AGENTS_DIR = path.join(PACKAGE_ROOT, 'agents');
 export const CONTEXTS_DIR = path.join(PACKAGE_ROOT, 'contexts');
 
-export const VERSION = '1.11.0';
+export const VERSION = '2.0.0';
+
+/** Prefix for all ai-kit generated skills and agents to avoid collisions with global/built-in names */
+export const SKILL_PREFIX = 'kit-';
 
 export const AI_KIT_FOLDER = 'ai-kit';
 export const AI_KIT_CONFIG_FILE = 'ai-kit.config.json';

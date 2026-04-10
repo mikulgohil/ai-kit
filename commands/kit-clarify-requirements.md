@@ -78,7 +78,7 @@ Before presenting the brief, verify:
 ## Constraints
 
 - Do NOT ask more than 5 questions — prioritize ruthlessly
-- Do NOT turn this into a long interview — that's what `/deep-interview` is for
+- Do NOT turn this into a long interview — that's what `/kit-deep-interview` is for
 - Do NOT ask obvious questions that the task description already answers
 - Do NOT write code — this command is for clarification only
 - Keep the total interaction under 5 minutes

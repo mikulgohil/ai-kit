@@ -1,8 +1,9 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { COMMANDS_DIR } from '../constants.js';
+import { COMMANDS_DIR, SKILL_PREFIX } from '../constants.js';
 
-const AVAILABLE_SKILLS = [
+// Base skill names — SKILL_PREFIX is prepended at runtime for file lookups and output names
+const BASE_SKILLS = [
   'prompt-help',
   'review',
   'fix-bug',
@@ -55,8 +56,11 @@ const AVAILABLE_SKILLS = [
   'fetch-docs',
 ];
 
+const AVAILABLE_SKILLS = BASE_SKILLS.map((s) => `${SKILL_PREFIX}${s}`);
+
 // Short descriptions for auto-discovery — AI reads these to decide when to apply
-const SKILL_DESCRIPTIONS: Record<string, string> = {
+// Keys use base names; prefixed names are derived via SKILL_DESCRIPTIONS lookup helper below
+const BASE_SKILL_DESCRIPTIONS: Record<string, string> = {
   'prompt-help': 'Help developers write effective AI prompts with structured context',
   'review': 'Deep code review following project coding standards',
   'fix-bug': 'Systematic debugging workflow with root cause analysis and regression testing',
@@ -83,7 +87,6 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'responsive-check': 'Audit responsive design — breakpoints, touch targets, overflow',
   'document': 'Generate documentation for existing components and utilities',
   'token-tips': 'Token usage optimization strategies for AI coding assistants',
-  // New skills (v1.1.0)
   'perf-audit': 'Lighthouse-style performance audit covering Core Web Vitals, resource loading, and caching',
   'bundle-check': 'Analyze bundle size, find heavy imports, suggest tree-shaking and code splitting',
   'i18n-check': 'Find hardcoded strings, missing translation keys, and internationalization gaps',
@@ -91,7 +94,6 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'changelog': 'Generate formatted changelogs from git history following Keep a Changelog format',
   'release': 'Guided release workflow with versioning, changelog, tagging, and release notes',
   'storybook-gen': 'Generate Storybook stories with controls, play functions, and visual tests',
-  // New skills (v1.2.0) — hooks, agents, sessions, orchestration
   'search-first': 'Research-before-coding — search docs, existing patterns, and APIs before writing code',
   'quality-gate-check': 'Post-implementation quality checklist — type safety, a11y, security, performance, Sitecore',
   'server-action': 'Scaffold Next.js Server Actions with Zod validation, error handling, and revalidation',
@@ -102,12 +104,15 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'orchestrate': 'Multi-agent orchestration — break complex tasks into subtasks and delegate to agents',
   'quality-gate': 'Run comprehensive quality checks: types, lint, format, tests, bundle, a11y, security',
   'harness-audit': 'Audit AI agent configuration — check CLAUDE.md, hooks, agents, skills, MCP servers',
-  // New skills (v1.7.0) — requirements clarification
   'deep-interview': 'Socratic requirements gathering — structured interview to transform vague ideas into detailed specifications',
   'clarify-requirements': 'Quick task clarification — identify gaps and ambiguities in under 5 minutes before coding',
-  // New skills (v1.10.0) — documentation freshness
   'fetch-docs': 'Pre-load current, version-specific docs for your tech stack using Context7 MCP — run at session start to prevent outdated API usage',
 };
+
+// Derive prefixed description map for lookups by prefixed skill name
+const SKILL_DESCRIPTIONS: Record<string, string> = Object.fromEntries(
+  Object.entries(BASE_SKILL_DESCRIPTIONS).map(([k, v]) => [`${SKILL_PREFIX}${k}`, v]),
+);
 
 export async function copySkills(targetDir: string): Promise<string[]> {
   const copied: string[] = [];
@@ -150,3 +155,6 @@ export async function copySkills(targetDir: string): Promise<string[]> {
 
 // Keep the old function name as an alias for backward compatibility
 export const copyCommands = copySkills;
+
+/** Base skill names without prefix — used by update command to clean up old unprefixed files */
+export { BASE_SKILLS };

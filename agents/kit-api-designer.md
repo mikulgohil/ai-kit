@@ -1,5 +1,5 @@
 ---
-name: api-designer
+name: kit-api-designer
 description: API designer agent — REST and GraphQL API design, schema validation, versioning strategy, error handling patterns, and API documentation.
 tools: Read, Glob, Grep, Bash
 ---

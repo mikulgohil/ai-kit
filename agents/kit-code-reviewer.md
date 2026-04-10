@@ -1,5 +1,5 @@
 ---
-name: code-reviewer
+name: kit-code-reviewer
 description: Deep code review agent — checks quality, patterns, security, accessibility, and performance for React/Next.js/Sitecore code.
 tools: Read, Glob, Grep
 ---

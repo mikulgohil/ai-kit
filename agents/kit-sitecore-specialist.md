@@ -1,5 +1,5 @@
 ---
-name: sitecore-specialist
+name: kit-sitecore-specialist
 description: Sitecore XM Cloud specialist — handles component mapping, GraphQL queries, layout service, Experience Edge, personalization, and Content SDK v2.x.
 tools: Read, Write, Edit, Glob, Grep, Bash
 ---

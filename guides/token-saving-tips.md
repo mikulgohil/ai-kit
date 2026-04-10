@@ -8,7 +8,7 @@ Tokens = cost. Here's how to use fewer tokens while getting better results.
 |-------|-----------|-----|
 | Pasting entire files into chat | 🔴 Very High | Point AI to file paths instead |
 | Long back-and-forth conversations | 🔴 Very High | Start new conversations per task |
-| Vague prompts that need clarification | 🟡 Medium | Use `/prompt-help` to get it right first time |
+| Vague prompts that need clarification | 🟡 Medium | Use `/kit-prompt-help` to get it right first time |
 | Asking AI to read the whole codebase | 🔴 Very High | Be specific about which files |
 | Not using existing patterns | 🟡 Medium | Reference existing files: "follow the pattern in X" |
 
@@ -26,11 +26,11 @@ Each new message includes ALL previous context. A 20-message conversation sends 
 ### 3. Be Specific Upfront
 ```
 ❌ "Make a form" → AI asks 5 questions → 10 messages → 5000 tokens wasted
-✅ Use /prompt-help → 1 structured prompt → done in 2 messages
+✅ Use /kit-prompt-help → 1 structured prompt → done in 2 messages
 ```
 
 ### 4. Use Slash Commands
-Commands include pre-built context. `/new-component Button` is more efficient than typing all the instructions manually.
+Commands include pre-built context. `/kit-new-component Button` is more efficient than typing all the instructions manually.
 
 ### 5. Point to Patterns
 ```

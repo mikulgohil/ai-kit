@@ -44,30 +44,30 @@ Agents are specialized AI assistants that can be delegated to for specific tasks
 
 | Agent | What It Does |
 |-------|-------------|
-| **planner** | Breaks down features into implementation plans |
-| **code-reviewer** | Deep code review for quality, patterns, and security |
-| **security-reviewer** | Focused security audit (XSS, CSRF, OWASP Top 10) |
-| **build-resolver** | Diagnoses and fixes build/type errors |
-| **e2e-runner** | Generates and runs Playwright E2E tests |
-| **doc-updater** | Syncs documentation with code changes |
-| **refactor-cleaner** | Finds and removes dead code |
-| **sitecore-specialist** | Sitecore XM Cloud patterns and debugging |
+| **kit-planner** | Breaks down features into implementation plans |
+| **kit-code-reviewer** | Deep code review for quality, patterns, and security |
+| **kit-security-reviewer** | Focused security audit (XSS, CSRF, OWASP Top 10) |
+| **kit-build-resolver** | Diagnoses and fixes build/type errors |
+| **kit-e2e-runner** | Generates and runs Playwright E2E tests |
+| **kit-doc-updater** | Syncs documentation with code changes |
+| **kit-refactor-cleaner** | Finds and removes dead code |
+| **kit-sitecore-specialist** | Sitecore XM Cloud patterns and debugging |
 
 ### How to Use Agents
 
 In Claude Code, agents are automatically available for delegation. You can also invoke them directly:
 
 ```
-@planner Plan the implementation for adding dark mode support
-@code-reviewer Review the changes in src/components/Header.tsx
-@e2e-runner Write E2E tests for the checkout flow
+@kit-planner Plan the implementation for adding dark mode support
+@kit-code-reviewer Review the changes in src/components/Header.tsx
+@kit-e2e-runner Write E2E tests for the checkout flow
 ```
 
 ### Conditional Agents
 
 Some agents are only generated when their tools are detected:
-- **e2e-runner** — only if Playwright is installed
-- **sitecore-specialist** — only if Sitecore XM Cloud is detected
+- **kit-e2e-runner** — only if Playwright is installed
+- **kit-sitecore-specialist** — only if Sitecore XM Cloud is detected
 
 ---
 
@@ -99,17 +99,17 @@ New skills help you persist context across sessions:
 
 | Skill | What It Does |
 |-------|-------------|
-| `/save-session` | Save current session state and decisions |
-| `/resume-session` | Restore context from a previous session |
-| `/checkpoint` | Run all quality checks and record results |
+| `/kit-save-session` | Save current session state and decisions |
+| `/kit-resume-session` | Restore context from a previous session |
+| `/kit-checkpoint` | Run all quality checks and record results |
 
 ### Quality & Orchestration
 
 | Skill | What It Does |
 |-------|-------------|
-| `/quality-gate` | Run all checks: types, lint, format, tests, a11y, security |
-| `/orchestrate` | Coordinate multiple agents for complex tasks |
-| `/harness-audit` | Check AI configuration health |
+| `/kit-quality-gate` | Run all checks: types, lint, format, tests, a11y, security |
+| `/kit-orchestrate` | Coordinate multiple agents for complex tasks |
+| `/kit-harness-audit` | Check AI configuration health |
 
 ---
 

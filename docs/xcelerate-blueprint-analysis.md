@@ -112,10 +112,10 @@ This suggests the team either doesn't trust AI output or hasn't configured it fo
 There are no `.claude/commands/` files. Every developer has to write prompts from scratch every time. For a project with 68 components following a strict 3-file pattern (component + stories + mock-data + test), this is a huge productivity gap.
 
 **With ai-kit:** 8 pre-built slash commands including:
-- `/prompt-help` — asks all the right questions so developers don't write vague prompts
-- `/new-component` — would ask about Sitecore fields, TailwindVariants, SitecoreWrappers, and generate all 3 files following the project's exact pattern
-- `/review` — deep code review checking for missing field helpers, accessibility gaps, TailwindVariant misuse
-- `/test` — generate Jest snapshot tests + functional tests with the project's mock-data pattern
+- `/kit-prompt-help` — asks all the right questions so developers don't write vague prompts
+- `/kit-new-component` — would ask about Sitecore fields, TailwindVariants, SitecoreWrappers, and generate all 3 files following the project's exact pattern
+- `/kit-review` — deep code review checking for missing field helpers, accessibility gaps, TailwindVariant misuse
+- `/kit-test` — generate Jest snapshot tests + functional tests with the project's mock-data pattern
 
 ### Gap 5: No Shared Standards in AI Config
 
@@ -157,7 +157,7 @@ Each file has specific patterns:
 
 **Without ai-kit:** Developer manually creates 4 files, copies patterns from existing component, adapts. ~30–45 minutes of boilerplate per component.
 
-**With ai-kit + /new-component:** The command asks 10 targeted questions (component name, Sitecore fields, TailwindVariants, responsive behavior, etc.) and generates all 4 files following the exact project pattern. ~5 minutes.
+**With ai-kit + /kit-new-component:** The command asks 10 targeted questions (component name, Sitecore fields, TailwindVariants, responsive behavior, etc.) and generates all 4 files following the exact project pattern. ~5 minutes.
 
 **For 68 components:** That's potentially 28–45 hours of boilerplate time that could be reduced to ~5.5 hours. For new projects bootstrapped from this template, the savings multiply.
 
@@ -190,13 +190,13 @@ TailwindVariants is not a mainstream library. Without explicit rules, AI tools d
 | **Claude Code context** | None (no CLAUDE.md) | Full project-aware CLAUDE.md |
 | **Cursor context** | Partial (73 lines, not always-on) | Comprehensive .cursorrules (always active) |
 | **Claude Code permissions** | Read-only git commands | Configurable with confidence (standards enforced) |
-| **Slash commands** | None | 8 pre-built (/prompt-help, /review, /new-component, etc.) |
+| **Slash commands** | None | 8 pre-built (/kit-prompt-help, /kit-review, /kit-new-component, etc.) |
 | **Coding standards in AI** | Only in Cursor rules | Both CLAUDE.md and .cursorrules |
 | **Developer onboarding for AI** | None | 4 guides (getting started, prompts, token tips) |
-| **Component scaffolding** | Manual 4-file creation | /new-component generates all files |
-| **Code review** | Manual | /review with checklist |
-| **Test generation** | Manual (copy from existing) | /test with project's Jest/Storybook patterns |
-| **Prompt quality** | Depends on developer skill | /prompt-help asks all questions dynamically |
+| **Component scaffolding** | Manual 4-file creation | /kit-new-component generates all files |
+| **Code review** | Manual | /kit-review with checklist |
+| **Test generation** | Manual (copy from existing) | /kit-test with project's Jest/Storybook patterns |
+| **Prompt quality** | Depends on developer skill | /kit-prompt-help asks all questions dynamically |
 | **Sitecore-specific rules** | Mentioned in Cursor rules | Full Content SDK patterns, field helpers, wrappers |
 | **Cross-tool consistency** | Cursor only | Claude Code + Cursor, same standards |
 | **Maintenance** | Manual rule updates | `ai-kit update` re-scans and regenerates |
@@ -207,8 +207,8 @@ TailwindVariants is not a mainstream library. Without explicit rules, AI tools d
 
 ### For This Project (enterprise-xmc-starter)
 
-- **68 existing components** — /review and /test commands can audit and improve coverage
-- **New components** — from ~40 min/component to ~5 min with /new-component
+- **68 existing components** — /kit-review and /kit-test commands can audit and improve coverage
+- **New components** — from ~40 min/component to ~5 min with /kit-new-component
 - **5–7 developers** — all get the same AI context and standards automatically
 - **Content SDK migration patterns** — baked into CLAUDE.md so AI uses correct imports
 - **Storybook 3-file pattern** — auto-generated instead of manually copied

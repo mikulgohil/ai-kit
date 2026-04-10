@@ -1,5 +1,5 @@
 ---
-name: data-scientist
+name: kit-data-scientist
 description: Data science and ML agent — data analysis, model evaluation, pipeline design, feature engineering, and experiment tracking patterns.
 tools: Read, Glob, Grep, Bash
 ---

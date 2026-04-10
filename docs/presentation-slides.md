@@ -478,7 +478,7 @@ What Gets Generated — CLAUDE.md (sample)
 The Key Innovation
 
 
-/prompt-help
+/kit-prompt-help
 
 
 An interactive prompt builder that asks ALL the right questions
@@ -488,7 +488,7 @@ Think of the developer as an intern — the tool extracts every detail.
 ```
 
 - Title: `Inter Bold`, 44px, centered
-- `/prompt-help`: `JetBrains Mono` or `Inter`, 48px, `#000000`, centered
+- `/kit-prompt-help`: `JetBrains Mono` or `Inter`, 48px, `#000000`, centered
 - Description: `Inter Regular`, 22px, `#666666`, centered, max-width 650px
 - Last line: `Inter Medium`, 18px, `#111111`, centered
 
@@ -496,12 +496,12 @@ Think of the developer as an intern — the tool extracts every detail.
 
 ---
 
-## Slide 17 — /prompt-help in Action
+## Slide 17 — /kit-prompt-help in Action
 
 **Layout:** Simulated conversation. Left labels ("AI" / "Dev") in `#666666`, content in `#111111`. Each exchange separated by 20px. Whole conversation inside a `#F5F5F5` card, 24px padding.
 
 ```
-/prompt-help in Action
+/kit-prompt-help in Action
 
 ┌──────────────────────────────────────────────────────────────┐
 │                                                              │
@@ -564,16 +564,16 @@ Every Task Gets Different Questions
 ```
 Pre-Built Slash Commands
 
-  /prompt-help       Interactive prompt builder — start here
-  /review            Deep code review as a Senior Engineer
-  /fix-bug           Guided bug fix with root cause analysis
-  /new-component     Scaffold a component matching project patterns
-  /new-page          Create a page/route with data fetching + SEO
-  /understand        Explain code for learning
-  /test              Generate tests with edge case coverage
-  /optimize          Performance audit with impact ranking
-  /figma-to-code     Guided Figma design to code workflow
-  /design-tokens     Read and display project design tokens
+  /kit-prompt-help       Interactive prompt builder — start here
+  /kit-review            Deep code review as a Senior Engineer
+  /kit-fix-bug           Guided bug fix with root cause analysis
+  /kit-new-component     Scaffold a component matching project patterns
+  /kit-new-page          Create a page/route with data fetching + SEO
+  /kit-understand        Explain code for learning
+  /kit-test              Generate tests with edge case coverage
+  /kit-optimize          Performance audit with impact ranking
+  /kit-figma-to-code     Guided Figma design to code workflow
+  /kit-design-tokens     Read and display project design tokens
 
 Copied to .claude/commands/ — available instantly in Claude Code
 ```
@@ -624,7 +624,7 @@ No config files to write. No docs to read. Just run it.
 Before AI Kit                          After AI Kit
 
 
-"Create a hero component"              /prompt-help → answers 10 questions
+"Create a hero component"              /kit-prompt-help → answers 10 questions
 Expects 100% from one line             → structured prompt → correct output
 
 

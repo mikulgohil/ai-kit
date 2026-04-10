@@ -11,51 +11,56 @@ import { COMMANDS_DIR } from '../../src/constants.js';
  */
 
 const ALL_COMMANDS = [
-  'prompt-help',
-  'review',
-  'fix-bug',
-  'new-component',
-  'new-page',
-  'understand',
-  'test',
-  'optimize',
-  'figma-to-code',
-  'design-tokens',
-  'accessibility-audit',
-  'security-check',
-  'refactor',
-  'api-route',
-  'pre-pr',
-  'migrate',
-  'error-boundary',
-  'type-fix',
-  'extract-hook',
-  'dep-check',
-  'env-setup',
-  'commit-msg',
-  'sitecore-debug',
-  'responsive-check',
-  'document',
-  'token-tips',
+  'kit-prompt-help',
+  'kit-review',
+  'kit-fix-bug',
+  'kit-new-component',
+  'kit-new-page',
+  'kit-understand',
+  'kit-test',
+  'kit-optimize',
+  'kit-figma-to-code',
+  'kit-design-tokens',
+  'kit-accessibility-audit',
+  'kit-security-check',
+  'kit-refactor',
+  'kit-api-route',
+  'kit-pre-pr',
+  'kit-migrate',
+  'kit-error-boundary',
+  'kit-type-fix',
+  'kit-extract-hook',
+  'kit-dep-check',
+  'kit-env-setup',
+  'kit-commit-msg',
+  'kit-sitecore-debug',
+  'kit-responsive-check',
+  'kit-document',
+  'kit-token-tips',
   // v1.1.0
-  'perf-audit',
-  'bundle-check',
-  'i18n-check',
-  'schema-gen',
-  'changelog',
-  'release',
-  'storybook-gen',
+  'kit-perf-audit',
+  'kit-bundle-check',
+  'kit-i18n-check',
+  'kit-schema-gen',
+  'kit-changelog',
+  'kit-release',
+  'kit-storybook-gen',
   // v1.2.0
-  'search-first',
-  'quality-gate-check',
-  'server-action',
-  'middleware',
-  'save-session',
-  'resume-session',
-  'checkpoint',
-  'orchestrate',
-  'quality-gate',
-  'harness-audit',
+  'kit-search-first',
+  'kit-quality-gate-check',
+  'kit-server-action',
+  'kit-middleware',
+  'kit-save-session',
+  'kit-resume-session',
+  'kit-checkpoint',
+  'kit-orchestrate',
+  'kit-quality-gate',
+  'kit-harness-audit',
+  // v1.7.0
+  'kit-deep-interview',
+  'kit-clarify-requirements',
+  // v1.10.0
+  'kit-fetch-docs',
 ];
 
 function makeTempDir(): string {
@@ -136,7 +141,7 @@ describe('copyCommands', () => {
       await copyCommands(tmpDir);
 
       // Mutate the destination file
-      const reviewDest = path.join(commandsDir, 'review.md');
+      const reviewDest = path.join(commandsDir, 'kit-review.md');
       if (fs.existsSync(reviewDest)) {
         fs.writeFileSync(reviewDest, 'stale content');
         expect(fs.readFileSync(reviewDest, 'utf-8')).toBe('stale content');
@@ -153,11 +158,11 @@ describe('copyCommands', () => {
     it('creates skill directories for Claude Code and Cursor', async () => {
       await copyCommands(tmpDir);
       // Check Claude Code skills
-      expect(fs.existsSync(path.join(tmpDir, '.claude', 'skills', 'review', 'SKILL.md'))).toBe(true);
+      expect(fs.existsSync(path.join(tmpDir, '.claude', 'skills', 'kit-review', 'SKILL.md'))).toBe(true);
       // Check Cursor skills
-      expect(fs.existsSync(path.join(tmpDir, '.cursor', 'skills', 'review', 'SKILL.md'))).toBe(true);
+      expect(fs.existsSync(path.join(tmpDir, '.cursor', 'skills', 'kit-review', 'SKILL.md'))).toBe(true);
       // Check legacy commands still exist
-      expect(fs.existsSync(path.join(tmpDir, '.claude', 'commands', 'review.md'))).toBe(true);
+      expect(fs.existsSync(path.join(tmpDir, '.claude', 'commands', 'kit-review.md'))).toBe(true);
     });
 
     it('creates a SKILL.md with the same content as the source command', async () => {

@@ -1,5 +1,5 @@
 ---
-name: doc-updater
+name: kit-doc-updater
 description: Documentation sync agent — updates component docs, README, and Storybook stories when code changes.
 tools: Read, Write, Edit, Glob, Grep
 ---

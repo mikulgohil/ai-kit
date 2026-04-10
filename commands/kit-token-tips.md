@@ -13,7 +13,7 @@
 ### High Impact
 
 - **Be specific about files** — "fix auth in src/lib/auth.ts:45" not "fix the auth"
-- **Use /understand BEFORE modifying unfamiliar code** — cheaper than a failed attempt
+- **Use /kit-understand BEFORE modifying unfamiliar code** — cheaper than a failed attempt
 - **Use slash commands** — they provide structured context efficiently
 - **Break large tasks into focused prompts** — 5 small prompts < 1 vague prompt that needs 3 follow-ups
 
@@ -22,7 +22,7 @@
 - **Don't ask AI to read the entire codebase** — point to specific files
 - **Use git diff to show AI only what changed**
 - **Close and reopen sessions when switching tasks** (prevents context bloat)
-- **Use /prompt-help to structure your request** before asking
+- **Use /kit-prompt-help to structure your request** before asking
 
 ### Low Impact (but adds up)
 
@@ -40,9 +40,9 @@ Daily budget: ~$0.91
 | --------------------- | ----------------- | ------------- | ---------- |
 | Read a file           | ~500 tokens       | 20            | ~$0.03     |
 | Generate a component  | ~3,000 tokens     | 3             | ~$0.14     |
-| Code review (/review) | ~5,000 tokens     | 2             | ~$0.15     |
+| Code review (/kit-review) | ~5,000 tokens     | 2             | ~$0.15     |
 | Bug fix conversation  | ~8,000 tokens     | 2             | ~$0.24     |
-| /pre-pr checklist     | ~6,000 tokens     | 1             | ~$0.09     |
+| /kit-pre-pr checklist     | ~6,000 tokens     | 1             | ~$0.09     |
 | **Total estimated**   |                   |               | ~$0.65/day |
 
 Buffer for complex tasks: ~$0.26/day

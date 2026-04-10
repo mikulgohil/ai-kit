@@ -2,15 +2,15 @@
 
 ## Phase 1: Port Relevant ECC Agents (2 new agents)
 
-### 1.1 — Add `architect` agent
-- **File**: `agents/architect.md`
+### 1.1 — Add `kit-architect` agent
+- **File**: `agents/kit-architect.md`
 - **Purpose**: System design decisions — SSR vs SSG strategy, component architecture, data flow patterns
 - **Format**: YAML frontmatter (name, description, tools) + mandatory steps + output format
 - **Scope**: Next.js + Tailwind + Sitecore XM Cloud focused (no Python/Go/etc.)
 - **Key sections**: Architecture decision records, component hierarchy, data fetching strategy, rendering strategy (SSR/SSG/ISR), state management approach
 
-### 1.2 — Add `tdd-guide` agent
-- **File**: `agents/tdd-guide.md`
+### 1.2 — Add `kit-tdd-guide` agent
+- **File**: `agents/kit-tdd-guide.md`
 - **Purpose**: Test-driven development workflow for Sitecore components and Next.js pages
 - **Format**: Same agent format
 - **Scope**: Red-green-refactor cycle, Sitecore component testing with mocked Layout Service, Next.js page testing
@@ -18,21 +18,21 @@
 
 ### 1.3 — Update copier to include new agents
 - **File**: `src/copier/agents.ts`
-- **Change**: Add `architect` to UNIVERSAL_AGENTS, add `tdd-guide` as conditional (if testing tools detected)
+- **Change**: Add `kit-architect` to UNIVERSAL_AGENTS, add `kit-tdd-guide` as conditional (if testing tools detected)
 
 ---
 
 ## Phase 2: Port Relevant ECC Skills (2 new skills)
 
-### 2.1 — Add `search-first` skill
-- **File**: `commands/search-first.md`
+### 2.1 — Add `kit-search-first` skill
+- **File**: `commands/kit-search-first.md`
 - **Purpose**: Research-before-coding pattern — read docs, understand APIs, check existing patterns before writing code
 - **Tailored for**: Sitecore APIs (sparse docs), Next.js App Router patterns, Tailwind utility discovery
 
-### 2.2 — Add `quality-gate-check` skill
-- **File**: `commands/quality-gate-check.md`
+### 2.2 — Add `kit-quality-gate-check` skill
+- **File**: `commands/kit-quality-gate-check.md`
 - **Purpose**: Post-implementation quality verification — type safety, a11y, performance, Sitecore field helpers usage
-- **Complements**: Existing `/quality-gate` skill (which is orchestration-focused); this is a checklist skill
+- **Complements**: Existing `/kit-quality-gate` skill (which is orchestration-focused); this is a checklist skill
 
 ### 2.3 — Update skill registry
 - **File**: `src/copier/skills.ts`
@@ -55,13 +55,13 @@
 - **File**: `templates/cursorrules/nextjs-app-router.md`
 - **Add**: Condensed versions of the same patterns (cursorrules are shorter)
 
-### 3.3 — Add `/server-action` skill
-- **File**: `commands/server-action.md`
+### 3.3 — Add `/kit-server-action` skill
+- **File**: `commands/kit-server-action.md`
 - **Purpose**: Scaffold Server Actions with validation, error handling, revalidation
 - **Steps**: Detect form vs programmatic use, create action file, add Zod validation, wire up revalidation
 
-### 3.4 — Add `/middleware` skill
-- **File**: `commands/middleware.md`
+### 3.4 — Add `/kit-middleware` skill
+- **File**: `commands/kit-middleware.md`
 - **Purpose**: Create/modify Next.js middleware for auth, redirects, i18n, Sitecore preview mode
 - **Steps**: Detect existing middleware, identify use case, generate matcher config, add middleware logic
 
@@ -93,16 +93,16 @@
 - **File**: `templates/cursorrules/sitecore-xmc.md`
 - **Add**: Condensed Content SDK v2.x + Experience Edge rules
 
-### 4.5 — Enhance `sitecore-specialist` agent
-- **File**: `agents/sitecore-specialist.md`
+### 4.5 — Enhance `kit-sitecore-specialist` agent
+- **File**: `agents/kit-sitecore-specialist.md`
 - **Add**:
   - Content SDK v2.x field type mapping (updated from JSS)
   - Experience Edge query patterns
   - `<NextImage>` + Sitecore image integration
   - Personalization variant handling
 
-### 4.6 — Enhance `/sitecore-debug` skill
-- **File**: `commands/sitecore-debug.md`
+### 4.6 — Enhance `/kit-sitecore-debug` skill
+- **File**: `commands/kit-sitecore-debug.md`
 - **Add**:
   - Content SDK v2.x specific debugging (new hook patterns, context changes)
   - Experience Edge connectivity issues
@@ -145,20 +145,20 @@
 
 | File | Action |
 |---|---|
-| `agents/architect.md` | **NEW** |
-| `agents/tdd-guide.md` | **NEW** |
-| `commands/search-first.md` | **NEW** |
-| `commands/quality-gate-check.md` | **NEW** |
-| `commands/server-action.md` | **NEW** |
-| `commands/middleware.md` | **NEW** |
+| `agents/kit-architect.md` | **NEW** |
+| `agents/kit-tdd-guide.md` | **NEW** |
+| `commands/kit-search-first.md` | **NEW** |
+| `commands/kit-quality-gate-check.md` | **NEW** |
+| `commands/kit-server-action.md` | **NEW** |
+| `commands/kit-middleware.md` | **NEW** |
 | `templates/claude-md/nextjs-app-router.md` | EDIT |
 | `templates/cursorrules/nextjs-app-router.md` | EDIT |
 | `templates/claude-md/sitecore-xmc.md` | EDIT |
 | `templates/cursorrules/sitecore-xmc.md` | EDIT |
 | `templates/claude-md/typescript.md` | EDIT |
 | `templates/cursorrules/typescript.md` | EDIT |
-| `agents/sitecore-specialist.md` | EDIT |
-| `commands/sitecore-debug.md` | EDIT |
+| `agents/kit-sitecore-specialist.md` | EDIT |
+| `commands/kit-sitecore-debug.md` | EDIT |
 | `src/scanner/sitecore.ts` | EDIT |
 | `src/types.ts` | EDIT |
 | `src/copier/agents.ts` | EDIT |
@@ -174,9 +174,9 @@
 
 Inspired by [github/spec-kit](https://github.com/github/spec-kit) — borrowing the best ideas while staying true to AI Kit's auto-detect philosophy.
 
-### 7.1 — Add `constitution` skill (Project Principles Generator)
+### 7.1 — Add `kit-constitution` skill (Project Principles Generator)
 
-- **File**: `commands/constitution.md`
+- **File**: `commands/kit-constitution.md`
 - **Purpose**: Generate a `PROJECT_PRINCIPLES.md` governance document that defines coding standards, testing requirements, UX consistency rules, and performance budgets for the project
 - **Why**: Spec Kit's `/speckit.constitution` is their most valuable concept — a single source of truth for project values that AI agents reference before making decisions. AI Kit currently generates *technical* rules but lacks a *principles* layer
 - **How it works**:
@@ -186,23 +186,23 @@ Inspired by [github/spec-kit](https://github.com/github/spec-kit) — borrowing 
   4. Adds a reference to principles in generated CLAUDE.md so all AI agents load it automatically
 - **Difference from Spec Kit**: AI Kit auto-detects what it can; the constitution captures *opinions* that can't be inferred from code
 
-### 7.2 — Add `specify` skill (Spec-First Feature Workflow)
+### 7.2 — Add `kit-specify` skill (Spec-First Feature Workflow)
 
-- **File**: `commands/specify.md`
+- **File**: `commands/kit-specify.md`
 - **Purpose**: Create a structured feature specification before writing any code — captures the **what** and **why** before the **how**
-- **Why**: Spec Kit's core thesis is valid — specs produce better outcomes than jumping straight to code. AI Kit's existing `/new-component` asks questions but doesn't create a persistent spec document
+- **Why**: Spec Kit's core thesis is valid — specs produce better outcomes than jumping straight to code. AI Kit's existing `/kit-new-component` asks questions but doesn't create a persistent spec document
 - **How it works**:
   1. Developer describes the feature in plain language
   2. AI generates a structured spec in `specs/<feature-name>.md` with: User Stories, Acceptance Criteria, Edge Cases, Out of Scope, Dependencies, Open Questions
   3. Spec is reviewed/approved before implementation begins
-  4. Existing `/planner` agent references the spec during implementation
+  4. Existing `/kit-planner` agent references the spec during implementation
   5. Spec is archived (not deleted) after feature ships
 - **Output**: `specs/<feature-name>.md` — a living document referenced throughout the feature lifecycle
 
 ### 7.3 — Add Extension Catalog System
 
 - **Files**:
-  - `commands/extension.md` — skill for managing extensions
+  - `commands/kit-extension.md` — skill for managing extensions
   - `src/commands/extension.ts` — CLI command implementation
   - `extensions/catalog.json` — built-in extension registry
 - **Purpose**: Allow community-contributed agents, skills, and template fragments to be installed and managed
@@ -241,8 +241,8 @@ Inspired by [github/spec-kit](https://github.com/github/spec-kit) — borrowing 
   | Preset | Focus | Agents | Hook Profile | Extras |
   |---|---|---|---|---|
   | `enterprise` | Compliance, security, audit trail | All 10 + security-reviewer priority | Strict | Decisions log required, security audit on every PR |
-  | `startup` | Speed, iteration, minimal ceremony | planner + code-reviewer only | Minimal | No doc scaffolds, fast feedback loop |
-  | `sitecore-xmc` | Sitecore XM Cloud best practices | All + sitecore-specialist priority | Standard | XM Cloud template fragments, Sitecore-specific skills |
+  | `startup` | Speed, iteration, minimal ceremony | kit-planner + kit-code-reviewer only | Minimal | No doc scaffolds, fast feedback loop |
+  | `sitecore-xmc` | Sitecore XM Cloud best practices | All + kit-sitecore-specialist priority | Standard | XM Cloud template fragments, Sitecore-specific skills |
   | `fullstack` | Full-stack Next.js development | All universal agents | Standard | All Next.js skills, component scanner enabled |
 
 ### 7.5 — Add `ai-kit compare` CLI command
@@ -258,9 +258,9 @@ Inspired by [github/spec-kit](https://github.com/github/spec-kit) — borrowing 
 
 | File | Action |
 |---|---|
-| `commands/constitution.md` | **NEW** |
-| `commands/specify.md` | **NEW** |
-| `commands/extension.md` | **NEW** |
+| `commands/kit-constitution.md` | **NEW** |
+| `commands/kit-specify.md` | **NEW** |
+| `commands/kit-extension.md` | **NEW** |
 | `src/commands/extension.ts` | **NEW** |
 | `src/commands/preset.ts` | **NEW** |
 | `src/commands/compare.ts` | **NEW** |
@@ -294,7 +294,7 @@ Inspired by [github/spec-kit](https://github.com/github/spec-kit) — borrowing 
 Based on comprehensive research of Claude Code v2.1.92, Next.js 16, MCP ecosystem, and Cursor IDE changes (April 2026).
 
 ### 8.1 — Agent Worktree Isolation & InitialPrompt (DONE)
-- **Files**: `agents/refactor-cleaner.md`, `agents/build-resolver.md`, `agents/e2e-runner.md`, `agents/migration-specialist.md`
+- **Files**: `agents/kit-refactor-cleaner.md`, `agents/kit-build-resolver.md`, `agents/kit-e2e-runner.md`, `agents/kit-migration-specialist.md`
 - **Change**: Added `isolation: worktree` and `initialPrompt` frontmatter fields to code-modifying agents
 - **Why**: Claude Code v2.1.x supports worktree isolation — agents run in temporary git worktrees, preventing working directory conflicts during parallel agent execution
 
@@ -409,18 +409,18 @@ Inspired by [kv0906/pm-kit](https://github.com/kv0906/pm-kit) — an AI-augmente
 
 ### 10.4 — Post-Init Guided Walkthrough
 
-- **Files**: `commands/walkthrough.md` (new skill), `src/copier/skills.ts` (edit)
-- **Purpose**: After `ai-kit init` completes, suggest running `/walkthrough` — a guided tour of what was generated and how to use it
+- **Files**: `commands/kit-walkthrough.md` (new skill), `src/copier/skills.ts` (edit)
+- **Purpose**: After `ai-kit init` completes, suggest running `/kit-walkthrough` — a guided tour of what was generated and how to use it
 - **Why**: PM-Kit's `/onboard` walks users through setup interactively. ai-kit dumps 50+ files and shows a summary table, but users don't know where to start. A 2-minute walkthrough converts setup into understanding.
 - **How it works**:
   1. Reads `ai-kit.config.json` to know what was generated
   2. Walks through 5 steps:
      - **Step 1**: "Your CLAUDE.md was generated with these rules: [list]. Open it and skim the first section."
-     - **Step 2**: "You have 16 agents available. The most useful for your stack: `/architect`, `/code-reviewer`, `/sitecore-specialist`. Try: `/review` on a recent file."
+     - **Step 2**: "You have 16 agents available. The most useful for your stack: `/kit-architect`, `/kit-code-reviewer`, `/kit-sitecore-specialist`. Try: `/kit-review` on a recent file."
      - **Step 3**: "Your hooks are set to [profile]. They will [explain what each hook does]."
      - **Step 4**: "Quick test — ask Claude to create a component. It should follow the conventions in CLAUDE.md."
      - **Step 5**: "Run `ai-kit health` periodically to check your setup integrity."
-  3. After init, print: `Run /walkthrough to learn how to use your new AI setup`
+  3. After init, print: `Run /kit-walkthrough to learn how to use your new AI setup`
 - **Risk**: None — new skill, no existing files modified
 - **Priority**: MEDIUM — improves adoption, especially for junior devs
 
@@ -432,7 +432,7 @@ Inspired by [kv0906/pm-kit](https://github.com/kv0906/pm-kit) — an AI-augmente
 - **How it works**:
   1. Every ai-kit command appends an entry:
      ```
-     ## 2026-04-08 14:30:00 — ai-kit update (v1.10.0)
+     ## 2026-04-08 14:30:00 — ai-kit update (v2.0.0)
      - Updated: CLAUDE.md (Next.js fragment refreshed)
      - Updated: 3 agents (new isolation: worktree fields)
      - Skipped: .cursorrules (no changes)
@@ -481,7 +481,7 @@ Inspired by [kv0906/pm-kit](https://github.com/kv0906/pm-kit) — an AI-augmente
 - **Why**: PM-Kit's `pm-kit status` shows CLI version, vault version, active projects. Developers need a quick "am I set up correctly?" check without the full health dashboard.
 - **Output**:
   ```
-  ai-kit v1.10.0 | Last scan: 2026-04-01 | Stack: Next.js 16 + Sitecore XMC v2 + Tailwind 4
+  ai-kit v2.0.0 | Last scan: 2026-04-01 | Stack: Next.js 16 + Sitecore XMC v2 + Tailwind 4
   Health: A (98%) | Skills: 56 | Agents: 16 | Hooks: standard
   ⚠ Config is 7 days old — run `ai-kit update` to refresh
   ```
@@ -495,11 +495,11 @@ Inspired by [kv0906/pm-kit](https://github.com/kv0906/pm-kit) — an AI-augmente
 - **Why**: PM-Kit's learning curve is smooth — `/daily` takes 10 seconds, `/today` is a full workflow, advanced skills like `/ask` with QMD are opt-in. ai-kit dumps 56 skills at once, which overwhelms new users.
 - **How it works**:
   1. Add `tier: essential | recommended | advanced` to each skill's YAML frontmatter
-  2. Essential: `review`, `fix-bug`, `new-component`, `test`, `refactor`, `commit-msg`, `understand`
-  3. Recommended: `optimize`, `security-check`, `pre-pr`, `accessibility-audit`, `standup`, `search-first`
+  2. Essential: `kit-review`, `kit-fix-bug`, `kit-new-component`, `kit-test`, `kit-refactor`, `kit-commit-msg`, `kit-understand`
+  3. Recommended: `kit-optimize`, `kit-security-check`, `kit-pre-pr`, `kit-accessibility-audit`, `kit-standup`, `kit-search-first`
   4. Advanced: everything else
   5. `/walkthrough` only introduces essential skills
-  6. `ai-kit health` shows: "Using 5/56 skills? Explore recommended skills: /optimize, /security-check"
+  6. `ai-kit health` shows: "Using 5/56 skills? Explore recommended skills: /kit-optimize, /kit-security-check"
   7. `ai-kit init --tier essential` only copies essential skills (lighter install)
 - **Risk**: Low — additive metadata, no existing behavior changes unless `--tier` flag used
 - **Priority**: MEDIUM — improves onboarding significantly
@@ -531,7 +531,7 @@ Inspired by [kv0906/pm-kit](https://github.com/kv0906/pm-kit) — an AI-augmente
 | `src/commands/rollback.ts` | **NEW** — rollback command | 10.2 |
 | `src/generator/symlinks.ts` | **NEW** — symlink generation for multi-tool | 10.3 |
 | `src/commands/init.ts` | EDIT — symlink option, changelog, walkthrough prompt | 10.3, 10.5, 10.4 |
-| `commands/walkthrough.md` | **NEW** — guided post-init walkthrough skill | 10.4 |
+| `commands/kit-walkthrough.md` | **NEW** — guided post-init walkthrough skill | 10.4 |
 | `src/utils/changelog.ts` | **NEW** — changelog utility | 10.5 |
 | `src/commands/doctor.ts` | EDIT — add auto-fix capability | 10.7 |
 | `src/commands/status.ts` | **NEW** — quick status command | 10.8 |

@@ -1,5 +1,5 @@
 ---
-name: performance-profiler
+name: kit-performance-profiler
 description: Performance profiling agent — Core Web Vitals, bundle analysis, runtime profiling, rendering optimization, and Lighthouse audits for web applications.
 tools: Read, Glob, Grep, Bash
 ---

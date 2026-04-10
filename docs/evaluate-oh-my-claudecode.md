@@ -73,11 +73,11 @@ A multi-agent orchestration framework for Claude Code that provides team-based a
 - API designer agent
 
 **Action items:**
-- [x] Add `data-scientist.md` agent — ML pipeline, model evaluation, data analysis patterns
-- [x] Add `performance-profiler.md` agent — Bundle analysis, runtime profiling, Core Web Vitals
-- [x] Add `migration-specialist.md` agent — Framework upgrades, breaking change detection
-- [x] Add `dependency-auditor.md` agent — Outdated deps, vulnerability checks, license compliance
-- [x] Add `api-designer.md` agent — REST/GraphQL API design, schema validation, versioning
+- [x] Add `kit-data-scientist.md` agent — ML pipeline, model evaluation, data analysis patterns
+- [x] Add `kit-performance-profiler.md` agent — Bundle analysis, runtime profiling, Core Web Vitals
+- [x] Add `kit-migration-specialist.md` agent — Framework upgrades, breaking change detection
+- [x] Add `kit-dependency-auditor.md` agent — Outdated deps, vulnerability checks, license compliance
+- [x] Add `kit-api-designer.md` agent — REST/GraphQL API design, schema validation, versioning
 
 ### 4. OMC as an export target
 

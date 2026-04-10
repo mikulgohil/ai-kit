@@ -54,8 +54,8 @@ npx @mikulgohil/ai-kit health
 |---|---|
 | `CLAUDE.md` | Project-aware rules for Claude Code — your stack, conventions, and patterns |
 | `.cursorrules` + `.cursor/rules/*.mdc` | Same rules formatted for Cursor AI with scoped file matching |
-| **48 Skills** | Auto-discovered workflows — `/review`, `/new-component`, `/security-check`, `/pre-pr`, and more |
-| **16 Agents** | Specialized AI assistants — planner, reviewer, security, architect, build-resolver, and more |
+| **48 Skills** | Auto-discovered workflows — `/kit-review`, `/kit-new-component`, `/kit-security-check`, `/kit-pre-pr`, and more |
+| **16 Agents** | Specialized AI assistants — kit-planner, kit-code-reviewer, kit-security-reviewer, kit-architect, kit-build-resolver, and more |
 | **3 Context Modes** | Switch between dev (build fast), review (check quality), and research (understand code) |
 | **Automated Hooks** | Auto-format, TypeScript checks, console.log warnings, mistakes auto-capture, git safety |
 | **6 Guides** | Developer playbooks for prompts, tokens, hooks, agents, Figma workflow |
@@ -88,13 +88,13 @@ Structured AI workflows applied automatically — the AI recognizes what you're 
 
 | Category | Skills |
 |---|---|
-| **Getting Started** | `prompt-help`, `understand` |
-| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen`, `scaffold-spec` |
-| **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check`, `test-gaps` |
-| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `upgrade` |
-| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `pr-description`, `standup`, `learn-from-pr`, `release-notes` |
-| **Session** | `save-session`, `resume-session`, `checkpoint` |
-| **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` |
+| **Getting Started** | `kit-prompt-help`, `kit-understand` |
+| **Building** | `kit-new-component`, `kit-new-page`, `kit-api-route`, `kit-error-boundary`, `kit-extract-hook`, `kit-figma-to-code`, `kit-design-tokens`, `kit-schema-gen`, `kit-storybook-gen`, `kit-scaffold-spec` |
+| **Quality & Review** | `kit-review`, `kit-pre-pr`, `kit-test`, `kit-accessibility-audit`, `kit-security-check`, `kit-responsive-check`, `kit-type-fix`, `kit-perf-audit`, `kit-bundle-check`, `kit-i18n-check`, `kit-test-gaps` |
+| **Maintenance** | `kit-fix-bug`, `kit-refactor`, `kit-optimize`, `kit-migrate`, `kit-dep-check`, `kit-sitecore-debug`, `kit-upgrade` |
+| **Workflow** | `kit-document`, `kit-commit-msg`, `kit-env-setup`, `kit-changelog`, `kit-release`, `kit-pr-description`, `kit-standup`, `kit-learn-from-pr`, `kit-release-notes` |
+| **Session** | `kit-save-session`, `kit-resume-session`, `kit-checkpoint` |
+| **Orchestration** | `kit-orchestrate`, `kit-quality-gate`, `kit-harness-audit` |
 
 <br />
 
@@ -102,22 +102,37 @@ Structured AI workflows applied automatically — the AI recognizes what you're 
 
 | Agent | Purpose |
 |---|---|
-| `@planner` | Break features into implementation plans with dependencies and risk assessment |
-| `@code-reviewer` | Deep quality review — patterns, performance, types, and conventions |
-| `@security-reviewer` | OWASP Top 10, XSS, CSRF, secrets detection, and auth flow analysis |
-| `@build-resolver` | Diagnose and fix build errors, type conflicts, and dependency issues |
-| `@doc-updater` | Keep documentation in sync with code changes automatically |
-| `@refactor-cleaner` | Find and remove dead code, unused imports, and unnecessary complexity |
-| `@tdd-guide` | Test-driven development workflow — red, green, refactor with guidance |
-| `@ci-debugger` | Analyze CI/CD failures, parse logs, and suggest targeted fixes |
-| `@e2e-runner` | Playwright tests with Page Object Model and smart selectors |
-| `@sitecore-specialist` | XM Cloud patterns, Content SDK v2, Experience Edge, and field helpers |
-| `@architect` | SSR/SSG/ISR strategy, component hierarchy, data flow, and rendering patterns |
-| `@data-scientist` | ML pipelines, model evaluation, data analysis, and experiment tracking |
-| `@performance-profiler` | Core Web Vitals, bundle analysis, runtime profiling, and rendering optimization |
-| `@migration-specialist` | Framework upgrades, breaking change detection, codemods, and incremental adoption |
-| `@dependency-auditor` | Vulnerability scanning, outdated packages, license compliance, and bundle impact |
-| `@api-designer` | REST/GraphQL API design, schema validation, versioning, and error handling |
+| `@kit-planner` | Break features into implementation plans with dependencies and risk assessment |
+| `@kit-code-reviewer` | Deep quality review — patterns, performance, types, and conventions |
+| `@kit-security-reviewer` | OWASP Top 10, XSS, CSRF, secrets detection, and auth flow analysis |
+| `@kit-build-resolver` | Diagnose and fix build errors, type conflicts, and dependency issues |
+| `@kit-doc-updater` | Keep documentation in sync with code changes automatically |
+| `@kit-refactor-cleaner` | Find and remove dead code, unused imports, and unnecessary complexity |
+| `@kit-tdd-guide` | Test-driven development workflow — red, green, refactor with guidance |
+| `@kit-ci-debugger` | Analyze CI/CD failures, parse logs, and suggest targeted fixes |
+| `@kit-e2e-runner` | Playwright tests with Page Object Model and smart selectors |
+| `@kit-sitecore-specialist` | XM Cloud patterns, Content SDK v2, Experience Edge, and field helpers |
+| `@kit-architect` | SSR/SSG/ISR strategy, component hierarchy, data flow, and rendering patterns |
+| `@kit-data-scientist` | ML pipelines, model evaluation, data analysis, and experiment tracking |
+| `@kit-performance-profiler` | Core Web Vitals, bundle analysis, runtime profiling, and rendering optimization |
+| `@kit-migration-specialist` | Framework upgrades, breaking change detection, codemods, and incremental adoption |
+| `@kit-dependency-auditor` | Vulnerability scanning, outdated packages, license compliance, and bundle impact |
+| `@kit-api-designer` | REST/GraphQL API design, schema validation, versioning, and error handling |
+
+<br />
+
+### Namespace Prefix: No Conflicts with Your Global Setup
+
+All AI Kit skills use a `kit-` prefix (`/kit-review`, `/kit-new-component`, `/kit-security-check`) and all agents use the same prefix (`@kit-planner`, `@kit-code-reviewer`).
+
+**Why?** Claude Code, Cursor, and other tools let you define global skills and agents. Without namespacing, AI Kit's project-level `/review` would silently override your personal global `/review` — or worse, both would appear in the suggestion list, confusing developers about which to use.
+
+The `kit-` prefix guarantees:
+- AI Kit skills and your personal/global skills coexist without collision
+- No silent overrides — you always know which skill is running
+- Clean autocomplete — `kit-` groups all AI Kit skills together
+
+> **Upgrading from v1.x?** Run `ai-kit update` — it automatically cleans up old unprefixed files.
 
 <br />
 
@@ -228,7 +243,7 @@ Every team using AI coding assistants hits these problems. AI Kit solves each on
 |---|---------|---------------------|
 | 1 | **AI forgets everything each session** — Every new chat starts from zero. | Generates a persistent `CLAUDE.md` with project rules, conventions, and stack details. The AI knows your project from the first prompt, every time. |
 | 2 | **AI generates wrong framework patterns** — Writes Pages Router code when you use App Router. | Auto-detects your exact stack and generates rules specific to your setup. The AI can't use the wrong patterns. |
-| 3 | **Developers write bad prompts** — Vague prompts lead to wrong code and rework. | Ships **48 pre-built skills** — just run `/review`, `/security-check`, `/new-component`, etc. |
+| 3 | **Developers write bad prompts** — Vague prompts lead to wrong code and rework. | Ships **48 pre-built skills** — just run `/kit-review`, `/kit-security-check`, `/kit-new-component`, etc. |
 | 4 | **Same mistakes happen repeatedly** — No system to track what went wrong. | Generates a **mistakes log** with **auto-capture hook** that logs every build/lint failure automatically. |
 | 5 | **Every developer gets different AI behavior** — No consistency across the team. | One `ai-kit init` generates the same rules for everyone. Commit the files to the repo. |
 | 6 | **No quality checks on AI-generated code** — AI output goes straight to PR. | Automated **hooks** run formatting, type-checking, linting, and git safety checks in real-time. |
@@ -238,9 +253,9 @@ Every team using AI coding assistants hits these problems. AI Kit solves each on
 | 10 | **Onboarding takes too long** — New developers spend days understanding the project. | New team members get productive AI assistance from day one with zero manual setup. |
 | 11 | **Context gets repeated every conversation** — Same conventions explained every session. | All conventions encoded in generated rules. The AI reads them automatically at session start. |
 | 12 | **AI doesn't improve over time** — Same wrong suggestions regardless of past feedback. | Mistakes log, decisions log, and updated rules mean the AI gets smarter every session. |
-| 13 | **Complex tasks need multiple manual AI passes** — Manual coordination across conversations. | **Multi-agent orchestration** runs specialists in parallel with `/orchestrate`. |
+| 13 | **Complex tasks need multiple manual AI passes** — Manual coordination across conversations. | **Multi-agent orchestration** runs specialists in parallel with `/kit-orchestrate`. |
 | 14 | **Switching AI tools means starting over** — Moving tools loses all configuration. | Generates configs for **5+ tools** from a single source — switch without losing context. |
-| 15 | **AI creates components without tests, docs, or types** — Every file needs follow-up. | Skills like `/new-component` enforce structured workflows: component + types + tests + docs together. |
+| 15 | **AI creates components without tests, docs, or types** — Every file needs follow-up. | Skills like `/kit-new-component` enforce structured workflows: component + types + tests + docs together. |
 | 16 | **No visibility into AI usage costs** — No idea how many tokens the team consumes. | Built-in **token tracking** with daily/weekly/monthly summaries and cost breakdown. |
 | 17 | **Cursor copies entire modules instead of targeted edits** — AI bloats the repo. | Generated rules include explicit instructions for editing patterns — update in place. |
 | 18 | **No component-level AI awareness** — AI doesn't know which components have gaps. | **Component scanner** discovers all components and generates `.ai.md` docs with health scores. |
@@ -331,8 +346,8 @@ Your custom sections are placed at the top of the file. AI Kit's generated rules
 
 | Feature | Description | Status |
 |---|---|---|
-| **Project Constitution** | `/constitution` — governance doc with coding standards, testing philosophy, performance budgets | Planned |
-| **Spec-First Workflow** | `/specify` — structured feature specs with user stories and acceptance criteria before code | Planned |
+| **Project Constitution** | `/kit-constitution` — governance doc with coding standards, testing philosophy, performance budgets | Planned |
+| **Spec-First Workflow** | `/kit-specify` — structured feature specs with user stories and acceptance criteria before code | Planned |
 | **Extension Catalog** | Community-contributed agents, skills, and templates. Install with `ai-kit extension install` | Planned |
 | **Preset Bundles** | Curated bundles: `enterprise`, `startup`, `sitecore-xmc`, `fullstack`. Apply with `ai-kit preset apply` | Planned |
 | **Setup Comparison** | `ai-kit compare` — gap analysis comparing your setup against other spec-driven tools | Planned |

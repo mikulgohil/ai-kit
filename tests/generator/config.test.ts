@@ -104,7 +104,7 @@ describe('generateConfig', () => {
 
   describe('commands field', () => {
     it('stores the provided commands array', () => {
-      const commands = ['review', 'fix-bug', 'test'];
+      const commands = ['kit-review', 'kit-fix-bug', 'kit-test'];
       const config = generateConfig(minimalScan(), [], commands, []);
       expect(config.commands).toEqual(commands);
     });
@@ -130,7 +130,7 @@ describe('generateConfig', () => {
 
   describe('full config shape', () => {
     it('returns an object with all expected keys', () => {
-      const config = generateConfig(minimalScan(), ['CLAUDE.md'], ['review'], ['getting-started']);
+      const config = generateConfig(minimalScan(), ['CLAUDE.md'], ['kit-review'], ['getting-started']);
       expect(config).toHaveProperty('version');
       expect(config).toHaveProperty('scanResult');
       expect(config).toHaveProperty('generatedAt');

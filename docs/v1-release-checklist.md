@@ -69,9 +69,9 @@
 - [x] Biome detection added to scanner
 
 ### Specialized Agents (8)
-- [x] planner, code-reviewer, security-reviewer, build-resolver, doc-updater, refactor-cleaner
-- [x] e2e-runner (conditional: only if Playwright installed)
-- [x] sitecore-specialist (conditional: only if Sitecore detected)
+- [x] kit-planner, kit-code-reviewer, kit-security-reviewer, kit-build-resolver, kit-doc-updater, kit-refactor-cleaner
+- [x] kit-e2e-runner (conditional: only if Playwright installed)
+- [x] kit-sitecore-specialist (conditional: only if Sitecore detected)
 - [x] Agent copier with scan-aware conditional logic
 
 ### Context Modes (3)
@@ -80,10 +80,10 @@
 - [x] research — exploration and analysis
 
 ### Session Management Skills (4)
-- [x] /save-session, /resume-session, /checkpoint, /learn
+- [x] /kit-save-session, /kit-resume-session, /kit-checkpoint, /kit-learn
 
 ### Orchestration Skills (3)
-- [x] /orchestrate, /quality-gate, /harness-audit
+- [x] /kit-orchestrate, /kit-quality-gate, /kit-harness-audit
 
 ### Security Audit CLI
 - [x] `ai-kit audit` command

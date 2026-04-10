@@ -1,5 +1,5 @@
 ---
-name: ci-debugger
+name: kit-ci-debugger
 description: CI/CD failure debugger — analyzes pipeline logs, identifies root causes, and suggests fixes for GitHub Actions, Vercel, and Netlify failures.
 tools: Read, Edit, Glob, Grep, Bash
 ---

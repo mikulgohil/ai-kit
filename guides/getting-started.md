@@ -1,5 +1,7 @@
 # Getting Started with AI Kit
 
+> **Upgrading from v1.x?** All skills and agents now use a `kit-` prefix (e.g., `/kit-review` instead of `/review`). Run `ai-kit update` to migrate automatically.
+
 ## What Just Happened?
 
 `ai-kit init` scanned your project and generated AI configuration files tailored to your tech stack. Here's what was created:
@@ -19,10 +21,10 @@
 ## First Thing to Do
 
 ### If you use Claude Code:
-Run the `/prompt-help` command. It's an interactive prompt builder that asks you all the right questions before generating a perfect prompt.
+Run the `/kit-prompt-help` command. It's an interactive prompt builder that asks you all the right questions before generating a perfect prompt.
 
 ```
-/prompt-help
+/kit-prompt-help
 ```
 
 ### If you use Cursor:
@@ -33,36 +35,36 @@ Open any file and use Cmd+K or the chat panel. The `.cursorrules` file is automa
 ### Getting Started
 | Skill | What it does |
 |-------|-------------|
-| `/prompt-help` | Interactive prompt builder — **start here** |
-| `/understand` | Explain code in detail |
-| `/token-tips` | Token usage optimization |
+| `/kit-prompt-help` | Interactive prompt builder — **start here** |
+| `/kit-understand` | Explain code in detail |
+| `/kit-token-tips` | Token usage optimization |
 
 ### Building
 | Skill | What it does |
 |-------|-------------|
-| `/new-component` | Scaffold a new component |
-| `/new-page` | Create a new page/route |
-| `/api-route` | Scaffold an API route |
-| `/figma-to-code` | Implement Figma designs |
+| `/kit-new-component` | Scaffold a new component |
+| `/kit-new-page` | Create a new page/route |
+| `/kit-api-route` | Scaffold an API route |
+| `/kit-figma-to-code` | Implement Figma designs |
 
 ### Quality & Review
 | Skill | What it does |
 |-------|-------------|
-| `/review` | Deep code review |
-| `/fix-bug` | Guided bug fix workflow |
-| `/test` | Generate tests |
-| `/quality-gate` | Run ALL quality checks at once |
-| `/security-check` | Security vulnerability scan |
-| `/accessibility-audit` | WCAG 2.1 AA audit |
+| `/kit-review` | Deep code review |
+| `/kit-fix-bug` | Guided bug fix workflow |
+| `/kit-test` | Generate tests |
+| `/kit-quality-gate` | Run ALL quality checks at once |
+| `/kit-security-check` | Security vulnerability scan |
+| `/kit-accessibility-audit` | WCAG 2.1 AA audit |
 
 ### Session & Learning (NEW in v1.2.0)
 | Skill | What it does |
 |-------|-------------|
-| `/save-session` | Save current session for later resumption |
-| `/resume-session` | Pick up where you left off |
-| `/checkpoint` | Snapshot all quality check results |
-| `/orchestrate` | Coordinate multiple agents on complex tasks |
-| `/harness-audit` | Check AI configuration health |
+| `/kit-save-session` | Save current session for later resumption |
+| `/kit-resume-session` | Pick up where you left off |
+| `/kit-checkpoint` | Snapshot all quality check results |
+| `/kit-orchestrate` | Coordinate multiple agents on complex tasks |
+| `/kit-harness-audit` | Check AI configuration health |
 
 ## Hooks (Automated Checks)
 
@@ -83,24 +85,24 @@ Specialized AI assistants live in `.claude/agents/` and can be delegated to:
 
 | Agent | Specialization |
 |-------|---------------|
-| `planner` | Implementation planning |
-| `code-reviewer` | Quality review |
-| `security-reviewer` | Security audit |
-| `build-resolver` | Fix build errors |
-| `e2e-runner` | Playwright E2E tests |
-| `doc-updater` | Documentation sync |
-| `refactor-cleaner` | Dead code cleanup |
-| `sitecore-specialist` | Sitecore XM Cloud patterns |
+| `kit-planner` | Implementation planning |
+| `kit-code-reviewer` | Quality review |
+| `kit-security-reviewer` | Security audit |
+| `kit-build-resolver` | Fix build errors |
+| `kit-e2e-runner` | Playwright E2E tests |
+| `kit-doc-updater` | Documentation sync |
+| `kit-refactor-cleaner` | Dead code cleanup |
+| `kit-sitecore-specialist` | Sitecore XM Cloud patterns |
 
 ## Tips
 
-1. **Always start with `/prompt-help`** if you're unsure how to ask for something
+1. **Always start with `/kit-prompt-help`** if you're unsure how to ask for something
 2. **Be specific about files** — mention paths like `src/components/Header.tsx`
 3. **Don't start from scratch** — ask the AI to read existing code first
 4. **One task per conversation** — keep conversations focused
 5. **Review AI output** — always read what it generates before accepting
-6. **Use `/checkpoint`** before and after major changes to track quality
-7. **Use `/save-session`** before ending a long session
+6. **Use `/kit-checkpoint`** before and after major changes to track quality
+7. **Use `/kit-save-session`** before ending a long session
 
 ## CLI Commands
 

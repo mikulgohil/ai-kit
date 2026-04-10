@@ -96,7 +96,7 @@ A new template fragment that gets included when the scanner detects Figma-relate
 - Don't forget dark mode tokens if the design system supports themes
 ```
 
-### 2b. New Slash Command: `/figma-to-code`
+### 2b. New Slash Command: `/kit-figma-to-code`
 
 The most important addition. A guided workflow that takes a developer from Figma link to production code.
 
@@ -112,7 +112,7 @@ The most important addition. A guided workflow that takes a developer from Figma
 8. Generate code using project patterns
 9. Remind about visual verification
 
-### 2c. New Slash Command: `/design-tokens`
+### 2c. New Slash Command: `/kit-design-tokens`
 
 A quick-reference command that reads the project's `tailwind.config` or `globals.css` and lists all available design tokens, so the AI (and developer) know what's available before writing code.
 
@@ -121,7 +121,7 @@ A quick-reference command that reads the project's `tailwind.config` or `globals
 A developer guide explaining:
 - How to set up Figma MCP (2-minute setup)
 - The correct workflow: extract → map → generate → verify
-- How to use /figma-to-code command
+- How to use /kit-figma-to-code command
 - Common mistakes and how to avoid them
 - When to use figma-code-cli pipeline vs direct AI generation
 - How to prepare Figma files for better AI output
@@ -150,7 +150,7 @@ interface FigmaDetection {
 Developer gets Figma design
          │
          ├── Small task (1-2 components)?
-         │   └── Use AI directly with /figma-to-code
+         │   └── Use AI directly with /kit-figma-to-code
          │       └── ai-kit's CLAUDE.md ensures correct tokens,
          │           patterns, and visual verification
          │
@@ -168,7 +168,7 @@ Developer gets Figma design
 ai-kit init
   └── Detects Figma MCP config
   └── Adds figma fragment to CLAUDE.md
-  └── Copies /figma-to-code command
+  └── Copies /kit-figma-to-code command
   └── CLAUDE.md now includes:
       - Token mapping rules
       - Visual verification workflow
@@ -211,7 +211,7 @@ Total: ~4 hours per component (including QA cycles)
 ```
 1. Developer gets Figma link
 2. Opens Claude Code
-3. Types: /figma-to-code
+3. Types: /kit-figma-to-code
 4. Command asks: What are you building? Figma link? Which section?
 5. AI extracts design context via Figma MCP
 6. AI maps to project's existing tokens and components
@@ -244,8 +244,8 @@ Total: ~45 minutes per component (including verification)
 | `src/scanner/figma.ts` | Scanner detector | High | 1 hour |
 | `templates/claude-md/figma.md` | Template fragment | High | 2 hours |
 | `templates/cursorrules/figma.md` | Cursor fragment | High | 1 hour |
-| `commands/figma-to-code.md` | Slash command | High | 2 hours |
-| `commands/design-tokens.md` | Slash command | Medium | 1 hour |
+| `commands/kit-figma-to-code.md` | Slash command | High | 2 hours |
+| `commands/kit-design-tokens.md` | Slash command | Medium | 1 hour |
 | `guides/figma-workflow.md` | Developer guide | High | 1.5 hours |
 | Update `selectFragments()` | Generator logic | High | 30 min |
 | Update `AVAILABLE_COMMANDS` | Copier list | High | 5 min |
@@ -289,7 +289,7 @@ Without AI context, this is what happens:
 
 With ai-kit's Figma integration:
 
-  Developer:  /figma-to-code
+  Developer:  /kit-figma-to-code
   AI:         Extracts design context via Figma MCP
               Maps to project's Tailwind tokens
               Reuses existing components
@@ -310,7 +310,7 @@ ai-kit doesn't replace your Figma-to-code tools — it connects them.
   │  (extract)  │ ──→ │  (standards) │ ──→ │ cli (pipeline│
   └─────────────┘     └──────────────┘     └──────────────┘
 
-Small tasks: /figma-to-code → AI generates directly
+Small tasks: /kit-figma-to-code → AI generates directly
 Large tasks: figma-code-cli → 4-gate pipeline with human review
 Both follow: Same design token rules, same coding standards
 ```
@@ -321,7 +321,7 @@ Both follow: Same design token rules, same coding standards
 
 ai-kit's Figma integration is not about building another Figma-to-code tool — teams already have those. It's about:
 
-1. **Making the tools discoverable** — developers learn about /figma-to-code on day one
+1. **Making the tools discoverable** — developers learn about /kit-figma-to-code on day one
 2. **Embedding the rules** — design token mapping, visual verification, component reuse are baked into every AI config
 3. **Standardizing the workflow** — every developer follows the same extract → map → generate → verify flow
 4. **Connecting the ecosystem** — ai-kit for quick tasks, figma-code-cli for complex pipelines, same standards everywhere

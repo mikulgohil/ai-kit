@@ -31,7 +31,7 @@ Before resuming work, check:
 
 ## If No Sessions Found
 - Check `ai-kit/sessions/` directory exists
-- Suggest running `/save-session` at the end of future sessions
+- Suggest running `/kit-save-session` at the end of future sessions
 - Offer to start fresh by creating a new session
 
 ## Tips

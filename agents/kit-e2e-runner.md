@@ -1,5 +1,5 @@
 ---
-name: e2e-runner
+name: kit-e2e-runner
 description: Playwright E2E test agent — generates and runs Playwright tests using Page Object Model for Next.js applications.
 tools: Read, Write, Edit, Glob, Grep, Bash
 isolation: worktree

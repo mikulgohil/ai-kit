@@ -158,43 +158,43 @@ AI training data has a cutoff date. When working with framework APIs, **verify y
 ## Skills & Commands
 Available as auto-discovered skills (`.claude/skills/`, `.cursor/skills/`) and legacy commands (`.claude/commands/`).
 
-AI will auto-discover and apply these when your task matches. You can also invoke them manually with `/skill-name`.
+AI will auto-discover and apply these when your task matches. You can also invoke them manually with `/kit-skill-name`. All ai-kit skills use the `kit-` prefix to avoid conflicts with global or built-in skills.
 
 **Getting Started**
-- `/prompt-help` — Interactive prompt builder (start here if unsure how to ask)
-- `/understand` — Explain code in detail
+- `/kit-prompt-help` — Interactive prompt builder (start here if unsure how to ask)
+- `/kit-understand` — Explain code in detail
 
 **Building**
-- `/new-component` — Scaffold a new component with proper structure
-- `/new-page` — Scaffold a new page/route
-- `/api-route` — Scaffold an API route with validation, error handling, and auth
-- `/error-boundary` — Generate error boundaries, loading states, and fallback UI
-- `/extract-hook` — Extract component logic into a reusable custom hook
-- `/figma-to-code` — Structured Figma-to-code implementation workflow
-- `/design-tokens` — Design token management and mapping
+- `/kit-new-component` — Scaffold a new component with proper structure
+- `/kit-new-page` — Scaffold a new page/route
+- `/kit-api-route` — Scaffold an API route with validation, error handling, and auth
+- `/kit-error-boundary` — Generate error boundaries, loading states, and fallback UI
+- `/kit-extract-hook` — Extract component logic into a reusable custom hook
+- `/kit-figma-to-code` — Structured Figma-to-code implementation workflow
+- `/kit-design-tokens` — Design token management and mapping
 
 **Quality & Review**
-- `/review` — Deep code review following team standards
-- `/pre-pr` — Pre-PR checklist (type safety, console cleanup, a11y, security)
-- `/test` — Generate tests for a file or function
-- `/accessibility-audit` — WCAG 2.1 AA compliance check
-- `/security-check` — XSS, injection, secrets, and OWASP Top 10 review
-- `/responsive-check` — Responsive design audit (breakpoints, touch targets, overflow)
-- `/type-fix` — Fix TypeScript issues (replace `any`, add null checks, generate types)
+- `/kit-review` — Deep code review following team standards
+- `/kit-pre-pr` — Pre-PR checklist (type safety, console cleanup, a11y, security)
+- `/kit-test` — Generate tests for a file or function
+- `/kit-accessibility-audit` — WCAG 2.1 AA compliance check
+- `/kit-security-check` — XSS, injection, secrets, and OWASP Top 10 review
+- `/kit-responsive-check` — Responsive design audit (breakpoints, touch targets, overflow)
+- `/kit-type-fix` — Fix TypeScript issues (replace `any`, add null checks, generate types)
 
 **Maintenance**
-- `/fix-bug` — Guided bug fix workflow
-- `/refactor` — Safe refactoring (split components, extract hooks, remove duplication)
-- `/optimize` — Performance optimization review
-- `/migrate` — Guided migration helper (Next.js, Tailwind, Sitecore upgrades)
-- `/dep-check` — Dependency audit (unused, outdated, security, bundle size)
-- `/sitecore-debug` — Sitecore XM Cloud debugging (placeholders, fields, GraphQL)
+- `/kit-fix-bug` — Guided bug fix workflow
+- `/kit-refactor` — Safe refactoring (split components, extract hooks, remove duplication)
+- `/kit-optimize` — Performance optimization review
+- `/kit-migrate` — Guided migration helper (Next.js, Tailwind, Sitecore upgrades)
+- `/kit-dep-check` — Dependency audit (unused, outdated, security, bundle size)
+- `/kit-sitecore-debug` — Sitecore XM Cloud debugging (placeholders, fields, GraphQL)
 
 **Workflow**
-- `/document` — Generate documentation for existing code
-- `/commit-msg` — Generate conventional commit message from staged changes
-- `/env-setup` — Generate .env.example and validate environment variables
-- `/fetch-docs` — Pre-load current docs for your tech stack (run at session start)
+- `/kit-document` — Generate documentation for existing code
+- `/kit-commit-msg` — Generate conventional commit message from staged changes
+- `/kit-env-setup` — Generate .env.example and validate environment variables
+- `/kit-fetch-docs` — Pre-load current docs for your tech stack (run at session start)
 
 ## Scripts
 {{scripts}}

@@ -1,6 +1,6 @@
 # Prompt Playbook
 
-Quick reference for writing effective AI prompts. When in doubt, use `/prompt-help` instead.
+Quick reference for writing effective AI prompts. When in doubt, use `/kit-prompt-help` instead.
 
 ## The Golden Rule
 

@@ -1,5 +1,5 @@
 ---
-name: architect
+name: kit-architect
 description: System architect — SSR/SSG/ISR strategy, component hierarchy, data flow, rendering patterns for Next.js + Sitecore XM Cloud + Tailwind projects.
 tools: Read, Glob, Grep, Bash
 ---

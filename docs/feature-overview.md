@@ -11,7 +11,7 @@ AI Kit is a CLI tool that automatically configures AI coding assistants for any 
 | # | Problem | How AI Kit Solves It |
 |---|---------|----------------------|
 | 1 | **AI forgets everything each session** — Every new chat starts from zero. No memory of project rules, patterns, or past decisions. | Generates a persistent `CLAUDE.md` with project rules, conventions, and stack details. The AI knows your project from the first prompt, every time. |
-| 2 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. | Ships 48 pre-built slash commands so developers don't need to write prompts from scratch — just run `/review`, `/security`, `/refactor`, etc. |
+| 2 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. | Ships 48 pre-built slash commands so developers don't need to write prompts from scratch — just run `/kit-review`, `/kit-security`, `/kit-refactor`, etc. |
 | 3 | **Same mistakes happen repeatedly** — No system to track what went wrong, so the team keeps hitting the same issues. | Generates a **mistakes log** (`docs/mistakes-log.md`) that records every error and lesson learned — the AI references it to avoid repeating them. |
 | 4 | **No decision trail** — Nobody remembers why a technical decision was made 3 months ago. | Auto-scaffolds a **decisions log** (`docs/decisions-log.md`) to capture what was decided, why, and by whom — fully searchable and traceable. |
 | 5 | **Can't track what changed in a component** — When something breaks, there's no quick way to see what AI-assisted changes were made and when. | Encourages per-component documentation and change tracking through doc scaffolds and time logs — every change is logged with context. |
@@ -40,29 +40,29 @@ Generates project-aware rule files for multiple AI tools:
 - **Export** to Windsurf, Aider, Cline formats
 
 ### 3. Pre-Built Slash Commands
-48 ready-to-use commands across 8 categories — no prompt writing needed. Includes session management, quality checks, orchestration, security, requirements gathering, and more.
+48 ready-to-use commands across 8 categories — no prompt writing needed. Includes session management, quality checks, orchestration, security, requirements gathering, and more. All skills use the `kit-` prefix (e.g., `/kit-review`, `/kit-new-component`) to avoid collisions with users' global or built-in skills.
 
 ### 3a. Session Context (SessionStart Hook)
 Every new Claude Code session starts with an automatic context echo — the AI immediately knows your tech stack, package manager, available scripts, and when configs were last updated. No wasted turns re-discovering the project.
 
 ### 4. Specialized AI Agents
 16 purpose-built agents that handle delegated tasks:
-- **Planner** — Break features into implementation plans
-- **Code Reviewer** — Deep quality and security review
-- **Security Reviewer** — OWASP Top 10, XSS, CSRF, secrets detection
-- **E2E Runner** — Playwright tests with Page Object Model
-- **Build Resolver** — Diagnose and fix build/type errors
-- **Doc Updater** — Keep documentation in sync with code
-- **Refactor Cleaner** — Find and remove dead code
-- **TDD Guide** — Test-driven development guidance and workflow
-- **CI Debugger** — CI/CD failure analysis and resolution
-- **Sitecore Specialist** — Sitecore XM Cloud patterns and debugging
-- **Architect** — System design and architecture decisions
-- **Data Scientist** — ML pipelines, model evaluation, data analysis patterns
-- **Performance Profiler** — Bundle analysis, Core Web Vitals, runtime profiling
-- **Migration Specialist** — Framework upgrades, breaking change detection, codemods
-- **Dependency Auditor** — Outdated packages, vulnerability scanning, license compliance
-- **API Designer** — REST/GraphQL API design, schema validation, versioning
+- **kit-Planner** — Break features into implementation plans
+- **kit-Code Reviewer** — Deep quality and security review
+- **kit-Security Reviewer** — OWASP Top 10, XSS, CSRF, secrets detection
+- **kit-E2E Runner** — Playwright tests with Page Object Model
+- **kit-Build Resolver** — Diagnose and fix build/type errors
+- **kit-Doc Updater** — Keep documentation in sync with code
+- **kit-Refactor Cleaner** — Find and remove dead code
+- **kit-TDD Guide** — Test-driven development guidance and workflow
+- **kit-CI Debugger** — CI/CD failure analysis and resolution
+- **kit-Sitecore Specialist** — Sitecore XM Cloud patterns and debugging
+- **kit-Architect** — System design and architecture decisions
+- **kit-Data Scientist** — ML pipelines, model evaluation, data analysis patterns
+- **kit-Performance Profiler** — Bundle analysis, Core Web Vitals, runtime profiling
+- **kit-Migration Specialist** — Framework upgrades, breaking change detection, codemods
+- **kit-Dependency Auditor** — Outdated packages, vulnerability scanning, license compliance
+- **kit-API Designer** — REST/GraphQL API design, schema validation, versioning
 
 ### 5. Context Modes
 Three modes that change how the AI approaches work:
@@ -172,13 +172,13 @@ npx @mikulgohil/ai-kit update
 
 Improvements inspired by the spec-driven development ecosystem, adapted to AI Kit's auto-detect philosophy.
 
-### Project Constitution (`/constitution` skill)
+### Project Constitution (`/kit-constitution` skill)
 Generate a `PROJECT_PRINCIPLES.md` governance document that captures team opinions AI can't infer from code — testing philosophy, performance budgets, accessibility targets, and coding standards. All AI agents reference it automatically.
 
 **Business value**: Ensures AI-generated code aligns with team values, not just technical patterns. Reduces "technically correct but wrong for us" code.
 
-### Spec-First Feature Workflow (`/specify` skill)
-Create structured feature specifications (`specs/<feature>.md`) with user stories, acceptance criteria, and edge cases *before* implementation begins. The planner agent references specs throughout the build.
+### Spec-First Feature Workflow (`/kit-specify` skill)
+Create structured feature specifications (`specs/<feature>.md`) with user stories, acceptance criteria, and edge cases *before* implementation begins. The kit-planner agent references specs throughout the build.
 
 **Business value**: Reduces rework by 40-60% on complex features. Creates a persistent trail from requirement to implementation.
 

@@ -22,7 +22,7 @@ Audit the AI agent configuration for completeness and correctness.
 - [ ] Each agent has valid YAML frontmatter (name, description)
 - [ ] Agent descriptions are specific enough for delegation
 - [ ] No duplicate or conflicting agents
-- [ ] Conditional agents match detected stack (e2e-runner only if Playwright installed)
+- [ ] Conditional agents match detected stack (kit-e2e-runner only if Playwright installed)
 
 ### 4. Contexts (`.claude/contexts/*.md`)
 - [ ] dev, review, research modes are present

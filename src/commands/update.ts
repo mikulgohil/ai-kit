@@ -8,9 +8,9 @@ import { generateCursorRules } from '../generator/cursorrules.js';
 import { generateMdcFiles } from '../generator/cursor-mdc.js';
 import { generateConfig } from '../generator/config.js';
 import { generateSettingsLocal } from '../generator/hooks.js';
-import { copySkills } from '../copier/skills.js';
+import { copySkills, BASE_SKILLS } from '../copier/skills.js';
 import { copyGuides } from '../copier/guides.js';
-import { copyAgents } from '../copier/agents.js';
+import { copyAgents, BASE_UNIVERSAL_AGENTS } from '../copier/agents.js';
 import { copyContexts } from '../copier/contexts.js';
 import { loadCustomFragments } from '../generator/assembler.js';
 import { AI_KIT_CONFIG_FILE, GENERATED_FILES, VERSION } from '../constants.js';
@@ -74,6 +74,9 @@ export async function updateCommand(targetPath?: string): Promise<void> {
   if (backupPath) {
     logSuccess(`Backed up current configs to ${path.relative(projectDir, backupPath)}`);
   }
+
+  // Clean up old unprefixed skill/agent files from before the kit- namespace migration
+  await cleanupUnprefixedFiles(projectDir);
 
   logSection('Updating Files');
 
@@ -173,5 +176,43 @@ export async function updateCommand(targetPath?: string): Promise<void> {
   logInfo('All AI configs refreshed with latest project scan.');
   if (backupPath) {
     logInfo('Rollback available: `ai-kit rollback --latest`');
+  }
+}
+
+/**
+ * Remove old unprefixed skill/agent files left over from before the kit- namespace migration.
+ * This prevents duplicate skills (e.g., both /review and /kit-review showing up).
+ */
+async function cleanupUnprefixedFiles(projectDir: string): Promise<void> {
+  let cleaned = 0;
+
+  // Clean old skill directories: .claude/skills/{name}/ and .cursor/skills/{name}/
+  for (const name of BASE_SKILLS) {
+    for (const root of ['.claude/skills', '.cursor/skills']) {
+      const oldDir = path.join(projectDir, root, name);
+      if (await fs.pathExists(oldDir)) {
+        await fs.remove(oldDir);
+        cleaned++;
+      }
+    }
+    // Clean old legacy commands: .claude/commands/{name}.md
+    const oldCmd = path.join(projectDir, '.claude', 'commands', `${name}.md`);
+    if (await fs.pathExists(oldCmd)) {
+      await fs.remove(oldCmd);
+      cleaned++;
+    }
+  }
+
+  // Clean old agent files: .claude/agents/{name}.md
+  for (const name of BASE_UNIVERSAL_AGENTS) {
+    const oldAgent = path.join(projectDir, '.claude', 'agents', `${name}.md`);
+    if (await fs.pathExists(oldAgent)) {
+      await fs.remove(oldAgent);
+      cleaned++;
+    }
+  }
+
+  if (cleaned > 0) {
+    logInfo(`Cleaned up ${cleaned} old unprefixed skill/agent files (migrated to kit- prefix)`);
   }
 }
