@@ -12,7 +12,7 @@ export const DOCS_SCAFFOLDS_DIR = path.join(PACKAGE_ROOT, 'docs-scaffolds');
 export const AGENTS_DIR = path.join(PACKAGE_ROOT, 'agents');
 export const CONTEXTS_DIR = path.join(PACKAGE_ROOT, 'contexts');
 
-export const VERSION = '2.0.0';
+export const VERSION = '2.1.0';
 
 /** Prefix for all ai-kit generated skills and agents to avoid collisions with global/built-in names */
 export const SKILL_PREFIX = 'kit-';
@@ -36,6 +36,7 @@ export const GENERATED_FILES = {
 
 export const TEMPLATE_FRAGMENTS = [
   'base',
+  'behavioral',
   'nextjs-app-router',
   'nextjs-pages-router',
   'sitecore-xmc',

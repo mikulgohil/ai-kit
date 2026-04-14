@@ -2,7 +2,7 @@ import type { ProjectScan, StrictnessLevel } from '../types.js';
 import { assembleTemplate } from './assembler.js';
 
 export function selectFragments(scan: ProjectScan): string[] {
-  const fragments: string[] = ['base'];
+  const fragments: string[] = ['base', 'behavioral'];
 
   if (scan.framework === 'nextjs') {
     if (scan.routerType === 'app' || scan.routerType === 'hybrid') {
