@@ -54,6 +54,13 @@ const BASE_SKILLS = [
   'clarify-requirements',
   // New skills (v1.10.0) — documentation freshness
   'fetch-docs',
+  // New skills (v2.3.0) — roles: product, design, DX, retrospective, deploy, safety
+  'product-review',
+  'design-review',
+  'devex-review',
+  'retro',
+  'post-deploy',
+  'careful',
 ];
 
 const AVAILABLE_SKILLS = BASE_SKILLS.map((s) => `${SKILL_PREFIX}${s}`);
@@ -107,6 +114,12 @@ const BASE_SKILL_DESCRIPTIONS: Record<string, string> = {
   'deep-interview': 'Socratic requirements gathering — structured interview to transform vague ideas into detailed specifications',
   'clarify-requirements': 'Quick task clarification — identify gaps and ambiguities in under 5 minutes before coding',
   'fetch-docs': 'Pre-load current, version-specific docs for your tech stack using Context7 MCP — run at session start to prevent outdated API usage',
+  'product-review': 'Product owner review — evaluate whether a feature is worth building, identify the 10x version, and produce a Go/No-Go/Reshape recommendation before coding starts',
+  'design-review': 'Visual design quality audit — score typography, spacing, color, hierarchy, consistency, and interaction design across six dimensions with specific Tailwind fixes',
+  'devex-review': 'Developer experience audit — measure TTHW (time to hello world), identify setup friction, and produce prioritized DX improvements for new team members',
+  'retro': 'Sprint or feature retrospective — extract what shipped, what worked, what slowed the team down, and concrete action items including AI collaboration insights',
+  'post-deploy': 'Post-deployment health check — verify pages load, Sitecore components render, performance is within baseline, and issue a HEALTHY/DEGRADED/ROLLBACK verdict',
+  'careful': 'Safety guard — pauses before destructive or irreversible operations (rm -rf, force push, DROP TABLE, reset --hard), shows blast radius, and requires explicit confirmation',
 };
 
 // Derive prefixed description map for lookups by prefixed skill name

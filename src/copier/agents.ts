@@ -18,6 +18,10 @@ const BASE_UNIVERSAL_AGENTS = [
   'migration-specialist',
   'dependency-auditor',
   'api-designer',
+  // New agents (v2.3.0) — roles: design, release, onboarding
+  'ui-designer',
+  'release-manager',
+  'onboarding-guide',
 ];
 
 const UNIVERSAL_AGENTS = BASE_UNIVERSAL_AGENTS.map((a) => `${SKILL_PREFIX}${a}`);
