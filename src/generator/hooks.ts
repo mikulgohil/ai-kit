@@ -156,6 +156,28 @@ export function generateHooks(
     });
   }
 
+  // --- Pre-Edit Investigation Reminder ---
+  // Warns before editing large files to encourage reading them first (standard + strict)
+  if (profile !== 'minimal') {
+    preToolUse.push({
+      matcher: 'Edit|Write',
+      hooks: [
+        {
+          type: 'command',
+          command: [
+            'if [ -f "$CLAUDE_FILE_PATH" ]; then',
+            '  LINES=$(wc -l < "$CLAUDE_FILE_PATH" 2>/dev/null || echo 0)',
+            '  if [ "$LINES" -gt 150 ]; then',
+            '    echo "📖 Large file ($LINES lines): $CLAUDE_FILE_PATH"',
+            '    echo "   Ensure you have read the full file before editing to avoid missing imports or breaking invariants."',
+            '  fi',
+            'fi',
+          ].join('\n'),
+        },
+      ],
+    });
+  }
+
   // --- Pre-Commit Review Hook ---
   // Lightweight review of staged changes before git commit (strict only)
   if (profile === 'strict') {
@@ -247,6 +269,71 @@ export function generateHooks(
     });
   }
 
+  // --- Config Weakening Guard ---
+  // Detects eslint-disable, @ts-ignore/@ts-nocheck, and strict:false additions (strict only)
+  if (profile === 'strict') {
+    postToolUse.push({
+      matcher: 'Edit|Write',
+      hooks: [
+        {
+          type: 'command',
+          command: [
+            'if [ -f "$CLAUDE_FILE_PATH" ]; then',
+            '  GUARDS=""',
+            '  case "$CLAUDE_FILE_PATH" in',
+            '    *.ts|*.tsx|*.js|*.jsx|*.mjs)',
+            '      DISABLE=$(grep -c "eslint-disable" "$CLAUDE_FILE_PATH" 2>/dev/null || echo 0)',
+            '      if [ "$DISABLE" -gt 0 ]; then',
+            '        GUARDS="${GUARDS}\\n  ⚠️  eslint-disable: $DISABLE directive(s) found — weakens linting"',
+            '      fi',
+            '      SUPPRESS=$(grep -cE "@ts-ignore|@ts-nocheck" "$CLAUDE_FILE_PATH" 2>/dev/null || echo 0)',
+            '      if [ "$SUPPRESS" -gt 0 ]; then',
+            '        GUARDS="${GUARDS}\\n  ⚠️  TypeScript suppression: $SUPPRESS @ts-ignore/@ts-nocheck found"',
+            '      fi',
+            '      ;;',
+            '    *tsconfig*.json)',
+            '      if grep -qE \'"strict"[[:space:]]*:[[:space:]]*false|"noImplicitAny"[[:space:]]*:[[:space:]]*false\' "$CLAUDE_FILE_PATH" 2>/dev/null; then',
+            '        GUARDS="${GUARDS}\\n  ⚠️  TypeScript strict mode disabled — this weakens type safety"',
+            '      fi',
+            '      ;;',
+            '  esac',
+            '  if [ -n "$GUARDS" ]; then',
+            '    echo "🛡️  Config guard triggered in $CLAUDE_FILE_PATH:"',
+            '    printf "$GUARDS\\n"',
+            '    echo "   Confirm these are intentional before committing."',
+            '  fi',
+            'fi',
+          ].join('\n'),
+        },
+      ],
+    });
+  }
+
+  // --- Credential Scan ---
+  // Detects hardcoded secrets and credentials in edited files (strict only)
+  if (profile === 'strict') {
+    postToolUse.push({
+      matcher: 'Edit|Write',
+      hooks: [
+        {
+          type: 'command',
+          command: [
+            'case "$CLAUDE_FILE_PATH" in',
+            '  *.ts|*.tsx|*.js|*.jsx|*.json|*.yaml|*.yml)',
+            '    CREDS=$(grep -inE "(apikey|api_key|secret_key|access_token|private_key|password|auth_token)[[:space:]]*[:=][[:space:]]*[^$][^[:space:]]{8,}" "$CLAUDE_FILE_PATH" 2>/dev/null | grep -v "process\\.env" | head -3)',
+            '    if [ -n "$CREDS" ]; then',
+            '      echo "🔐 Credential scan — potential secret detected in $CLAUDE_FILE_PATH:"',
+            '      echo "$CREDS"',
+            '      echo "   Move real secrets to .env and reference via process.env — never commit credentials."',
+            '    fi',
+            '    ;;',
+            'esac',
+          ].join('\n'),
+        },
+      ],
+    });
+  }
+
   // --- PostCompact hooks ---
 
   // Re-echo critical context after context compaction (standard + strict)
@@ -302,6 +389,9 @@ export function generateSettingsLocal(
   const hooks = generateHooks(scan, profile);
 
   return {
+    env: {
+      CLAUDE_AUTOCOMPACT_PCT_OVERRIDE: '65',
+    },
     hooks,
   };
 }

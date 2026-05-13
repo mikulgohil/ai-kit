@@ -35,6 +35,10 @@ const CONDITIONAL_AGENTS: { name: string; condition: (scan: ProjectScan) => bool
     name: `${SKILL_PREFIX}tdd-guide`,
     condition: (scan) => scan.tools.playwright || !!scan.scripts['test'],
   },
+  {
+    name: `${SKILL_PREFIX}database-reviewer`,
+    condition: (scan) => scan.cms !== 'none' || scan.framework === 'nextjs',
+  },
 ];
 
 export async function copyAgents(

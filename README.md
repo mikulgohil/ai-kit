@@ -224,7 +224,7 @@ Period summaries, budget progress with alerts, per-project cost breakdown, week-
 | Context setup per conversation | 5-10 min | **0 min** (auto-loaded) |
 | Code review cycles per PR | 2-4 rounds | **1-2 rounds** |
 | Component creation time | 30-60 min | **10-15 min** |
-| New developer onboarding | 1-2 weeks | **2-3 days** |
+| New developer onboarding | 1-2 weeks | **1 hour** |
 | Security issues caught | At PR review or production | **At development time** |
 | Knowledge retention | Lost when developers leave | **Logged in decisions & mistakes** |
 | AI tool switching cost | Start over from scratch | **Zero — same rules, 5+ tools** |
