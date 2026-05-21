@@ -10,17 +10,21 @@
    - Programmatic mutation (call from event handler or other Server Action)
    - Data revalidation only (on-demand ISR trigger)
 
-2. **Detect Existing Patterns** — Search the codebase for:
+2. **Detect Project Next.js Version** — Read `package.json` `dependencies.next`:
+   - **Next.js 16+**: use the new revalidation APIs (`revalidateTag(tag, cacheLife)`, `updateTag()`, `refresh()`).
+   - **Next.js 15.x**: use the legacy single-arg `revalidateTag(tag)` form.
+
+3. **Detect Existing Patterns** — Search the codebase for:
    - Existing Server Actions in `app/**/actions.ts` files
    - Zod schemas in use for validation
-   - Existing revalidation patterns (`revalidatePath`, `revalidateTag`)
+   - Existing revalidation patterns
 
-3. **Generate the Server Action** — Following this pattern:
+4. **Generate the Server Action** — Following this pattern (Next.js 16+):
 
 ```typescript
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidateTag, updateTag, refresh } from 'next/cache';
 import { z } from 'zod';
 
 const Schema = z.object({
@@ -45,7 +49,17 @@ export async function myAction(formData: FormData): Promise<ActionResult> {
   try {
     // Perform mutation (database, API call, etc.)
 
-    revalidatePath('/affected-route');
+    // Choose ONE of the following based on UX requirements:
+
+    // (a) Read-your-writes — user must see their change immediately
+    updateTag('affected-tag');
+
+    // (b) Stale-while-revalidate — eventual consistency is fine
+    // revalidateTag('affected-tag', 'max');
+
+    // (c) Refresh uncached data displayed elsewhere on the page
+    // refresh();
+
     return { success: true };
   } catch (error) {
     return { success: false, error: 'Something went wrong. Please try again.' };
@@ -53,7 +67,17 @@ export async function myAction(formData: FormData): Promise<ActionResult> {
 }
 ```
 
-4. **Generate the Form Component** (if form-based):
+For **Next.js 15.x** (legacy), replace the revalidation block with:
+
+```typescript
+import { revalidatePath, revalidateTag } from 'next/cache';
+// ...
+revalidatePath('/affected-route');
+// or
+revalidateTag('affected-tag');
+```
+
+5. **Generate the Form Component** (if form-based):
 
 ```typescript
 'use client';
@@ -76,10 +100,17 @@ export function MyForm() {
 }
 ```
 
-5. **Wire Up Revalidation** — Choose the right strategy:
-   - `revalidatePath('/path')` for specific route revalidation
-   - `revalidateTag('tag')` for cache tag-based revalidation
-   - Both for comprehensive cache busting
+6. **Wire Up Revalidation (Next.js 16+)** — Choose the right strategy:
+
+| API | When to use |
+|---|---|
+| `updateTag(tag)` | Server Actions only. User must see their write immediately (forms, settings, edits). |
+| `revalidateTag(tag, 'max')` | Eventual consistency OK. Background SWR revalidation. Static-ish content. |
+| `revalidateTag(tag, 'hours' \| 'days' \| { expire: N })` | Custom SWR profile. |
+| `refresh()` | Server Actions only. Refresh uncached data (notification counts, live metrics) without touching cache. |
+| `revalidatePath('/path')` | Force re-render of a route without targeting tags. Still available. |
+
+For Next.js 15.x: only `revalidatePath` and single-arg `revalidateTag(tag)` are available.
 
 ## Rules
 
@@ -88,6 +119,8 @@ export function MyForm() {
 - Return structured results — never throw errors from Server Actions
 - Keep Server Actions in dedicated `actions.ts` files, colocated with the route
 - Use `useActionState` for form state, not manual useState + useEffect
-- Do not access `cookies()` or `headers()` unless necessary — they opt into dynamic rendering
+- On Next.js 16+, `cookies()`/`headers()`/`draftMode()` are async — `await` them
+- On Next.js 16+, do not use the single-argument `revalidateTag(tag)` form — it's deprecated
+- Prefer `updateTag()` over `revalidateTag()+router.refresh()` patterns when you want read-your-writes
 
 Target: $ARGUMENTS

@@ -61,6 +61,15 @@ const ALL_COMMANDS = [
   'kit-clarify-requirements',
   // v1.10.0
   'kit-fetch-docs',
+  // v2.3.0 — role skills
+  'kit-product-review',
+  'kit-design-review',
+  'kit-devex-review',
+  'kit-retro',
+  'kit-post-deploy',
+  'kit-careful',
+  // v2.4.0 — Next.js 16 proxy.ts
+  'kit-proxy',
 ];
 
 function makeTempDir(): string {

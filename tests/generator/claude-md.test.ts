@@ -51,9 +51,9 @@ describe('selectFragments', () => {
     expect(result).toContain('base');
   });
 
-  it('returns only base for a fully minimal scan', () => {
+  it('returns base + behavioral for a fully minimal scan', () => {
     const result = selectFragments(minimalScan());
-    expect(result).toEqual(['base']);
+    expect(result).toEqual(['base', 'behavioral']);
   });
 
   describe('nextjs router fragments', () => {
@@ -201,6 +201,7 @@ describe('selectFragments', () => {
       );
       expect(result).toEqual([
         'base',
+        'behavioral',
         'nextjs-app-router',
         'sitecore-xmc',
         'tailwind',
@@ -227,6 +228,7 @@ describe('selectFragments', () => {
       });
       expect(selectFragments(scan)).toEqual([
         'base',
+        'behavioral',
         'nextjs-app-router',
         'nextjs-pages-router',
         'sitecore-xmc',

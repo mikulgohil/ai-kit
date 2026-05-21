@@ -113,8 +113,9 @@ function buildVariables(scan: ProjectScan): Record<string, string> {
   }
 
   // .aiignore summary
-  const aiIgnoreSummary = scan.aiIgnorePatterns.length > 0
-    ? scan.aiIgnorePatterns.map((p) => `- \`${p}\``).join('\n')
+  const aiIgnorePatterns = scan.aiIgnorePatterns ?? [];
+  const aiIgnoreSummary = aiIgnorePatterns.length > 0
+    ? aiIgnorePatterns.map((p) => `- \`${p}\``).join('\n')
     : '';
 
   return {
@@ -122,6 +123,7 @@ function buildVariables(scan: ProjectScan): Record<string, string> {
     techStack: techStack.join(' · '),
     packageManager: scan.packageManager,
     routerType: scan.routerType || 'unknown',
+    nextjsVersion: scan.nextjsVersion || 'not detected',
     scripts: scripts || '- No scripts detected',
     framework: scan.framework,
     designTokens: designTokenSummary || '- No design tokens detected',

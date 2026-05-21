@@ -61,6 +61,8 @@ const BASE_SKILLS = [
   'retro',
   'post-deploy',
   'careful',
+  // New skills (v2.4.0) — Next.js 16 proxy.ts (replaces middleware)
+  'proxy',
 ];
 
 const AVAILABLE_SKILLS = BASE_SKILLS.map((s) => `${SKILL_PREFIX}${s}`);
@@ -120,6 +122,7 @@ const BASE_SKILL_DESCRIPTIONS: Record<string, string> = {
   'retro': 'Sprint or feature retrospective — extract what shipped, what worked, what slowed the team down, and concrete action items including AI collaboration insights',
   'post-deploy': 'Post-deployment health check — verify pages load, Sitecore components render, performance is within baseline, and issue a HEALTHY/DEGRADED/ROLLBACK verdict',
   'careful': 'Safety guard — pauses before destructive or irreversible operations (rm -rf, force push, DROP TABLE, reset --hard), shows blast radius, and requires explicit confirmation',
+  'proxy': 'Next.js 16+ proxy.ts specialist — replaces middleware.ts for auth, redirects, i18n, and Sitecore preview mode using the Node runtime',
 };
 
 // Derive prefixed description map for lookups by prefixed skill name

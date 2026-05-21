@@ -1,5 +1,6 @@
 import type { ToolsDetection } from './scanner/tools.js';
 import type { McpDetection } from './scanner/mcp.js';
+import type { ProxyFileState, TurbopackConfigLocation } from './scanner/nextjs.js';
 
 export type StrictnessLevel = 'strict' | 'standard' | 'relaxed';
 
@@ -34,6 +35,19 @@ export interface ProjectScan {
   nextjsVersion?: string;
   nextjsMajorVersion?: number;
   routerType?: 'app' | 'pages' | 'hybrid';
+
+  // Next.js 16+ feature detections
+  proxyFile?: ProxyFileState;
+  cacheComponents?: boolean;
+  reactCompiler?: boolean;
+  turbopackConfigLocation?: TurbopackConfigLocation;
+  turbopackFsCache?: boolean;
+  parallelRoutesMissingDefault?: string[];
+  imageConfigUsesDomains?: boolean;
+  deprecatedExperimentalFlags?: string[];
+  reactVersion?: string;
+  reactMajorMinor?: number;
+  nodeEnginesSatisfiesNext16?: boolean;
 
   cms: 'sitecore-xmc-v2' | 'sitecore-xmc' | 'sitecore-jss' | 'optimizely-saas' | 'none';
   sitecorejssVersion?: string;
