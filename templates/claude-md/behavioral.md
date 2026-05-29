@@ -2,8 +2,6 @@
 
 Rules for how you approach work — not what code to write, but how to think about it.
 
-_Inspired by [Andrej Karpathy's LLM coding guidelines](https://github.com/forrestchang/andrej-karpathy-skills)._
-
 ## Think Before Coding
 
 Do not assume. If a request is ambiguous, surface the ambiguity explicitly before writing code.
@@ -84,3 +82,14 @@ Transform vague tasks into verifiable goals. Then work toward those goals with e
 These behavioral guardrails are calibrated for **non-trivial work** — feature implementation, bug fixes, refactors, and architectural changes.
 
 For trivial tasks (typo fixes, one-line changes, obvious corrections), apply proportionally — a quick fix doesn't need a full assumption audit. Use judgment.
+
+## Signs These Guardrails Are Working
+
+You don't need a dashboard to know these rules are paying off — watch the diffs and the conversation:
+
+- **Diffs stay tight** — changed lines trace directly to the request; reviewers stop asking "why was this touched?"
+- **Fewer rewrites** — code isn't thrown away for being overcomplicated or for solving the wrong problem
+- **Questions come first** — clarification happens *before* implementation, not after a wrong turn
+- **Less churn on review** — fewer back-and-forth cycles fixing scope creep, style drift, or speculative features
+
+If diffs are sprawling, rewrites are frequent, or clarifying questions only show up after mistakes, the guardrails are being skipped.

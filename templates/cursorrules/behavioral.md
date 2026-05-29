@@ -1,7 +1,5 @@
 # Behavioral Guardrails
 
-_Inspired by [Andrej Karpathy's LLM coding guidelines](https://github.com/forrestchang/andrej-karpathy-skills)._
-
 ## Think Before Coding
 - If a request is ambiguous, state your interpretation and ask — don't guess
 - Present alternatives when multiple valid approaches exist
@@ -28,3 +26,6 @@ _Inspired by [Andrej Karpathy's LLM coding guidelines](https://github.com/forres
 - Define success criteria before starting: what works, what must not break, how to verify
 - If an approach fails twice with the same root cause, switch strategies
 - When stuck, present what you tried and ask — don't silently retry
+
+## Working If
+These rules are paying off when: diffs stay tight (every line traces to the request), rewrites for overcomplication drop, clarifying questions come *before* implementation, and review cycles shrink. Sprawling diffs or post-mistake questions mean the guardrails are being skipped.
