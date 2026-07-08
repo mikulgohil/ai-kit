@@ -7,11 +7,31 @@
 
 You MUST follow these steps in order. Do not skip any step.
 
+0. **Triage the model** — Before anything else, classify the task and recommend a model (see Model Triage below). Show the developer the Recommended Model + Why, then continue to step 1.
 1. **Ask Task Type** — Present the numbered task menu below and wait for the developer to choose. Do not proceed until they select one.
 2. **Ask Task-Specific Questions** — Based on their selection, ask ALL questions from the matching category below. Do not skip any question. Developers will NOT fill in details themselves — you MUST extract every detail through questions.
 3. **Ask Constraints** — Ask: "Are there any constraints I should know about? (deadlines, backward compatibility, specific libraries, patterns to follow)"
 4. **Ask Success Criteria** — Ask: "How will you know this is done correctly? What does success look like?"
 5. **Generate Formatted Prompt** — Using all collected answers, generate a structured prompt in the exact output format below.
+
+## Model Triage
+
+Classify the task on two axes before running the interview:
+
+- **Path**: is the sequence of steps already known (**structured**), or does the model need to design its own approach (**dynamic**)?
+- **Length**: is this a quick, bounded task (**short**), or a long-running / multi-step / open-ended one (**long**)?
+
+|              | structured (path known)      | dynamic (model designs the route)        |
+|--------------|-------------------------------|-------------------------------------------|
+| **short**    | Sonnet                        | Sonnet, escalate to Opus if it stalls     |
+| **long**     | Opus (or split into a workflow with sub-agents) | Opus with high effort, or an autonomous/background run if truly unattended |
+
+Report this as:
+
+> **Recommended model:** [model]
+> **Why:** [one sentence tying the task to the axis placement above]
+
+Do not block on this — it's informational, then proceed straight into Step 1.
 
 ## Task Type Menu
 

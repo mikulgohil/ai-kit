@@ -481,8 +481,8 @@ The Key Innovation
 /kit-prompt-help
 
 
-An interactive prompt builder that asks ALL the right questions
-so the developer never writes a vague prompt again.
+Recommends the right model for the task, then asks ALL the right
+questions so the developer never writes a vague prompt again.
 
 Think of the developer as an intern — the tool extracts every detail.
 ```
@@ -504,6 +504,8 @@ Think of the developer as an intern — the tool extracts every detail.
 /kit-prompt-help in Action
 
 ┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│  AI    Recommended model: Sonnet — short, structured task     │
 │                                                              │
 │  AI    What do you need help with?                           │
 │        1. New Component  2. New Page  3. Fix a Bug  ...      │
@@ -564,7 +566,7 @@ Every Task Gets Different Questions
 ```
 Pre-Built Slash Commands
 
-  /kit-prompt-help       Interactive prompt builder — start here
+  /kit-prompt-help       Recommends a model, then builds your prompt — start here
   /kit-review            Deep code review as a Senior Engineer
   /kit-fix-bug           Guided bug fix with root cause analysis
   /kit-new-component     Scaffold a component matching project patterns

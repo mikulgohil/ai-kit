@@ -21,7 +21,7 @@
 ## First Thing to Do
 
 ### If you use Claude Code:
-Run the `/kit-prompt-help` command. It's an interactive prompt builder that asks you all the right questions before generating a perfect prompt.
+Run the `/kit-prompt-help` command. It first recommends the right model for your task, then walks you through an interactive prompt builder that asks all the right questions before generating a perfect prompt.
 
 ```
 /kit-prompt-help

@@ -112,7 +112,7 @@ This suggests the team either doesn't trust AI output or hasn't configured it fo
 There are no `.claude/commands/` files. Every developer has to write prompts from scratch every time. For a project with 68 components following a strict 3-file pattern (component + stories + mock-data + test), this is a huge productivity gap.
 
 **With ai-kit:** 8 pre-built slash commands including:
-- `/kit-prompt-help` — asks all the right questions so developers don't write vague prompts
+- `/kit-prompt-help` — recommends the right model for the task, then asks all the right questions so developers don't write vague prompts
 - `/kit-new-component` — would ask about Sitecore fields, TailwindVariants, SitecoreWrappers, and generate all 3 files following the project's exact pattern
 - `/kit-review` — deep code review checking for missing field helpers, accessibility gaps, TailwindVariant misuse
 - `/kit-test` — generate Jest snapshot tests + functional tests with the project's mock-data pattern
@@ -196,7 +196,7 @@ TailwindVariants is not a mainstream library. Without explicit rules, AI tools d
 | **Component scaffolding** | Manual 4-file creation | /kit-new-component generates all files |
 | **Code review** | Manual | /kit-review with checklist |
 | **Test generation** | Manual (copy from existing) | /kit-test with project's Jest/Storybook patterns |
-| **Prompt quality** | Depends on developer skill | /kit-prompt-help asks all questions dynamically |
+| **Prompt quality** | Depends on developer skill | /kit-prompt-help recommends a model, then asks all questions dynamically |
 | **Sitecore-specific rules** | Mentioned in Cursor rules | Full Content SDK patterns, field helpers, wrappers |
 | **Cross-tool consistency** | Cursor only | Claude Code + Cursor, same standards |
 | **Maintenance** | Manual rule updates | `ai-kit update` re-scans and regenerates |

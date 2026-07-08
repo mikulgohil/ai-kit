@@ -22,7 +22,7 @@
 - **Don't ask AI to read the entire codebase** — point to specific files
 - **Use git diff to show AI only what changed**
 - **Close and reopen sessions when switching tasks** (prevents context bloat)
-- **Use /kit-prompt-help to structure your request** before asking
+- **Use /kit-prompt-help to structure your request** before asking — it also recommends whether the task even needs a premium model
 
 ### Low Impact (but adds up)
 

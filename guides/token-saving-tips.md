@@ -9,6 +9,7 @@ Tokens = cost. Here's how to use fewer tokens while getting better results.
 | Pasting entire files into chat | 🔴 Very High | Point AI to file paths instead |
 | Long back-and-forth conversations | 🔴 Very High | Start new conversations per task |
 | Vague prompts that need clarification | 🟡 Medium | Use `/kit-prompt-help` to get it right first time |
+| Using a premium model for a simple task | 🟡 Medium | `/kit-prompt-help` recommends Sonnet vs. Opus before you spend anything |
 | Asking AI to read the whole codebase | 🔴 Very High | Be specific about which files |
 | Not using existing patterns | 🟡 Medium | Reference existing files: "follow the pattern in X" |
 

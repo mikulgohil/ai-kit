@@ -161,7 +161,7 @@ Available as auto-discovered skills (`.claude/skills/`, `.cursor/skills/`) and l
 AI will auto-discover and apply these when your task matches. You can also invoke them manually with `/kit-skill-name`. All ai-kit skills use the `kit-` prefix to avoid conflicts with global or built-in skills.
 
 **Getting Started**
-- `/kit-prompt-help` — Interactive prompt builder (start here if unsure how to ask)
+- `/kit-prompt-help` — Recommends the right model, then walks through an interactive prompt builder (start here if unsure how to ask)
 - `/kit-understand` — Explain code in detail
 
 **Building**

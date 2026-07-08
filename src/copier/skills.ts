@@ -70,7 +70,7 @@ const AVAILABLE_SKILLS = BASE_SKILLS.map((s) => `${SKILL_PREFIX}${s}`);
 // Short descriptions for auto-discovery — AI reads these to decide when to apply
 // Keys use base names; prefixed names are derived via SKILL_DESCRIPTIONS lookup helper below
 const BASE_SKILL_DESCRIPTIONS: Record<string, string> = {
-  'prompt-help': 'Help developers write effective AI prompts with structured context',
+  'prompt-help': 'Recommend the right model for a task, then help developers write effective AI prompts with structured context',
   'review': 'Deep code review following project coding standards',
   'fix-bug': 'Systematic debugging workflow with root cause analysis and regression testing',
   'new-component': 'Scaffold new React components with types, tests, and documentation',
